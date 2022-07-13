@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:sharedspace/services/notificationService.dart';
 import 'package:sharedspace/services/themeService.dart';
+import 'package:sharedspace/widgets/button.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -12,11 +14,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   var notifyHelper;
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
     notifyHelper = NotifyHelper();
     notifyHelper.initializeNotification();
@@ -28,40 +29,65 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: _appBar(),
       body: Column(
-        children: const [
-          Text("Theme data",
-          style: TextStyle(
-            fontSize: 30,
-          ),)
+        children: [_addTaskBar()],
+      ),
+    );
+  }
+
+  _addTaskBar() {
+    return Container(
+      margin: const EdgeInsets.only(left: 20, right: 20, top: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Container(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(DateFormat.yMMMMd().format(DateTime.now()),
+                    style: subHeadingStyle),
+                Text(
+                  "Today",
+                  style: headingStyle,
+                )
+              ],
+            ),
+          ),
+          MyButton(label: "+ Add Task", onTap: () => null)
         ],
       ),
     );
   }
 
-  _appBar(){
+  _appBar() {
     return AppBar(
+      elevation: 0.0,
+      backgroundColor: context.theme.backgroundColor,
       leading: GestureDetector(
-        onTap: (){
+        onTap: () {
           ThemeService().switchTheme();
-          notifyHelper.displayNotification(
-            title: 'Themed changed',
-            body: Get.isDarkMode?"Activated Light Mode": "Activated Dark Mode"
-          );
+          // notifyHelper.displayNotification(
+          //     title: 'Themed changed',
+          //     body: Get.isDarkMode
+          //         ? "Activated Light Mode"
+          //         : "Activated Dark Mode");
 
-          notifyHelper.scheduledNotification(
-            title: 'Themed changed',
-            body: Get.isDarkMode?"Activated Light Mode": "Activated Dark Mode"
-          );
+          // notifyHelper.scheduledNotification(
+          //   title: 'Themed changed',
+          //   body: Get.isDarkMode?"Activated Light Mode": "Activated Dark Mode"
+          // );
         },
-        child: const Icon(Icons.nightlight_round,
-        size: 20,
+        child: Icon(
+          Get.isDarkMode ? Icons.wb_sunny_outlined : Icons.nightlight_round,
+          size: 20,
+          color: Get.isDarkMode ? Colors.white : Colors.black,
         ),
       ),
       actions: const [
-       Icon(Icons.person,
-        size: 20,
-        ),
-        SizedBox(width: 20,)
+        CircleAvatar(backgroundImage: AssetImage("images/profile.png")),
+        SizedBox(
+          width: 20,
+        )
       ],
     );
   }

@@ -8,15 +8,14 @@ const primaryClr = blueishClr;
 const Color darkGreyClr = Color(0xFF121212);
 Color darkHeaderClr = Color(0xFF424242);
 
-
-class Themes{
+class Themes {
   static final light = ThemeData(
-    primaryColor: primaryClr,
-    brightness: Brightness.light
-  );
+      backgroundColor: Colors.white,
+      primaryColor: primaryClr,
+      brightness: Brightness.light);
 
   static final dark = ThemeData(
-    primaryColor: darkGreyClr,
-    brightness: Brightness.dark
-  );
+      backgroundColor: darkGreyClr,
+      primaryColor: primaryClr,
+      brightness: Brightness.dark);
 }
