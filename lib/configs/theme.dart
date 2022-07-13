@@ -6,7 +6,7 @@ const Color pinkClr = Color(0xFFff4667);
 const Color white = Colors.white;
 const primaryClr = blueishClr;
 const Color darkGreyClr = Color(0xFF121212);
-Color darkHeaderClr = Color(0xFF424242);
+Color darkHeaderClr = Color.fromRGBO(48, 48, 48, 0);
 
 class Themes {
   static final light = ThemeData(
@@ -15,7 +15,7 @@ class Themes {
       brightness: Brightness.light);
 
   static final dark = ThemeData(
-      backgroundColor: darkGreyClr,
+      backgroundColor: darkHeaderClr,
       primaryColor: primaryClr,
       brightness: Brightness.dark);
 }
