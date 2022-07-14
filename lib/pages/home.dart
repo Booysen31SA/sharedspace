@@ -12,26 +12,38 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-          child: Column(
-        children: [
-          // Heading bar
-          header()
-          //Card for my profile
-
-          //card for linked profiles
-        ],
+          child: Padding(
+        padding: EdgeInsets.only(left: 10, right: 10, top: 10),
+        child: Column(
+          children: [
+            // Heading bar
+            header(),
+            //Card for my profile
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  'MY PROFILE',
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.grey.shade600),
+                ),
+              ],
+            )
+            //card for linked profiles
+          ],
+        ),
       )),
     );
   }
 }
 
 header() {
-  return Padding(
-    padding: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Row(
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: [
+      Padding(
+        padding: EdgeInsets.only(bottom: 20),
+        child: Row(
           children: [
             Container(
               padding: EdgeInsets.only(left: 15),
@@ -56,9 +68,9 @@ header() {
                 )),
           ],
         ),
-        SizedBox(),
-        Icon(Icons.settings),
-      ],
-    ),
+      ),
+      SizedBox(),
+      Icon(Icons.settings),
+    ],
   );
 }
