@@ -6,7 +6,17 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:sharedspace/configs/theme.dart';
 
 class CardList extends StatelessWidget {
-  const CardList({Key? key}) : super(key: key);
+  final String imageUrl;
+  final String name;
+  final String surname;
+  final String? userList;
+  const CardList(
+      {Key? key,
+      required this.imageUrl,
+      required this.name,
+      required this.surname,
+      required this.userList})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,17 +32,24 @@ class CardList extends StatelessWidget {
           Row(
             children: [
               CircleAvatar(
-                backgroundImage: AssetImage('images/profile.png'),
-                radius: 25,
+                backgroundImage: AssetImage(imageUrl),
+                maxRadius: 28,
               ),
               SizedBox(
                 width: 20,
               ),
-              Text(
-                'Name and Surname',
-                style: TextStyle(
-                  color: Colors.white,
-                ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '$name $surname',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                    ),
+                  ),
+                  if (userList != null) Text('$userList')
+                ],
               )
             ],
           ),

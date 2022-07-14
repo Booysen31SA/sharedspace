@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:sharedspace/configs/theme.dart';
-import 'package:sharedspace/widgets/card.dart';
+import 'package:sharedspace/widgets/cardList.dart';
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
@@ -38,7 +38,12 @@ class Home extends StatelessWidget {
                     ),
                   ],
                 ),
-                CardList(),
+                CardList(
+                  imageUrl: 'images/profileImg.png',
+                  name: 'Chandé',
+                  surname: 'Herman',
+                  userList: null,
+                ),
               ],
             )
             //card for linked profiles
