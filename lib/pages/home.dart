@@ -1,9 +1,8 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:sharedspace/configs/theme.dart';
+import 'package:sharedspace/widgets/card.dart';
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
@@ -19,14 +18,27 @@ class Home extends StatelessWidget {
             // Heading bar
             header(),
             //Card for my profile
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+            Column(
               children: [
-                Text(
-                  'MY PROFILE',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold, color: Colors.grey.shade600),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        left: 20,
+                        bottom: 15,
+                      ),
+                      child: Text(
+                        'MY PROFILE',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey.shade600,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
+                CardList(),
               ],
             )
             //card for linked profiles
@@ -56,7 +68,6 @@ header() {
                 "Shared",
                 style: TextStyle(
                   fontSize: 26,
-                  fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
               ),
