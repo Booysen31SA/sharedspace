@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:sharedspace/pages/home.dart';
 import 'package:sharedspace/pages/loading.dart';
+import 'package:sharedspace/pages/space.dart';
 import 'package:sharedspace/screen/home_page.dart';
 import 'package:sharedspace/services/themeService.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';

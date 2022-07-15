@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:sharedspace/configs/theme.dart';
 import 'package:sharedspace/widgets/cardList.dart';
+import 'package:sharedspace/widgets/plusButton.dart';
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
@@ -55,11 +56,13 @@ header() {
                 ),
               ),
             ),
-            Text("Space",
-                style: TextStyle(
-                  fontSize: 26,
-                  color: primaryClr,
-                )),
+            Text(
+              "Space",
+              style: TextStyle(
+                fontSize: 26,
+                color: primaryClr,
+              ),
+            ),
           ],
         ),
       ),
@@ -91,8 +94,7 @@ myProfile() {
       ),
       CardList(
         imageUrl: 'images/profileImg.png',
-        name: 'Chandé',
-        surname: 'Herman',
+        name: 'Chandé Herman',
         cardColor: primaryClr,
       ),
     ],
@@ -117,19 +119,7 @@ mySpaces() {
                 color: Colors.grey.shade600,
               ),
             ),
-            Container(
-              child: Icon(
-                Icons.add,
-                color: Colors.white,
-                size: 30,
-              ),
-              decoration: BoxDecoration(
-                color: primaryClr,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(40),
-                ),
-              ),
-            )
+            PlusButton(),
           ],
         ),
       ),
@@ -137,14 +127,12 @@ mySpaces() {
       // cards shared spaces
       CardList(
           imageUrl: 'images/profileImg.png',
-          name: 'Chandé',
-          surname: 'Herman',
+          name: 'Chandé Herman',
           cardColor: Colors.green),
 
       CardList(
         imageUrl: 'images/profileImg.png',
-        name: 'Chandé',
-        surname: 'Herman',
+        name: 'Chandé Herman',
         cardColor: Colors.amber,
       )
     ],
