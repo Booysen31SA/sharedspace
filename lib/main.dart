@@ -4,6 +4,7 @@ import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:sharedspace/pages/home.dart';
+import 'package:sharedspace/pages/loading.dart';
 import 'package:sharedspace/screen/home_page.dart';
 import 'package:sharedspace/services/themeService.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
@@ -23,17 +24,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'Flutter Demo',
-      debugShowCheckedModeBanner: false,
-      theme: Themes.light,
-      darkTheme: Themes.dark,
-      themeMode: ThemeService().theme,
-      home: AnimatedSplashScreen(
-        splash: Image.asset('images/splash.gif'),
-        nextScreen: Home(),
-        splashTransition: SplashTransition.slideTransition,
-        backgroundColor: primaryClr,
-      ),
-    );
+        title: 'Flutter Demo',
+        debugShowCheckedModeBanner: false,
+        theme: Themes.light,
+        darkTheme: Themes.dark,
+        themeMode: ThemeService().theme,
+        initialRoute: '/',
+        routes: {
+          '/': (context) => Loading(),
+          '/home': (context) => Home(),
+        });
   }
 }
