@@ -9,21 +9,24 @@ class CardList extends StatelessWidget {
   final String imageUrl;
   final String name;
   final String surname;
-  final String? userList;
+  final Color cardColor;
   const CardList(
       {Key? key,
       required this.imageUrl,
       required this.name,
       required this.surname,
-      required this.userList})
+      required this.cardColor})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: EdgeInsets.only(
+        top: 15,
+      ),
       padding: EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: primaryClr,
+        color: cardColor,
         borderRadius: BorderRadius.circular(30),
       ),
       child: Row(
@@ -48,7 +51,6 @@ class CardList extends StatelessWidget {
                       fontSize: 20,
                     ),
                   ),
-                  if (userList != null) Text('$userList')
                 ],
               )
             ],

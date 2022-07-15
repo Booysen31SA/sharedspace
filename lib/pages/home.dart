@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sort_child_properties_last
 
 import 'package:flutter/material.dart';
 import 'package:sharedspace/configs/theme.dart';
@@ -11,45 +11,23 @@ class Home extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-          child: Padding(
-        padding: EdgeInsets.only(left: 10, right: 10, top: 10),
-        child: Column(
-          children: [
-            // Heading bar
-            header(),
-            //Card for my profile
-            Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        left: 20,
-                        bottom: 15,
-                      ),
-                      child: Text(
-                        'MY PROFILE',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.grey.shade600,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                CardList(
-                  imageUrl: 'images/profileImg.png',
-                  name: 'Chandé',
-                  surname: 'Herman',
-                  userList: null,
-                ),
-              ],
-            )
-            //card for linked profiles
-          ],
+        child: Padding(
+          padding: EdgeInsets.only(left: 10, right: 10, top: 10),
+          child: Column(
+            children: [
+              // Heading bar
+              header(),
+              //Card for my profile
+              myProfile(),
+              SizedBox(
+                height: 25,
+              ),
+              //card for linked profiles
+              mySpaces()
+            ],
+          ),
         ),
-      )),
+      ),
     );
   }
 }
@@ -87,6 +65,88 @@ header() {
       ),
       SizedBox(),
       Icon(Icons.settings),
+    ],
+  );
+}
+
+myProfile() {
+  return Column(
+    children: [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(
+              left: 20,
+            ),
+            child: Text(
+              'MY PROFILE',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.grey.shade600,
+              ),
+            ),
+          ),
+        ],
+      ),
+      CardList(
+        imageUrl: 'images/profileImg.png',
+        name: 'Chandé',
+        surname: 'Herman',
+        cardColor: primaryClr,
+      ),
+    ],
+  );
+}
+
+mySpaces() {
+  return Column(
+    children: [
+      Padding(
+        padding: const EdgeInsets.only(
+          left: 20,
+          right: 20,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              "SPACES",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.grey.shade600,
+              ),
+            ),
+            Container(
+              child: Icon(
+                Icons.add,
+                color: Colors.white,
+                size: 30,
+              ),
+              decoration: BoxDecoration(
+                color: primaryClr,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(40),
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+
+      // cards shared spaces
+      CardList(
+          imageUrl: 'images/profileImg.png',
+          name: 'Chandé',
+          surname: 'Herman',
+          cardColor: Colors.green),
+
+      CardList(
+        imageUrl: 'images/profileImg.png',
+        name: 'Chandé',
+        surname: 'Herman',
+        cardColor: Colors.amber,
+      )
     ],
   );
 }
