@@ -49,6 +49,21 @@ class _AddTaskState extends State<AddTask> {
                             _getDateFromUser(),
                           },
                         ),
+                      ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child:
+                                MyInputField(title: 'Start Time', hint: 'time'),
+                          ),
+                          SizedBox(
+                            width: 15,
+                          ),
+                          Expanded(
+                            child:
+                                MyInputField(title: 'End Time', hint: 'time'),
+                          )
+                        ],
                       )
                     ],
                   ),
