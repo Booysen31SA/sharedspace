@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:sharedspace/configs/theme.dart';
+import 'package:sharedspace/pages/settings.dart';
 import 'package:sharedspace/widgets/cardList.dart';
 import 'package:sharedspace/widgets/plusButton.dart';
 
@@ -17,7 +18,7 @@ class Home extends StatelessWidget {
           child: Column(
             children: [
               // Heading bar
-              header(),
+              header(context),
               //Card for my profile
               myProfile(),
               SizedBox(
@@ -33,7 +34,7 @@ class Home extends StatelessWidget {
   }
 }
 
-header() {
+header(context) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [
@@ -67,7 +68,17 @@ header() {
         ),
       ),
       SizedBox(),
-      Icon(Icons.settings),
+      GestureDetector(
+        child: Icon(Icons.settings),
+        onTap: () => {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Settings(),
+            ),
+          )
+        },
+      ),
     ],
   );
 }
