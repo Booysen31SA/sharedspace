@@ -1,10 +1,11 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sized_box_for_whitespace
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sized_box_for_whitespace, unused_field, prefer_final_fields
 
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:intl/intl.dart';
 import 'package:sharedspace/configs/theme.dart';
+import 'package:sharedspace/services/themeService.dart';
 import 'package:sharedspace/widgets/input_field.dart';
 
 class AddTask extends StatefulWidget {
@@ -19,6 +20,10 @@ class AddTask extends StatefulWidget {
 
 class _AddTaskState extends State<AddTask> {
   DateTime _selectedDate = DateTime.now();
+  String _endTime = '09:00 AM';
+  String _startTime = DateFormat("hh:mm a").format(DateTime.now()).toString();
+  int _selectedRemind = 5;
+  List<int> remindList = [5, 10, 15, 30];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,18 +58,68 @@ class _AddTaskState extends State<AddTask> {
                       Row(
                         children: [
                           Expanded(
-                            child:
-                                MyInputField(title: 'Start Time', hint: 'time'),
+                            child: MyInputField(
+                              title: 'Start Time',
+                              hint: _startTime,
+                              widget: IconButton(
+                                onPressed: () {
+                                  _getTimeFromUser(isStartTime: true);
+                                },
+                                icon: Icon(
+                                  Icons.access_time_rounded,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ),
                           ),
                           SizedBox(
                             width: 15,
                           ),
                           Expanded(
-                            child:
-                                MyInputField(title: 'End Time', hint: 'time'),
+                            child: MyInputField(
+                              title: 'End Time',
+                              hint: _endTime,
+                              widget: IconButton(
+                                onPressed: () {
+                                  _getTimeFromUser(isStartTime: false);
+                                },
+                                icon: Icon(
+                                  Icons.access_time_rounded,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ),
                           )
                         ],
-                      )
+                      ),
+                      MyInputField(
+                        title: 'Reminder',
+                        hint: '$_selectedRemind minutes early',
+                        widget: DropdownButton(
+                          icon: Icon(
+                            Icons.keyboard_arrow_down,
+                            color: Colors.grey,
+                          ),
+                          iconSize: 32,
+                          elevation: 4,
+                          style: subTitleStyle,
+                          underline: Container(height: 0),
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              _selectedRemind = int.parse(newValue!);
+                            });
+                          },
+                          items: remindList
+                              .map<DropdownMenuItem<String>>((int value) {
+                            return DropdownMenuItem(
+                              value: value.toString(),
+                              child: Text(
+                                value.toString(),
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -122,5 +177,36 @@ class _AddTaskState extends State<AddTask> {
     } else {
       print('Something Went wrong with date Picker');
     }
+  }
+
+  _getTimeFromUser({required bool isStartTime}) async {
+    var pickedTime = await _showTimePicker();
+
+    if (pickedTime == null) {
+      print('Time Cancelled');
+    } else if (isStartTime) {
+      setState(() {
+        String _formattedTime = pickedTime.format(context);
+        _startTime = _formattedTime;
+      });
+    } else {
+      setState(() {
+        String _formattedTime = pickedTime.format(context);
+        _endTime = _formattedTime;
+      });
+    }
+  }
+
+  _showTimePicker() {
+    return showTimePicker(
+      initialEntryMode: TimePickerEntryMode.input,
+      context: context,
+      initialTime: TimeOfDay(
+        hour: int.parse(
+          _startTime.split(':')[0],
+        ),
+        minute: int.parse(_startTime.split(':')[1].split(' ')[0]),
+      ),
+    );
   }
 }
