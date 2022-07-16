@@ -3,8 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:get/get.dart';
 import 'package:sharedspace/configs/theme.dart';
 import 'package:sharedspace/pages/home.dart';
+import 'package:sharedspace/services/themeService.dart';
 
 class Settings extends StatefulWidget {
   const Settings({Key? key}) : super(key: key);
@@ -28,6 +30,8 @@ class _SettingsState extends State<Settings> {
                 'Settings',
                 primaryClr,
               ),
+
+              darkModeSettings(),
             ],
           ),
         ),
@@ -62,6 +66,26 @@ class _SettingsState extends State<Settings> {
           ),
         )
       ],
+    );
+  }
+
+  darkModeSettings() {
+    return Container(
+      margin: EdgeInsets.only(top: 15, left: 15),
+      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+        Text(
+          'Dark Mode',
+          style: TextStyle(
+            fontSize: 20,
+          ),
+        ),
+        Switch.adaptive(
+          value: Get.isDarkMode,
+          onChanged: (value) => {
+            ThemeService().switchTheme(),
+          },
+        )
+      ]),
     );
   }
 }
