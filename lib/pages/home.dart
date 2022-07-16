@@ -96,7 +96,7 @@ myProfile() {
         cardID: '1',
         imageUrl: 'images/profileImg.png',
         name: 'Chandé Herman',
-        cardColor: primaryClr,
+        spaceColor: primaryClr,
       ),
     ],
   );
@@ -130,13 +130,13 @@ mySpaces() {
           cardID: '3',
           imageUrl: 'images/profileImg.png',
           name: 'Chandé Herman',
-          cardColor: Colors.green),
+          spaceColor: Colors.green),
 
       CardList(
         cardID: '3',
         imageUrl: 'images/profileImg.png',
         name: 'Chandé Herman',
-        cardColor: Colors.amber,
+        spaceColor: Colors.amber,
       )
     ],
   );

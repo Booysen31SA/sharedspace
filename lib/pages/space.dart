@@ -13,8 +13,8 @@ import 'package:sharedspace/widgets/plusButton.dart';
 
 class Space extends StatefulWidget {
   final String name;
-  final Color cardColor;
-  const Space({Key? key, required this.name, required this.cardColor})
+  final Color spaceColor;
+  const Space({Key? key, required this.name, required this.spaceColor})
       : super(key: key);
 
   @override
@@ -32,7 +32,7 @@ class _SpaceState extends State<Space> {
           child: Column(
             children: [
               // header
-              header(context, widget.name, widget.cardColor),
+              header(context, widget.name, widget.spaceColor),
               //
 
               Row(
@@ -56,8 +56,8 @@ class _SpaceState extends State<Space> {
               ),
 
               // dates row
-              addDateBar(widget.cardColor),
-              addTaskBar(widget.cardColor),
+              addDateBar(widget.spaceColor),
+              addTaskBar(widget.spaceColor),
               //todays tasks
 
               //appBar
@@ -69,7 +69,7 @@ class _SpaceState extends State<Space> {
     );
   }
 
-  header(context, name, cardColor) {
+  header(context, name, spaceColor) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -89,24 +89,24 @@ class _SpaceState extends State<Space> {
                 '$name',
                 style: TextStyle(
                   fontSize: 26,
-                  color: cardColor,
+                  color: spaceColor,
                 ),
               ),
             ],
           ),
         ),
-        PlusButton(cardColor: cardColor),
+        PlusButton(spaceColor: spaceColor),
       ],
     );
   }
 
-  addDateBar(cardColor) {
+  addDateBar(spaceColor) {
     return DatePicker(
       DateTime.now(),
       height: 100,
       width: 80,
       initialSelectedDate: DateTime.now(),
-      selectionColor: cardColor,
+      selectionColor: spaceColor,
       selectedTextColor: Colors.white,
       dateTextStyle: TextStyle(
         fontSize: 20,
@@ -130,7 +130,7 @@ class _SpaceState extends State<Space> {
     );
   }
 
-  addTaskBar(cardColor) {
+  addTaskBar(spaceColor) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
       child: Row(
@@ -142,14 +142,14 @@ class _SpaceState extends State<Space> {
           ),
           MyButton(
             label: "+ Add Task",
-            cardColor: cardColor,
+            spaceColor: spaceColor,
             onTap: () => {
               Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => AddTask(
                     name: 'ADD TASK',
-                    cardColor: cardColor,
+                    cardColor: spaceColor,
                   ),
                 ),
               )

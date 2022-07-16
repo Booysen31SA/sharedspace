@@ -6,8 +6,8 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:sharedspace/configs/theme.dart';
 
 class PlusButton extends StatelessWidget {
-  final cardColor;
-  const PlusButton({Key? key, this.cardColor}) : super(key: key);
+  final spaceColor;
+  const PlusButton({Key? key, this.spaceColor}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +18,7 @@ class PlusButton extends StatelessWidget {
         size: 30,
       ),
       decoration: BoxDecoration(
-        color: cardColor,
+        color: spaceColor,
         borderRadius: BorderRadius.all(
           Radius.circular(40),
         ),

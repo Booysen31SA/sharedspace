@@ -10,12 +10,12 @@ class CardList extends StatelessWidget {
   final String cardID;
   final String imageUrl;
   final String name;
-  final Color cardColor;
+  final Color spaceColor;
   const CardList({
     Key? key,
     required this.imageUrl,
     required this.name,
-    required this.cardColor,
+    required this.spaceColor,
     required this.cardID,
   }) : super(key: key);
 
@@ -26,7 +26,7 @@ class CardList extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => Space(name: name, cardColor: cardColor),
+            builder: (context) => Space(name: name, spaceColor: spaceColor),
           ),
         )
       },
@@ -36,7 +36,7 @@ class CardList extends StatelessWidget {
         ),
         padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: cardColor,
+          color: spaceColor,
           borderRadius: BorderRadius.circular(30),
         ),
         child: Row(
