@@ -7,6 +7,7 @@ import 'package:sharedspace/configs/theme.dart';
 import 'package:sharedspace/pages/space.dart';
 
 class CardList extends StatelessWidget {
+  final String cardID;
   final String imageUrl;
   final String name;
   final Color cardColor;
@@ -14,7 +15,8 @@ class CardList extends StatelessWidget {
       {Key? key,
       required this.imageUrl,
       required this.name,
-      required this.cardColor})
+      required this.cardColor,
+      required this.cardID})
       : super(key: key);
 
   @override
