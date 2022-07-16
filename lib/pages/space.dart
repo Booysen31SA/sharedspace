@@ -6,6 +6,7 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:intl/intl.dart';
 import 'package:sharedspace/configs/theme.dart';
+import 'package:sharedspace/pages/Forms/AddTask.dart';
 import 'package:sharedspace/services/themeService.dart';
 import 'package:sharedspace/widgets/button.dart';
 import 'package:sharedspace/widgets/plusButton.dart';
@@ -55,8 +56,8 @@ class _SpaceState extends State<Space> {
               ),
 
               // dates row
-              addDateBar(),
-              addTaskBar(),
+              addDateBar(widget.cardColor),
+              addTaskBar(widget.cardColor),
               //todays tasks
 
               //appBar
@@ -94,37 +95,18 @@ class _SpaceState extends State<Space> {
             ],
           ),
         ),
-        PlusButton(),
+        PlusButton(cardColor: cardColor),
       ],
     );
   }
 
-  addTaskBar() {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            'Tasks',
-            style: subHeadingStyle,
-          ),
-          MyButton(
-            label: "+ Add Task",
-            onTap: () => null,
-          )
-        ],
-      ),
-    );
-  }
-
-  addDateBar() {
+  addDateBar(cardColor) {
     return DatePicker(
       DateTime.now(),
       height: 100,
       width: 80,
       initialSelectedDate: DateTime.now(),
-      selectionColor: primaryClr,
+      selectionColor: cardColor,
       selectedTextColor: Colors.white,
       dateTextStyle: TextStyle(
         fontSize: 20,
@@ -145,6 +127,36 @@ class _SpaceState extends State<Space> {
         print(date);
         _selectedDate = date;
       },
+    );
+  }
+
+  addTaskBar(cardColor) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            'Tasks',
+            style: subHeadingStyle,
+          ),
+          MyButton(
+            label: "+ Add Task",
+            cardColor: cardColor,
+            onTap: () => {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => AddTask(
+                    name: 'ADD TASK',
+                    cardColor: cardColor,
+                  ),
+                ),
+              )
+            },
+          )
+        ],
+      ),
     );
   }
 }

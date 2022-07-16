@@ -5,8 +5,13 @@ import 'package:sharedspace/configs/theme.dart';
 
 class MyButton extends StatelessWidget {
   final String label;
+  final Color cardColor;
   final Function()? onTap;
-  const MyButton({Key? key, required this.label, required this.onTap})
+  const MyButton(
+      {Key? key,
+      required this.label,
+      required this.onTap,
+      required this.cardColor})
       : super(key: key);
 
   @override
@@ -17,7 +22,7 @@ class MyButton extends StatelessWidget {
         width: 120,
         height: 60,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20), color: primaryClr),
+            borderRadius: BorderRadius.circular(20), color: cardColor),
         child: Center(
           child: Text(
             label,

@@ -11,13 +11,13 @@ class CardList extends StatelessWidget {
   final String imageUrl;
   final String name;
   final Color cardColor;
-  const CardList(
-      {Key? key,
-      required this.imageUrl,
-      required this.name,
-      required this.cardColor,
-      required this.cardID})
-      : super(key: key);
+  const CardList({
+    Key? key,
+    required this.imageUrl,
+    required this.name,
+    required this.cardColor,
+    required this.cardID,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
