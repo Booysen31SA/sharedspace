@@ -45,12 +45,12 @@ class _SettingsState extends State<Settings> {
       children: [
         GestureDetector(
           onTap: () => {
-            Navigator.pop(context),
+            Get.back(),
           },
           child: Row(
             children: [
               Icon(
-                Icons.arrow_back,
+                backArrow,
               ),
               SizedBox(
                 width: 10,

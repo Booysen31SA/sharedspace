@@ -131,7 +131,7 @@ mySpaces() {
                 color: Colors.grey.shade600,
               ),
             ),
-            PlusButton(),
+            PlusButton(spaceColor: primaryClr),
           ],
         ),
       ),

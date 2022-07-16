@@ -1,8 +1,11 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sized_box_for_whitespace
 
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:intl/intl.dart';
+import 'package:sharedspace/configs/theme.dart';
+import 'package:sharedspace/widgets/input_field.dart';
 
 class AddTask extends StatefulWidget {
   final String name;
@@ -15,6 +18,7 @@ class AddTask extends StatefulWidget {
 }
 
 class _AddTaskState extends State<AddTask> {
+  DateTime _selectedDate = DateTime.now();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,6 +29,31 @@ class _AddTaskState extends State<AddTask> {
             children: [
               // header
               header(context, widget.name, widget.cardColor),
+              Container(
+                width: MediaQuery.of(context).size.width,
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      MyInputField(title: 'Title', hint: 'Enter your title'),
+                      MyInputField(title: 'Note', hint: 'Enter your note'),
+                      MyInputField(
+                        title: 'Date',
+                        hint: DateFormat.yMd().format(_selectedDate),
+                        widget: IconButton(
+                          icon: Icon(
+                            Icons.calendar_today_outlined,
+                            color: Colors.grey,
+                          ),
+                          onPressed: () => {
+                            _getDateFromUser(),
+                          },
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              )
               //
             ],
           ),
@@ -44,7 +73,7 @@ class _AddTaskState extends State<AddTask> {
           child: Row(
             children: [
               Icon(
-                Icons.arrow_back,
+                backArrow,
               ),
               SizedBox(
                 width: 10,
@@ -61,5 +90,22 @@ class _AddTaskState extends State<AddTask> {
         ),
       ],
     );
+  }
+
+  _getDateFromUser() async {
+    DateTime? _pickDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2022),
+      lastDate: DateTime(2140),
+    );
+
+    if (_pickDate != null) {
+      setState(() {
+        _selectedDate = _pickDate;
+      });
+    } else {
+      print('Something Went wrong with date Picker');
+    }
   }
 }

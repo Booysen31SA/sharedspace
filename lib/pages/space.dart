@@ -4,6 +4,7 @@ import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:sharedspace/configs/theme.dart';
 import 'package:sharedspace/pages/Forms/AddTask.dart';
@@ -80,7 +81,7 @@ class _SpaceState extends State<Space> {
           child: Row(
             children: [
               Icon(
-                Icons.arrow_back,
+                backArrow,
               ),
               SizedBox(
                 width: 10,
@@ -144,13 +145,10 @@ class _SpaceState extends State<Space> {
             label: "+ Add Task",
             spaceColor: spaceColor,
             onTap: () => {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => AddTask(
-                    name: 'ADD TASK',
-                    cardColor: spaceColor,
-                  ),
+              Get.to(
+                AddTask(
+                  name: 'ADD TASK',
+                  cardColor: spaceColor,
                 ),
               )
             },

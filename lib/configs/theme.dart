@@ -6,7 +6,9 @@ const Color pinkClr = Color(0xFFff4667);
 const Color white = Colors.white;
 const primaryClr = blueishClr;
 const Color darkGreyClr = Color(0xFF121212);
-Color darkHeaderClr = Color.fromRGBO(48, 48, 48, 0);
+const Color darkHeaderClr = Color.fromRGBO(48, 48, 48, 0);
+
+IconData backArrow = Icons.arrow_back_ios;
 
 class Themes {
   static final light = ThemeData(
