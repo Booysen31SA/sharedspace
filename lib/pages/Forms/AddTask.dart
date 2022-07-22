@@ -33,163 +33,167 @@ class _AddTaskState extends State<AddTask> {
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.only(left: 10, right: 10, top: 10),
-          child: Column(
-            children: [
-              // header
-              header(context, widget.name, widget.cardColor),
-              Container(
-                width: MediaQuery.of(context).size.width,
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      MyInputField(title: 'Title', hint: 'Enter your title'),
-                      MyInputField(title: 'Note', hint: 'Enter your note'),
-                      MyInputField(
-                        title: 'Date',
-                        hint: DateFormat.yMd().format(_selectedDate),
-                        widget: IconButton(
-                          icon: Icon(
-                            Icons.calendar_today_outlined,
-                            color: Colors.grey,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                // header
+                header(context, widget.name, widget.cardColor),
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        MyInputField(title: 'Title', hint: 'Enter your title'),
+                        MyInputField(title: 'Note', hint: 'Enter your note'),
+                        MyInputField(
+                          title: 'Date',
+                          hint: DateFormat.yMd().format(_selectedDate),
+                          widget: IconButton(
+                            icon: Icon(
+                              Icons.calendar_today_outlined,
+                              color: Colors.grey,
+                            ),
+                            onPressed: () => {
+                              _getDateFromUser(),
+                            },
                           ),
-                          onPressed: () => {
-                            _getDateFromUser(),
-                          },
                         ),
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: MyInputField(
-                              title: 'Start Time',
-                              hint: _startTime,
-                              widget: IconButton(
-                                onPressed: () {
-                                  _getTimeFromUser(isStartTime: true);
-                                },
-                                icon: Icon(
-                                  Icons.access_time_rounded,
-                                  color: Colors.grey,
+                        Row(
+                          children: [
+                            Expanded(
+                              child: MyInputField(
+                                title: 'Start Time',
+                                hint: _startTime,
+                                widget: IconButton(
+                                  onPressed: () {
+                                    _getTimeFromUser(isStartTime: true);
+                                  },
+                                  icon: Icon(
+                                    Icons.access_time_rounded,
+                                    color: Colors.grey,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          SizedBox(
-                            width: 15,
-                          ),
-                          Expanded(
-                            child: MyInputField(
-                              title: 'End Time',
-                              hint: _endTime,
-                              widget: IconButton(
-                                onPressed: () {
-                                  _getTimeFromUser(isStartTime: false);
-                                },
-                                icon: Icon(
-                                  Icons.access_time_rounded,
-                                  color: Colors.grey,
+                            SizedBox(
+                              width: 15,
+                            ),
+                            Expanded(
+                              child: MyInputField(
+                                title: 'End Time',
+                                hint: _endTime,
+                                widget: IconButton(
+                                  onPressed: () {
+                                    _getTimeFromUser(isStartTime: false);
+                                  },
+                                  icon: Icon(
+                                    Icons.access_time_rounded,
+                                    color: Colors.grey,
+                                  ),
                                 ),
                               ),
+                            )
+                          ],
+                        ),
+                        MyInputField(
+                          title: 'Reminder',
+                          hint: '$_selectedRemind minutes early',
+                          widget: DropdownButton(
+                            icon: Icon(
+                              Icons.keyboard_arrow_down,
+                              color: Colors.grey,
                             ),
-                          )
-                        ],
-                      ),
-                      MyInputField(
-                        title: 'Reminder',
-                        hint: '$_selectedRemind minutes early',
-                        widget: DropdownButton(
-                          icon: Icon(
-                            Icons.keyboard_arrow_down,
-                            color: Colors.grey,
+                            iconSize: 32,
+                            elevation: 4,
+                            style: subTitleStyle,
+                            underline: Container(height: 0),
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                _selectedRemind = int.parse(newValue!);
+                              });
+                            },
+                            items: remindList
+                                .map<DropdownMenuItem<String>>((int value) {
+                              return DropdownMenuItem(
+                                value: value.toString(),
+                                child: Text(
+                                  value.toString(),
+                                ),
+                              );
+                            }).toList(),
                           ),
-                          iconSize: 32,
-                          elevation: 4,
-                          style: subTitleStyle,
-                          underline: Container(height: 0),
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              _selectedRemind = int.parse(newValue!);
-                            });
-                          },
-                          items: remindList
-                              .map<DropdownMenuItem<String>>((int value) {
-                            return DropdownMenuItem(
-                              value: value.toString(),
-                              child: Text(
-                                value.toString(),
-                              ),
-                            );
-                          }).toList(),
                         ),
-                      ),
-                      MyInputField(
-                        title: 'Repeat',
-                        hint: '$_selectedRepeat',
-                        widget: DropdownButton(
-                          icon: Icon(
-                            Icons.keyboard_arrow_down,
-                            color: Colors.grey,
+                        MyInputField(
+                          title: 'Repeat',
+                          hint: '$_selectedRepeat',
+                          widget: DropdownButton(
+                            icon: Icon(
+                              Icons.keyboard_arrow_down,
+                              color: Colors.grey,
+                            ),
+                            iconSize: 32,
+                            elevation: 4,
+                            style: subTitleStyle,
+                            underline: Container(height: 0),
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                _selectedRepeat = newValue!;
+                              });
+                            },
+                            items: repeatList
+                                .map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem(
+                                value: value.toString(),
+                                child: Text(
+                                  value.toString(),
+                                ),
+                              );
+                            }).toList(),
                           ),
-                          iconSize: 32,
-                          elevation: 4,
-                          style: subTitleStyle,
-                          underline: Container(height: 0),
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              _selectedRepeat = newValue!;
-                            });
-                          },
-                          items: repeatList
-                              .map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem(
-                              value: value.toString(),
-                              child: Text(
-                                value.toString(),
-                              ),
-                            );
-                          }).toList(),
                         ),
-                      ),
-                      SizedBox(
-                        height: 18,
-                      ),
-                      Row(
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Color',
-                                style: titleStyle,
-                              ),
-                              SizedBox(
-                                height: 8.0,
-                              ),
-                              Wrap(
-                                children: List<Widget>.generate(3, (int index) {
-                                  return Padding(
-                                    padding: const EdgeInsets.only(right: 8.0),
-                                    child: CircleAvatar(
-                                        radius: 14,
-                                        backgroundColor: index == 0
-                                            ? primaryClr
-                                            : index == 1
-                                                ? pinkClr
-                                                : yellowClr),
-                                  );
-                                }),
-                              )
-                            ],
-                          )
-                        ],
-                      )
-                    ],
+                        SizedBox(
+                          height: 18,
+                        ),
+                        Row(
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Color',
+                                  style: titleStyle,
+                                ),
+                                SizedBox(
+                                  height: 8.0,
+                                ),
+                                Wrap(
+                                  children:
+                                      List<Widget>.generate(3, (int index) {
+                                    return Padding(
+                                      padding:
+                                          const EdgeInsets.only(right: 8.0),
+                                      child: CircleAvatar(
+                                          radius: 14,
+                                          backgroundColor: index == 0
+                                              ? primaryClr
+                                              : index == 1
+                                                  ? pinkClr
+                                                  : yellowClr),
+                                    );
+                                  }),
+                                )
+                              ],
+                            )
+                          ],
+                        )
+                      ],
+                    ),
                   ),
-                ),
-              )
-              //
-            ],
+                )
+                //
+              ],
+            ),
           ),
         ),
       ),
