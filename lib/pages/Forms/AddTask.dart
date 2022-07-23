@@ -1,11 +1,11 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sized_box_for_whitespace, unused_field, prefer_final_fields
 
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:sharedspace/configs/theme.dart';
 import 'package:sharedspace/services/themeService.dart';
+import 'package:sharedspace/widgets/button.dart';
 import 'package:sharedspace/widgets/input_field.dart';
 
 class AddTask extends StatefulWidget {
@@ -19,6 +19,8 @@ class AddTask extends StatefulWidget {
 }
 
 class _AddTaskState extends State<AddTask> {
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _noteController = TextEditingController();
   DateTime _selectedDate = DateTime.now();
   String _endTime = '09:00 AM';
   String _startTime = DateFormat("hh:mm a").format(DateTime.now()).toString();
@@ -27,9 +29,12 @@ class _AddTaskState extends State<AddTask> {
   String _selectedRepeat = 'None';
   List<String> repeatList = ['None', 'Daily', 'Weekly', 'Monthly'];
 
+  int _selectedColor = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: context.theme.backgroundColor,
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.only(left: 10, right: 10, top: 10),
@@ -44,8 +49,16 @@ class _AddTaskState extends State<AddTask> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        MyInputField(title: 'Title', hint: 'Enter your title'),
-                        MyInputField(title: 'Note', hint: 'Enter your note'),
+                        MyInputField(
+                          title: 'Title',
+                          hint: 'Enter your title',
+                          controller: _titleController,
+                        ),
+                        MyInputField(
+                          title: 'Note',
+                          hint: 'Enter your note',
+                          controller: _noteController,
+                        ),
                         MyInputField(
                           title: 'Date',
                           hint: DateFormat.yMd().format(_selectedDate),
@@ -156,34 +169,14 @@ class _AddTaskState extends State<AddTask> {
                           height: 18,
                         ),
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Color',
-                                  style: titleStyle,
-                                ),
-                                SizedBox(
-                                  height: 8.0,
-                                ),
-                                Wrap(
-                                  children:
-                                      List<Widget>.generate(3, (int index) {
-                                    return Padding(
-                                      padding:
-                                          const EdgeInsets.only(right: 8.0),
-                                      child: CircleAvatar(
-                                          radius: 14,
-                                          backgroundColor: index == 0
-                                              ? primaryClr
-                                              : index == 1
-                                                  ? pinkClr
-                                                  : yellowClr),
-                                    );
-                                  }),
-                                )
-                              ],
+                            _colorPicker(),
+                            MyButton(
+                              label: 'Create Task',
+                              onTap: () => _validateData(),
+                              spaceColor: widget.cardColor,
                             )
                           ],
                         )
@@ -276,5 +269,66 @@ class _AddTaskState extends State<AddTask> {
         minute: int.parse(_startTime.split(':')[1].split(' ')[0]),
       ),
     );
+  }
+
+  _colorPicker() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Color',
+          style: titleStyle,
+        ),
+        SizedBox(
+          height: 8.0,
+        ),
+        Wrap(
+          children: List<Widget>.generate(3, (int index) {
+            return GestureDetector(
+              onTap: () {
+                setState(() {
+                  _selectedColor = index;
+                });
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(right: 8.0),
+                child: CircleAvatar(
+                  radius: 14,
+                  backgroundColor: index == 0
+                      ? primaryClr
+                      : index == 1
+                          ? pinkClr
+                          : yellowClr,
+                  child: _selectedColor == index
+                      ? Icon(
+                          Icons.done,
+                          color: Colors.white,
+                          size: 16,
+                        )
+                      : Container(),
+                ),
+              ),
+            );
+          }),
+        )
+      ],
+    );
+  }
+
+  _validateData() {
+    if (_titleController.text.isNotEmpty && _noteController.text.isEmpty) {
+      //add to db
+    } else if (_titleController.text.isEmpty || _noteController.text.isEmpty) {
+      Get.snackbar(
+        "Required",
+        'All fields are reqired!',
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.white,
+        colorText: pinkClr,
+        icon: Icon(
+          Icons.warning_amber_rounded,
+        ),
+      );
+    }
   }
 }

@@ -43,6 +43,7 @@ dependencies:
   animated_splash_screen:
   flutter_spinkit: ^5.1.0
   date_picker_timeline:
+  sqflite:
 dev_dependencies:
   flutter_test:
     sdk: flutter

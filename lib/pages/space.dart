@@ -27,6 +27,7 @@ class _SpaceState extends State<Space> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: context.theme.backgroundColor,
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.only(left: 10, right: 10, top: 10),

@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sort_child_properties_last
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:sharedspace/configs/theme.dart';
 import 'package:sharedspace/pages/settings.dart';
 import 'package:sharedspace/widgets/cardList.dart';
@@ -12,6 +13,7 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: context.theme.backgroundColor,
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.only(left: 10, right: 10, top: 10),
