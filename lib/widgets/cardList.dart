@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, prefer_interpolation_to_compose_strings
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
@@ -22,10 +22,7 @@ class CardList extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => Space(
-              name: cardListModel.firstName.toString() +
-                  ' ' +
-                  cardListModel.surname.toString(),
-              spaceColor: cardListModel.spaceColor,
+              cardListModel: cardListModel,
             ),
           ),
         )
@@ -55,9 +52,7 @@ class CardList extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      cardListModel.firstName.toString() +
-                          ' ' +
-                          cardListModel.surname.toString(),
+                      '${cardListModel.firstName} ${cardListModel.surname}',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 20,

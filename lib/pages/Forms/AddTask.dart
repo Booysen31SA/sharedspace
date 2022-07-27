@@ -13,8 +13,13 @@ import 'package:sharedspace/widgets/input_field.dart';
 class AddTask extends StatefulWidget {
   final String name;
   final Color cardColor;
-  const AddTask({Key? key, required this.name, required this.cardColor})
-      : super(key: key);
+  final String userid;
+  const AddTask({
+    Key? key,
+    required this.name,
+    required this.cardColor,
+    required this.userid,
+  }) : super(key: key);
 
   @override
   State<AddTask> createState() => _AddTaskState();
@@ -142,7 +147,7 @@ class _AddTaskState extends State<AddTask> {
                         ),
                         MyInputField(
                           title: 'Repeat',
-                          hint: '$_selectedRepeat',
+                          hint: _selectedRepeat,
                           widget: DropdownButton(
                             icon: Icon(
                               Icons.keyboard_arrow_down,
@@ -227,16 +232,16 @@ class _AddTaskState extends State<AddTask> {
   }
 
   _getDateFromUser() async {
-    DateTime? _pickDate = await showDatePicker(
+    DateTime? pickDate = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime(2022),
       lastDate: DateTime(2140),
     );
 
-    if (_pickDate != null) {
+    if (pickDate != null) {
       setState(() {
-        _selectedDate = _pickDate;
+        _selectedDate = pickDate;
       });
     } else {
       print('Something Went wrong with date Picker');
@@ -250,13 +255,13 @@ class _AddTaskState extends State<AddTask> {
       print('Time Cancelled');
     } else if (isStartTime) {
       setState(() {
-        String _formattedTime = pickedTime.format(context);
-        _startTime = _formattedTime;
+        String formattedTime = pickedTime.format(context);
+        _startTime = formattedTime;
       });
     } else {
       setState(() {
-        String _formattedTime = pickedTime.format(context);
-        _endTime = _formattedTime;
+        String formattedTime = pickedTime.format(context);
+        _endTime = formattedTime;
       });
     }
   }
@@ -339,16 +344,16 @@ class _AddTaskState extends State<AddTask> {
   _addTaskToDB() async {
     int result = await _taskController.addTask(
       task: Task(
-        note: _noteController.text,
-        title: _titleController.text,
-        date: DateFormat.yMd().format(_selectedDate),
-        startTime: _startTime,
-        endTime: _endTime,
-        remind: _selectedRemind,
-        repeat: _selectedRepeat,
-        color: _selectedColor,
-        isCompleted: 0,
-      ),
+          note: _noteController.text,
+          title: _titleController.text,
+          date: DateFormat.yMd().format(_selectedDate),
+          startTime: _startTime,
+          endTime: _endTime,
+          remind: _selectedRemind,
+          repeat: _selectedRepeat,
+          color: _selectedColor,
+          isCompleted: 0,
+          userid: widget.userid),
     );
     print("Insert ID is : $result");
   }

@@ -7,16 +7,18 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:sharedspace/configs/theme.dart';
+import 'package:sharedspace/models/cardListModel.dart';
 import 'package:sharedspace/pages/Forms/AddTask.dart';
 import 'package:sharedspace/services/themeService.dart';
 import 'package:sharedspace/widgets/button.dart';
 import 'package:sharedspace/widgets/plusButton.dart';
 
 class Space extends StatefulWidget {
-  final String name;
-  final Color spaceColor;
-  const Space({Key? key, required this.name, required this.spaceColor})
-      : super(key: key);
+  final CardListModel cardListModel;
+  const Space({
+    Key? key,
+    required this.cardListModel,
+  }) : super(key: key);
 
   @override
   State<Space> createState() => _SpaceState();
@@ -34,9 +36,11 @@ class _SpaceState extends State<Space> {
           child: Column(
             children: [
               // header
-              header(context, widget.name, widget.spaceColor),
+              header(
+                context,
+                widget.cardListModel,
+              ),
               //
-
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -58,8 +62,8 @@ class _SpaceState extends State<Space> {
               ),
 
               // dates row
-              addDateBar(widget.spaceColor),
-              addTaskBar(widget.spaceColor),
+              addDateBar(widget.cardListModel.spaceColor),
+              addTaskBar(widget.cardListModel),
               //todays tasks
 
               //appBar
@@ -71,7 +75,7 @@ class _SpaceState extends State<Space> {
     );
   }
 
-  header(context, name, spaceColor) {
+  header(context, cardListModel) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -88,16 +92,16 @@ class _SpaceState extends State<Space> {
                 width: 10,
               ),
               Text(
-                '$name',
+                '${cardListModel.firstName} ${cardListModel.surname}',
                 style: TextStyle(
                   fontSize: 26,
-                  color: spaceColor,
+                  color: cardListModel.spaceColor,
                 ),
               ),
             ],
           ),
         ),
-        PlusButton(spaceColor: spaceColor),
+        PlusButton(spaceColor: cardListModel.spaceColor),
       ],
     );
   }
@@ -132,7 +136,7 @@ class _SpaceState extends State<Space> {
     );
   }
 
-  addTaskBar(spaceColor) {
+  addTaskBar(cardListModel) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
       child: Row(
@@ -144,12 +148,13 @@ class _SpaceState extends State<Space> {
           ),
           MyButton(
             label: "+ Add Task",
-            spaceColor: spaceColor,
+            spaceColor: cardListModel.spaceColor,
             onTap: () => {
               Get.to(
                 AddTask(
                   name: 'ADD TASK',
-                  cardColor: spaceColor,
+                  cardColor: cardListModel.spaceColor,
+                  userid: cardListModel.userid,
                 ),
               )
             },
