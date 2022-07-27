@@ -1,22 +1,17 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors, prefer_interpolation_to_compose_strings
 
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:sharedspace/configs/theme.dart';
+import 'package:sharedspace/models/cardListModel.dart';
 import 'package:sharedspace/pages/space.dart';
 
 class CardList extends StatelessWidget {
-  final String cardID;
-  final String imageUrl;
-  final String name;
-  final Color spaceColor;
+  final CardListModel cardListModel;
   const CardList({
     Key? key,
-    required this.imageUrl,
-    required this.name,
-    required this.spaceColor,
-    required this.cardID,
+    required this.cardListModel,
   }) : super(key: key);
 
   @override
@@ -26,7 +21,12 @@ class CardList extends StatelessWidget {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => Space(name: name, spaceColor: spaceColor),
+            builder: (context) => Space(
+              name: cardListModel.firstName.toString() +
+                  ' ' +
+                  cardListModel.surname.toString(),
+              spaceColor: cardListModel.spaceColor,
+            ),
           ),
         )
       },
@@ -36,7 +36,7 @@ class CardList extends StatelessWidget {
         ),
         padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: spaceColor,
+          color: cardListModel.spaceColor,
           borderRadius: BorderRadius.circular(30),
         ),
         child: Row(
@@ -45,7 +45,7 @@ class CardList extends StatelessWidget {
             Row(
               children: [
                 CircleAvatar(
-                  backgroundImage: AssetImage(imageUrl),
+                  backgroundImage: AssetImage(cardListModel.imageUrl),
                   maxRadius: 28,
                 ),
                 SizedBox(
@@ -55,7 +55,9 @@ class CardList extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '$name',
+                      cardListModel.firstName.toString() +
+                          ' ' +
+                          cardListModel.surname.toString(),
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 20,

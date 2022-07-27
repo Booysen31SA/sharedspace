@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sharedspace/configs/theme.dart';
+import 'package:sharedspace/models/cardListModel.dart';
 import 'package:sharedspace/pages/settings.dart';
 import 'package:sharedspace/widgets/cardList.dart';
 import 'package:sharedspace/widgets/plusButton.dart';
@@ -106,10 +107,13 @@ myProfile() {
         ],
       ),
       CardList(
-        cardID: '1',
-        imageUrl: 'images/profileImg.png',
-        name: 'Chandé Herman',
-        spaceColor: primaryClr,
+        cardListModel: CardListModel(
+          userid: '1',
+          imageUrl: 'images/profileImg.png',
+          firstName: 'Chandé',
+          surname: 'Herman',
+          spaceColor: primaryClr,
+        ),
       ),
     ],
   );
@@ -140,16 +144,23 @@ mySpaces() {
 
       // cards shared spaces
       CardList(
-          cardID: '3',
+        cardListModel: CardListModel(
+          userid: '2',
           imageUrl: 'images/profileImg.png',
-          name: 'Chandé Herman',
-          spaceColor: Colors.green),
+          firstName: 'Chandé',
+          surname: 'Herman',
+          spaceColor: Colors.green,
+        ),
+      ),
 
       CardList(
-        cardID: '3',
-        imageUrl: 'images/profileImg.png',
-        name: 'Chandé Herman',
-        spaceColor: Colors.amber,
+        cardListModel: CardListModel(
+          userid: '3',
+          imageUrl: 'images/profileImg.png',
+          firstName: 'Chandé',
+          surname: 'Herman',
+          spaceColor: Colors.amber,
+        ),
       )
     ],
   );
