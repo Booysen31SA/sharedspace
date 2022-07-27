@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:sharedspace/configs/theme.dart';
+import 'package:sharedspace/controllers/Task_controller.dart';
+import 'package:sharedspace/models/task.dart';
 import 'package:sharedspace/services/themeService.dart';
 import 'package:sharedspace/widgets/button.dart';
 import 'package:sharedspace/widgets/input_field.dart';
@@ -19,6 +21,7 @@ class AddTask extends StatefulWidget {
 }
 
 class _AddTaskState extends State<AddTask> {
+  final TaskController _taskController = Get.put(TaskController());
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _noteController = TextEditingController();
   DateTime _selectedDate = DateTime.now();
@@ -316,8 +319,9 @@ class _AddTaskState extends State<AddTask> {
   }
 
   _validateData() {
-    if (_titleController.text.isNotEmpty && _noteController.text.isEmpty) {
-      //add to db
+    if (_titleController.text.isNotEmpty && _noteController.text.isNotEmpty) {
+      _addTaskToDB();
+      Get.back();
     } else if (_titleController.text.isEmpty || _noteController.text.isEmpty) {
       Get.snackbar(
         "Required",
@@ -330,5 +334,22 @@ class _AddTaskState extends State<AddTask> {
         ),
       );
     }
+  }
+
+  _addTaskToDB() async {
+    int result = await _taskController.addTask(
+      task: Task(
+        note: _noteController.text,
+        title: _titleController.text,
+        date: DateFormat.yMd().format(_selectedDate),
+        startTime: _startTime,
+        endTime: _endTime,
+        remind: _selectedRemind,
+        repeat: _selectedRepeat,
+        color: _selectedColor,
+        isCompleted: 0,
+      ),
+    );
+    print("Insert ID is : $result");
   }
 }
