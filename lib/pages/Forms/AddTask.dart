@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sized_box_for_whitespace, unused_field, prefer_final_fields
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, sized_box_for_whitespace, unused_field, prefer_final_fields, unrelated_type_equality_checks
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -9,6 +9,7 @@ import 'package:sharedspace/models/task.dart';
 import 'package:sharedspace/services/themeService.dart';
 import 'package:sharedspace/widgets/button.dart';
 import 'package:sharedspace/widgets/input_field.dart';
+import 'package:sharedspace/widgets/toast.dart';
 
 class AddTask extends StatefulWidget {
   final String name;
@@ -323,10 +324,28 @@ class _AddTaskState extends State<AddTask> {
     );
   }
 
-  _validateData() {
+  _validateData() async {
     if (_titleController.text.isNotEmpty && _noteController.text.isNotEmpty) {
-      _addTaskToDB();
-      Get.back();
+      var result = await _taskController.addTask(
+        task: Task(
+            note: _noteController.text,
+            title: _titleController.text,
+            date: DateFormat.yMd().format(_selectedDate),
+            startTime: _startTime,
+            endTime: _endTime,
+            remind: _selectedRemind,
+            repeat: _selectedRepeat,
+            color: _selectedColor,
+            isCompleted: 0,
+            userid: widget.userid),
+      );
+      if (result == true) {
+        DisplayToast().showToast('Successfully created task', Colors.green);
+        Get.back();
+      } else {
+        DisplayToast()
+            .showToast('Failed to create task, Please try again!', Colors.red);
+      }
     } else if (_titleController.text.isEmpty || _noteController.text.isEmpty) {
       Get.snackbar(
         "Required",
@@ -339,22 +358,5 @@ class _AddTaskState extends State<AddTask> {
         ),
       );
     }
-  }
-
-  _addTaskToDB() async {
-    int result = await _taskController.addTask(
-      task: Task(
-          note: _noteController.text,
-          title: _titleController.text,
-          date: DateFormat.yMd().format(_selectedDate),
-          startTime: _startTime,
-          endTime: _endTime,
-          remind: _selectedRemind,
-          repeat: _selectedRepeat,
-          color: _selectedColor,
-          isCompleted: 0,
-          userid: widget.userid),
-    );
-    print("Insert ID is : $result");
   }
 }

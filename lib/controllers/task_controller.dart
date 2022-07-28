@@ -1,8 +1,8 @@
 // ignore_for_file: unnecessary_overrides
 
 import 'package:get/get.dart';
-import 'package:sharedspace/db/db_helper.dart';
 import 'package:sharedspace/models/task.dart';
+import 'package:sharedspace/services/database.dart';
 
 class TaskController extends GetxController {
   @override
@@ -10,7 +10,8 @@ class TaskController extends GetxController {
     super.onReady();
   }
 
-  Future<int> addTask({Task? task}) async {
-    return await DBHelper.insertTask(task);
+  Future addTask({Task? task}) async {
+    var result = await DatabaseService.createTask(task);
+    return result;
   }
 }
