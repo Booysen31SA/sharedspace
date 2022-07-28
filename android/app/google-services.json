@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "643642329789",
+    "project_id": "shared-space-e2b6e",
+    "storage_bucket": "shared-space-e2b6e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:643642329789:android:35f5c5bdac06ef890545d4",
+        "android_client_info": {
+          "package_name": "com.booyse31sa.sharedspace"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "643642329789-ja3o3jke9kmv50pkr8dssvo3bhkmlk2e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1-SxKWapuCidgqGDgihbDnQi4SKzPu58"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "643642329789-ja3o3jke9kmv50pkr8dssvo3bhkmlk2e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

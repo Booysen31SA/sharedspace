@@ -151,7 +151,7 @@ class _SpaceState extends State<Space> {
             spaceColor: cardListModel.spaceColor,
             onTap: () => {
               Get.to(
-                AddTask(
+                () => AddTask(
                   name: 'ADD TASK',
                   cardColor: cardListModel.spaceColor,
                   userid: cardListModel.userid,
