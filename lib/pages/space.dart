@@ -6,7 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:sharedspace/configs/theme.dart';
+import 'package:sharedspace/controllers/task_controller.dart';
 import 'package:sharedspace/models/cardListModel.dart';
+import 'package:sharedspace/models/task.dart';
 import 'package:sharedspace/pages/Forms/AddTask.dart';
 import 'package:sharedspace/services/themeService.dart';
 import 'package:sharedspace/widgets/button.dart';
@@ -14,6 +16,7 @@ import 'package:sharedspace/widgets/plusButton.dart';
 import 'package:sharedspace/services/database.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 class Space extends StatefulWidget {
   final CardListModel cardListModel;
@@ -28,6 +31,10 @@ class Space extends StatefulWidget {
 
 class _SpaceState extends State<Space> {
   DateTime _selectedDate = DateTime.now();
+  DateTime _focusedDay = DateTime.now();
+  CalendarFormat format = CalendarFormat.week;
+  final TaskController _taskController = Get.put(TaskController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,34 +49,70 @@ class _SpaceState extends State<Space> {
                 context,
                 widget.cardListModel,
               ),
-              //
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+
+              Column(
                 children: [
-                  Container(
-                    margin: EdgeInsets.only(
-                      top: 15,
-                      bottom: 15,
-                      left: 15,
+                  TableCalendar(
+                    focusedDay: _focusedDay,
+                    firstDay: DateTime(2022),
+                    lastDay: DateTime(2090),
+                    formatAnimationDuration: const Duration(milliseconds: 500),
+                    availableCalendarFormats: const {
+                      CalendarFormat.month: 'Month',
+                      CalendarFormat.week: 'Week',
+                    },
+                    //formatAnimationCurve: Curves.linear,
+                    weekendDays: const [DateTime.saturday, DateTime.sunday],
+                    calendarFormat: format,
+                    headerStyle: HeaderStyle(
+                      formatButtonVisible: true,
+                      titleCentered: false,
+                      formatButtonShowsNext: false,
+                      formatButtonDecoration: BoxDecoration(
+                        color: primaryClr,
+                        borderRadius: BorderRadius.circular(5.0),
+                      ),
+                      formatButtonTextStyle: TextStyle(
+                        color: Colors.white,
+                      ),
+                      leftChevronVisible: false,
+                      rightChevronVisible: false,
+                      headerPadding: EdgeInsets.only(top: 20.0, bottom: 20.0),
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(DateFormat.yMMMMd().format(_selectedDate),
-                            style: subHeadingStyle),
-                      ],
+                    calendarStyle: CalendarStyle(
+                      isTodayHighlighted: true,
+                      selectedDecoration: BoxDecoration(
+                        color: primaryClr,
+                        shape: BoxShape.circle,
+                      ),
+                      selectedTextStyle: TextStyle(
+                        color: Colors.white,
+                      ),
                     ),
+                    selectedDayPredicate: (DateTime date) {
+                      return isSameDay(_selectedDate, date);
+                    },
+                    onFormatChanged: (CalendarFormat _format) {
+                      setState(() {
+                        format = _format;
+                      });
+                    },
+                    onDaySelected: (DateTime selectedDay, DateTime focusedDay) {
+                      setState(() {
+                        _selectedDate = selectedDay;
+                        _focusedDay = focusedDay;
+                      });
+                    },
+                    eventLoader: _taskController.getEventsFromDay,
                   ),
+                  ..._taskController.getEventsFromDay(_selectedDate).map(
+                        (Task task) => ListTile(
+                          textColor: Colors.green,
+                          title: Text(task.title.toString()),
+                        ),
+                      )
                 ],
               ),
-
-              // dates row
-              addDateBar(widget.cardListModel.spaceColor),
-              addTaskBar(widget.cardListModel),
-              //todays tasks
-
-              //appBar
-              // utill function
             ],
           ),
         ),
