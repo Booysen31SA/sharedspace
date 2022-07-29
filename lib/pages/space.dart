@@ -1,9 +1,8 @@
 // ignore_for_file: prefer_const_constructors, prefer_final_fields, unused_field, avoid_unnecessary_containers
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_picker_timeline/date_picker_timeline.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:sharedspace/configs/theme.dart';
@@ -12,6 +11,9 @@ import 'package:sharedspace/pages/Forms/AddTask.dart';
 import 'package:sharedspace/services/themeService.dart';
 import 'package:sharedspace/widgets/button.dart';
 import 'package:sharedspace/widgets/plusButton.dart';
+import 'package:sharedspace/services/database.dart';
+import 'package:provider/provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Space extends StatefulWidget {
   final CardListModel cardListModel;

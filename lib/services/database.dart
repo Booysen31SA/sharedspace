@@ -3,10 +3,10 @@ import 'package:sharedspace/models/task.dart';
 
 class DatabaseService {
   // Collection References
-  static final CollectionReference taskCollection =
+  final CollectionReference taskCollection =
       FirebaseFirestore.instance.collection('task');
 
-  static Future createTask(Task? task) async {
+  Future createTask(Task? task) async {
     return await taskCollection
         .doc()
         .set({

@@ -11,7 +11,7 @@ class TaskController extends GetxController {
   }
 
   Future addTask({Task? task}) async {
-    var result = await DatabaseService.createTask(task);
+    var result = await DatabaseService().createTask(task);
     return result;
   }
 }
