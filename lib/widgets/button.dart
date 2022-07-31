@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:sharedspace/configs/theme.dart';
 
 class MyButton extends StatelessWidget {
   final String label;

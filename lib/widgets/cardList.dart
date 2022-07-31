@@ -1,9 +1,6 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:sharedspace/configs/theme.dart';
 import 'package:sharedspace/models/cardListModel.dart';
 import 'package:sharedspace/pages/space.dart';
 

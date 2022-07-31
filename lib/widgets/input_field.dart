@@ -1,10 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
-import 'package:sharedspace/configs/theme.dart';
 import 'package:sharedspace/services/themeService.dart';
 
 class MyInputField extends StatelessWidget {
