@@ -33,7 +33,6 @@ class _TableCalendarViewState extends State<TableCalendarView> {
 
   List<dynamic> getEventsFromDay(DateTime date) {
     //2022-07-30 00:00:00.000Z
-    var test = _events[DateTime(date.year, date.month, date.day)];
     return _events[DateTime(date.year, date.month, date.day)] ?? [];
   }
 

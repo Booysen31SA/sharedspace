@@ -61,13 +61,13 @@ class _SpaceState extends State<Space> {
                 '${cardListModel.firstName} ${cardListModel.surname}',
                 style: TextStyle(
                   fontSize: 26,
-                  color: cardListModel.spaceColor,
+                  color: primaryClr,
                 ),
               ),
             ],
           ),
         ),
-        PlusButton(spaceColor: cardListModel.spaceColor),
+        PlusButton(spaceColor: primaryClr),
       ],
     );
   }
