@@ -6,10 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:sharedspace/configs/theme.dart';
-import 'package:sharedspace/controllers/task_controller.dart';
 import 'package:sharedspace/models/cardListModel.dart';
 import 'package:sharedspace/models/task.dart';
-import 'package:sharedspace/pages/Forms/AddTask.dart';
 import 'package:sharedspace/services/themeService.dart';
 import 'package:sharedspace/widgets/button.dart';
 import 'package:sharedspace/widgets/plusButton.dart';
@@ -33,7 +31,42 @@ class _SpaceState extends State<Space> {
   DateTime _selectedDate = DateTime.now();
   DateTime _focusedDay = DateTime.now();
   CalendarFormat format = CalendarFormat.week;
-  final TaskController _taskController = Get.put(TaskController());
+  Map<DateTime, List<dynamic>> _events = {};
+  List<dynamic> _selectedEvents = [];
+
+  Map<DateTime, List<dynamic>> _groupEvents(List<TaskModel> events) {
+    Map<DateTime, List<TaskModel>> data = {};
+    for (var event in events) {
+      DateTime date =
+          DateTime(event.date.year, event.date.month, event.date.day);
+      if (data[date] == null) data[date] = [];
+      data[date]!.add(event);
+    }
+    return data;
+  }
+
+  List<dynamic> getEventsFromDay(DateTime date) {
+    //2022-07-30 00:00:00.000Z
+    var test = _events[DateTime(date.year, date.month, date.day)];
+    return _events[DateTime(date.year, date.month, date.day)] ?? [];
+  }
+
+  _getBody() {
+    return _events[DateTime(
+                _selectedDate.year, _selectedDate.month, _selectedDate.day)] !=
+            null
+        ? _events[DateTime(
+                _selectedDate.year, _selectedDate.month, _selectedDate.day)]!
+            .map(
+            (e) => Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text(e.title.toString()),
+              ],
+            ),
+          )
+        : [];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,65 +85,80 @@ class _SpaceState extends State<Space> {
 
               Column(
                 children: [
-                  TableCalendar(
-                    focusedDay: _focusedDay,
-                    firstDay: DateTime(2022),
-                    lastDay: DateTime(2090),
-                    formatAnimationDuration: const Duration(milliseconds: 500),
-                    availableCalendarFormats: const {
-                      CalendarFormat.month: 'Month',
-                      CalendarFormat.week: 'Week',
+                  StreamBuilder<List<TaskModel>>(
+                    stream: eventDBS.streamList(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        List<TaskModel>? allEvents = snapshot.data;
+                        if (allEvents!.isNotEmpty) {
+                          _events = _groupEvents(allEvents);
+                        }
+                      }
+                      return Column(
+                        children: [
+                          TableCalendar(
+                            eventLoader: getEventsFromDay,
+                            focusedDay: _focusedDay,
+                            firstDay: DateTime(2022),
+                            lastDay: DateTime(2090),
+                            formatAnimationDuration:
+                                const Duration(milliseconds: 500),
+                            availableCalendarFormats: const {
+                              CalendarFormat.month: 'Month',
+                              CalendarFormat.week: 'Week',
+                            },
+                            //formatAnimationCurve: Curves.linear,
+                            weekendDays: const [
+                              DateTime.saturday,
+                              DateTime.sunday
+                            ],
+                            calendarFormat: format,
+                            headerStyle: HeaderStyle(
+                              formatButtonVisible: true,
+                              titleCentered: false,
+                              formatButtonShowsNext: false,
+                              formatButtonDecoration: BoxDecoration(
+                                color: primaryClr,
+                                borderRadius: BorderRadius.circular(5.0),
+                              ),
+                              formatButtonTextStyle: TextStyle(
+                                color: Colors.white,
+                              ),
+                              leftChevronVisible: false,
+                              rightChevronVisible: false,
+                              headerPadding:
+                                  EdgeInsets.only(top: 20.0, bottom: 20.0),
+                            ),
+                            calendarStyle: CalendarStyle(
+                              isTodayHighlighted: true,
+                              selectedDecoration: BoxDecoration(
+                                color: primaryClr,
+                                shape: BoxShape.circle,
+                              ),
+                              selectedTextStyle: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                            selectedDayPredicate: (DateTime date) {
+                              return isSameDay(_selectedDate, date);
+                            },
+                            onFormatChanged: (CalendarFormat _format) {
+                              setState(() {
+                                format = _format;
+                              });
+                            },
+                            onDaySelected: (selectedDay, focusedDay) {
+                              setState(() {
+                                _selectedDate = selectedDay;
+                                _focusedDay = focusedDay;
+                              });
+                            },
+                          ),
+                          ..._getBody()
+                        ],
+                      );
                     },
-                    //formatAnimationCurve: Curves.linear,
-                    weekendDays: const [DateTime.saturday, DateTime.sunday],
-                    calendarFormat: format,
-                    headerStyle: HeaderStyle(
-                      formatButtonVisible: true,
-                      titleCentered: false,
-                      formatButtonShowsNext: false,
-                      formatButtonDecoration: BoxDecoration(
-                        color: primaryClr,
-                        borderRadius: BorderRadius.circular(5.0),
-                      ),
-                      formatButtonTextStyle: TextStyle(
-                        color: Colors.white,
-                      ),
-                      leftChevronVisible: false,
-                      rightChevronVisible: false,
-                      headerPadding: EdgeInsets.only(top: 20.0, bottom: 20.0),
-                    ),
-                    calendarStyle: CalendarStyle(
-                      isTodayHighlighted: true,
-                      selectedDecoration: BoxDecoration(
-                        color: primaryClr,
-                        shape: BoxShape.circle,
-                      ),
-                      selectedTextStyle: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                    selectedDayPredicate: (DateTime date) {
-                      return isSameDay(_selectedDate, date);
-                    },
-                    onFormatChanged: (CalendarFormat _format) {
-                      setState(() {
-                        format = _format;
-                      });
-                    },
-                    onDaySelected: (DateTime selectedDay, DateTime focusedDay) {
-                      setState(() {
-                        _selectedDate = selectedDay;
-                        _focusedDay = focusedDay;
-                      });
-                    },
-                    eventLoader: _taskController.getEventsFromDay,
                   ),
-                  ..._taskController.getEventsFromDay(_selectedDate).map(
-                        (Task task) => ListTile(
-                          textColor: Colors.green,
-                          title: Text(task.title.toString()),
-                        ),
-                      )
                 ],
               ),
             ],
@@ -178,34 +226,6 @@ class _SpaceState extends State<Space> {
         print(date);
         _selectedDate = date;
       },
-    );
-  }
-
-  addTaskBar(cardListModel) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 15, 20, 15),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            'Tasks',
-            style: subHeadingStyle,
-          ),
-          MyButton(
-            label: "+ Add Task",
-            spaceColor: cardListModel.spaceColor,
-            onTap: () => {
-              Get.to(
-                () => AddTask(
-                  name: 'ADD TASK',
-                  cardColor: cardListModel.spaceColor,
-                  userid: cardListModel.userid,
-                ),
-              )
-            },
-          )
-        ],
-      ),
     );
   }
 }

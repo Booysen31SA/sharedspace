@@ -50,6 +50,7 @@ dependencies:
   firebase_core:
   fluttertoast: ^8.0.9
   table_calendar: ^3.0.6
+  firebase_helpers: ^0.5.0
 fluttertoast: ^8.0.9
 dev_dependencies:
   flutter_test:

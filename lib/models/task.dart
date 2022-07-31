@@ -1,62 +1,40 @@
-// ignore_for_file: prefer_collection_literals, unnecessary_new, unnecessary_this
+import 'package:firebase_helpers/firebase_helpers.dart';
+import 'package:intl/intl.dart';
 
-import 'dart:ffi';
+class TaskModel {
+  final String? userid;
+  final String title;
+  final String note;
+  final DateTime date;
 
-class Task {
-  int? id;
-  String? title;
-  String? note;
-  int? isCompleted;
-  String? date;
-  String? startTime;
-  String? endTime;
-  int? color;
-  int? remind;
-  String? repeat;
-  String? userid;
+  TaskModel(
+      {this.userid,
+      required this.title,
+      required this.note,
+      required this.date});
 
-  Task({
-    this.id,
-    this.title,
-    this.note,
-    this.isCompleted,
-    this.date,
-    this.startTime,
-    this.endTime,
-    this.color,
-    this.remind,
-    this.repeat,
-    this.userid,
-  });
-
-  Task.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    title = json['title'];
-    note = json['note'];
-    isCompleted = json['isCompleted'];
-    date = json['date'];
-    startTime = json['startTime'];
-    endTime = json['endTime'];
-    color = json['color'];
-    remind = json['remind'];
-    repeat = json['repeat'];
-    userid = json['userid'];
+  factory TaskModel.fromMap(Map data) {
+    return TaskModel(
+      title: data['title'],
+      note: data['note'],
+      date: data['date'],
+    );
   }
 
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['title'] = this.title;
-    data['note'] = this.note;
-    data['isCompleted'] = this.isCompleted;
-    data['date'] = this.date;
-    data['startTime'] = this.startTime;
-    data['endTime'] = this.endTime;
-    data['color'] = this.color;
-    data['remind'] = this.remind;
-    data['repeat'] = this.repeat;
-    data['userid'] = this.userid;
+  factory TaskModel.fromDS(String id, Map<String, dynamic> data) {
+    return TaskModel(
+        userid: id,
+        title: data['title'],
+        note: data['note'],
+        date: new DateFormat('yyyy-MM-dd').parse(data['date']));
+  }
 
-    return data;
+  Map<String, dynamic> toMap() {
+    return {
+      "title": title,
+      "note": note,
+      "date": date,
+      "id": userid,
+    };
   }
 }

@@ -1,27 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_helpers/firebase_helpers.dart';
 import 'package:sharedspace/models/task.dart';
 
-class DatabaseService {
-  // Collection References
-  final CollectionReference taskCollection =
-      FirebaseFirestore.instance.collection('task');
-
-  Future createTask(Task? task) async {
-    return await taskCollection
-        .doc()
-        .set({
-          "title": task!.title,
-          "note": task.note,
-          "isCompleted": false,
-          "date": task.date,
-          "startTime": task.startTime,
-          "endTime": task.endTime,
-          "color": task.color,
-          "remind": task.remind,
-          "repeat": task.repeat,
-          "userid": task.userid
-        })
-        .then((value) => true)
-        .onError((error, stackTrace) => false);
-  }
-}
+DatabaseService<TaskModel> eventDBS = DatabaseService<TaskModel>("task",
+    fromDS: (id, data) => TaskModel.fromDS(id, data!),
+    toMap: (event) => event.toMap());
