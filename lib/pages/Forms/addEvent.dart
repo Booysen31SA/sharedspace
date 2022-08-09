@@ -2,6 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:sharedspace/configs/theme.dart';
+import 'package:sharedspace/models/task.dart';
+import 'package:sharedspace/services/database.dart';
 import '../../globals.dart' as globals;
 import 'package:get/get.dart';
 
@@ -19,6 +22,8 @@ class _AddEventState extends State<AddEvent> {
   final TextEditingController _noterController = TextEditingController();
   DateTime _selectedDate = globals.selectedDate;
 
+  get primaryClr => null;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,6 +36,10 @@ class _AddEventState extends State<AddEvent> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                header(context),
+                SizedBox(
+                  height: 10,
+                ),
                 // Titler
                 TextFormField(
                   controller: _titleController,
@@ -77,6 +86,50 @@ class _AddEventState extends State<AddEvent> {
       return errorMessage;
     }
     return null;
+  }
+
+  header(context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        GestureDetector(
+          onTap: () => {
+            Navigator.pop(context),
+          },
+          child: Row(
+            children: [
+              Icon(
+                Icons.cancel_sharp,
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Text(
+                'Add Event',
+                style: TextStyle(
+                  fontSize: 26,
+                  color: primaryClr,
+                ),
+              ),
+            ],
+          ),
+        ),
+        GestureDetector(
+          child: Icon(Icons.check),
+          onTap: () async => {
+            print('Saving....'),
+            await taskDBS.create(
+              TaskModel(
+                title: _titleController.text,
+                note: _noterController.text,
+                date: DateFormat('yyyy-MM-dd').parse(_selectedDate.toString()),
+              ).toMap(),
+            ),
+            Get.back(),
+          },
+        ),
+      ],
+    );
   }
 
   _getDateFromUser() async {

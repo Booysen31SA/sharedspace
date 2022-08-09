@@ -32,15 +32,15 @@ class EventCardList extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('This is a title'),
-                  Text('This is a description')
+                  Text(event.title),
+                  Text(event.note),
                 ],
               ),
             ],
           ),
         ),
         Container(
-          color: Colors.grey[400],
+          //color: Colors.grey[400],
           padding: EdgeInsets.symmetric(vertical: 2, horizontal: 5),
           margin: EdgeInsets.only(
             top: 15,
