@@ -4,13 +4,15 @@ import 'package:flutter/material.dart';
 
 class PlusButton extends StatelessWidget {
   final spaceColor;
-  const PlusButton({Key? key, this.spaceColor}) : super(key: key);
+  final IconData icon;
+  const PlusButton({Key? key, this.spaceColor, required this.icon})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       child: Icon(
-        Icons.add,
+        icon,
         color: Colors.white,
         size: 30,
       ),

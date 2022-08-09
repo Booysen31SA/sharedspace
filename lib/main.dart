@@ -7,13 +7,14 @@ import 'package:sharedspace/pages/home.dart';
 import 'package:sharedspace/pages/loading.dart';
 import 'package:sharedspace/services/themeService.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
-
+import 'globals.dart' as globals;
 import 'configs/theme.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
   await Firebase.initializeApp();
+  globals.selectedDate = DateTime.now();
   runApp(const MyApp());
 }
 

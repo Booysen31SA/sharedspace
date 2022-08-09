@@ -1,10 +1,12 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
 import 'package:sharedspace/configs/theme.dart';
 import 'package:sharedspace/models/task.dart';
 import 'package:sharedspace/services/database.dart';
+import 'package:sharedspace/widgets/eventCardList.dart';
 import 'package:table_calendar/table_calendar.dart';
+import '../globals.dart' as globals;
 
 class TableCalendarView extends StatefulWidget {
   const TableCalendarView({Key? key}) : super(key: key);
@@ -14,7 +16,7 @@ class TableCalendarView extends StatefulWidget {
 }
 
 class _TableCalendarViewState extends State<TableCalendarView> {
-  DateTime _selectedDate = DateTime.now();
+  DateTime _selectedDate = globals.selectedDate;
   DateTime _focusedDay = DateTime.now();
   CalendarFormat format = CalendarFormat.week;
 
@@ -77,7 +79,8 @@ class _TableCalendarViewState extends State<TableCalendarView> {
                     ),
                     leftChevronVisible: false,
                     rightChevronVisible: false,
-                    headerPadding: EdgeInsets.only(top: 20.0, bottom: 20.0),
+                    headerPadding:
+                        EdgeInsets.only(top: 20.0, bottom: 20.0, left: 15),
                   ),
                   calendarStyle: CalendarStyle(
                     isTodayHighlighted: true,
@@ -101,6 +104,7 @@ class _TableCalendarViewState extends State<TableCalendarView> {
                     setState(() {
                       _selectedDate = selectedDay;
                       _focusedDay = focusedDay;
+                      globals.selectedDate = selectedDay;
                     });
                   },
                 ),
@@ -120,11 +124,8 @@ class _TableCalendarViewState extends State<TableCalendarView> {
         ? _events[DateTime(
                 _selectedDate.year, _selectedDate.month, _selectedDate.day)]!
             .map(
-            (e) => Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Text(e.title.toString()),
-              ],
+            (event) => EventCardList(
+              event: event,
             ),
           )
         : [];
