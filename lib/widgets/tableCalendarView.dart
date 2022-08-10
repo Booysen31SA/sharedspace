@@ -160,12 +160,16 @@ class _TableCalendarViewState extends State<TableCalendarView> {
   _ListBuilder() {
     return SizedBox(
       height: listSize,
-      child: ListView(
-        shrinkWrap: true,
-        children: <Widget>[
-          ..._getBody(),
-        ],
-      ),
+      child: _getBody().length > 0
+          ? ListView(
+              shrinkWrap: true,
+              children: <Widget>[
+                ..._getBody(),
+              ],
+            )
+          : Center(
+              child: Text('No Events'),
+            ),
     );
   }
 }
