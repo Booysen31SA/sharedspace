@@ -121,10 +121,7 @@ mySpaces() {
           children: [
             Text(
               "SPACES",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.grey.shade600,
-              ),
+              style: ThemeService().headingStyle,
             ),
             IconButtonCustom(
               color: primaryClr,
