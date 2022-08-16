@@ -1,4 +1,3 @@
-import 'package:firebase_helpers/firebase_helpers.dart';
 import 'package:intl/intl.dart';
 
 class EventModel {

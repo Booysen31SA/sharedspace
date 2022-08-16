@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sharedspace/Configs/themes.dart';
-import 'package:sharedspace/Models/cardListModel.dart';
 import 'package:sharedspace/Pages/Forms/addEvent.dart';
 import 'package:sharedspace/Pages/Views/calendarView.dart';
 import 'package:sharedspace/Pages/Views/noteView.dart';
