@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:sharedspace/Configs/themes.dart';
 import 'package:sharedspace/Widgets/roundedInputField.dart';
@@ -119,9 +120,64 @@ class _SignInState extends State<SignIn> {
                   ),
                 )
               ],
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            Container(
+              width: MediaQuery.of(context).size.width * 0.8,
+              child: Row(
+                children: <Widget>[
+                  divider(),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10),
+                    child: Text(
+                      'OR',
+                      style: TextStyle(
+                        color: primaryLightClr,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                  divider(),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 15,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      width: 2,
+                      color: primaryLightClr,
+                    ),
+                    shape: BoxShape.circle,
+                  ),
+                  child: SvgPicture.asset(
+                    'images/socialMediaSVG/google.svg',
+                    height: 20,
+                    width: 20,
+                    color: Colors.white,
+                  ),
+                )
+              ],
             )
           ],
         ),
+      ),
+    );
+  }
+
+  Expanded divider() {
+    return const Expanded(
+      child: Divider(
+        color: Color(0xFFD90909),
+        height: 1.5,
       ),
     );
   }
