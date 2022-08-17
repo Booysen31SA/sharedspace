@@ -5,7 +5,8 @@ import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
 import 'package:sharedspace/Configs/themes.dart';
 import 'package:sharedspace/Models/userModel.dart';
-import 'package:sharedspace/Pages/Auth/Signin.dart';
+import 'package:sharedspace/Pages/Auth/register.dart';
+import 'package:sharedspace/Pages/Auth/signin.dart';
 import 'package:sharedspace/Pages/space.dart';
 import 'package:sharedspace/Services/auth.dart';
 import 'package:sharedspace/Services/service.dart';
@@ -43,6 +44,7 @@ class MyApp extends StatelessWidget {
           routes: {
             '/': (context) => const Loading(),
             '/signin': (context) => const SignIn(),
+            '/register': (context) => const Register(),
             '/home': (context) => const Home(),
             '/settings': (context) => const Settings(),
             '/space': (context) => const Space()

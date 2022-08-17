@@ -8,6 +8,7 @@ const Color white = Colors.white;
 const primaryClr = blueishClr;
 const Color darkGreyClr = Color(0xFF121212);
 const Color darkHeaderClr = Color.fromRGBO(48, 48, 48, 0);
+const Color primaryLightClr = Color.fromARGB(255, 212, 181, 253);
 
 IconData backArrow = Icons.arrow_back_ios;
 IconData add = Icons.add;
@@ -38,4 +39,9 @@ var calendarStyle = HeaderStyle(
   leftChevronVisible: false,
   rightChevronVisible: false,
   headerPadding: const EdgeInsets.only(top: 20.0, bottom: 20.0, left: 15),
+);
+
+const loginFormHeaders = TextStyle(
+  fontSize: 18,
+  fontWeight: FontWeight.bold,
 );
