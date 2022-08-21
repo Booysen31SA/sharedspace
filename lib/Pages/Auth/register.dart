@@ -47,11 +47,14 @@ class _RegisterState extends State<Register> {
     return Scaffold(
       backgroundColor: primaryClr,
       body: SafeArea(
-        child: Column(
-          children: [
-            header(context),
-            stepForm(),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.only(top: 15),
+          child: Column(
+            children: [
+              header(context),
+              stepForm(),
+            ],
+          ),
         ),
       ),
     );
