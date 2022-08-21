@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:sharedspace/Configs/themes.dart';
 import 'package:sharedspace/Services/auth.dart';
 import 'package:sharedspace/Widgets/roundedInputField.dart';
+import 'package:sharedspace/Widgets/textFieldContainer.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({Key? key}) : super(key: key);
@@ -72,26 +73,6 @@ class _SignInState extends State<SignIn> {
             controller: _controller,
             child: Column(
               children: [
-                //header(context),
-                // const SizedBox(
-                //   height: 25,
-                // ),
-                // const Center(
-                //   child: Text(
-                //     'WELCOME',
-                //     style: loginFormHeaders,
-                //   ),
-                // ),
-                // const SizedBox(
-                //   height: 10,
-                // ),
-                // const Center(
-                //   child: Text(
-                //     'TO',
-                //     style: loginFormHeaders,
-                //   ),
-                // ),
-
                 header(context),
                 const SizedBox(
                   height: 50,
@@ -110,6 +91,9 @@ class _SignInState extends State<SignIn> {
                       });
                     },
                   ),
+                ),
+                const SizedBox(
+                  height: 15,
                 ),
                 TextFieldContainer(
                   child: RoundedInputField(
@@ -130,6 +114,9 @@ class _SignInState extends State<SignIn> {
                       });
                     },
                   ),
+                ),
+                const SizedBox(
+                  height: 15,
                 ),
                 errorMessage == null
                     ? Container()
@@ -305,29 +292,5 @@ class _SignInState extends State<SignIn> {
         ),
       ],
     );
-  }
-}
-
-class TextFieldContainer extends StatelessWidget {
-  final Widget child;
-  const TextFieldContainer({
-    Key? key,
-    required this.child,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-        margin: const EdgeInsets.only(bottom: 15),
-        width: MediaQuery.of(context).size.width * 0.8,
-        padding: const EdgeInsets.symmetric(
-          horizontal: 20,
-          vertical: 1,
-        ),
-        decoration: BoxDecoration(
-          color: white,
-          borderRadius: BorderRadius.circular(29),
-        ),
-        child: child);
   }
 }

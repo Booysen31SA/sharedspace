@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sharedspace/Configs/themes.dart';
 import 'package:sharedspace/Services/auth.dart';
+import 'package:sharedspace/Widgets/roundedInputField.dart';
+import 'package:sharedspace/Widgets/textFieldContainer.dart';
 
 class Register extends StatefulWidget {
   const Register({Key? key}) : super(key: key);
@@ -10,38 +12,42 @@ class Register extends StatefulWidget {
   State<Register> createState() => _RegisterState();
 }
 
-int currentStep = 0;
-int maxStep = getSteps().length - 1;
 final AuthService _auth = AuthService();
 
-List<Step> getSteps() => [
-      Step(
-        state: currentStep > 0 ? StepState.complete : StepState.indexed,
-        isActive: currentStep >= 0,
-        title: const Text('Email'),
-        content: const Center(
-          child: Text('Email Address'),
-        ),
-      ),
-      Step(
-        state: currentStep > 1 ? StepState.complete : StepState.indexed,
-        isActive: currentStep >= 1,
-        title: const Text('Basic Information'),
-        content: const Center(
-          child: Text('Basic Information'),
-        ),
-      ),
-      Step(
-        state: currentStep > 2 ? StepState.complete : StepState.indexed,
-        isActive: currentStep >= 2,
-        title: const Text('Security'),
-        content: const Center(
-          child: Text('Security'),
-        ),
-      )
-    ];
-
 class _RegisterState extends State<Register> {
+  int currentStep = 0;
+
+  List<Step> getSteps() => [
+        Step(
+          state: currentStep > 0 ? StepState.complete : StepState.indexed,
+          isActive: currentStep >= 0,
+          title: const Text('Email'),
+          content: Center(
+            child: stepOne(),
+          ),
+        ),
+        Step(
+          state: currentStep > 1 ? StepState.complete : StepState.indexed,
+          isActive: currentStep >= 1,
+          title: const Text('Basic Information'),
+          content: const Center(
+            child: Text('Basic Information'),
+          ),
+        ),
+        Step(
+          state: currentStep > 2 ? StepState.complete : StepState.indexed,
+          isActive: currentStep >= 2,
+          title: const Text('Security'),
+          content: const Center(
+            child: Text('Security'),
+          ),
+        )
+      ];
+
+  // Controllers
+  String? errorMessage;
+  String? emailController;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -122,13 +128,20 @@ class _RegisterState extends State<Register> {
           final isLastStep = currentStep == getSteps().length - 1;
 
           if (currentStep == 0) {
-            print('Email Check');
+            if (validation()) {
+              _auth.isEmailChecked(emailController);
+              // more validataion
+            }
           }
           if (isLastStep) {
-            print('Completed');
-            _auth.registerWithEmailAndPassword('email', 'password');
+            if (errorMessage == null) {
+              print('Completed');
+              _auth.registerWithEmailAndPassword(emailController, 'password');
+            } else {
+              print('Add error message in last step');
+            }
           }
-          if (currentStep < maxStep) {
+          if (currentStep < (getSteps().length - 1) && validation() == true) {
             setState(() {
               currentStep += 1;
             });
@@ -169,5 +182,54 @@ class _RegisterState extends State<Register> {
         },
       ),
     );
+  }
+
+  stepOne() {
+    return Column(
+      children: [
+        TextFieldContainer(
+          child: RoundedInputField(
+            hintText: 'Email',
+            IconData: const Icon(
+              Icons.person,
+              color: primaryLightClr,
+            ),
+            onChanged: (value) {
+              setState(() {
+                errorMessage = null;
+                emailController = value;
+              });
+            },
+          ),
+        ),
+        errorMessage == null
+            ? Container()
+            : Container(
+                margin: const EdgeInsets.only(top: 10),
+                child: Text(
+                  errorMessage!,
+                  style: const TextStyle(color: Colors.red),
+                ),
+              ),
+      ],
+    );
+  }
+
+  bool validation() {
+    var isCorrect = true;
+    if (emailController == null) {
+      setState(() {
+        errorMessage = 'Please Provide a valid Email';
+      });
+      return false;
+    }
+
+    if (!emailController!.contains('@') || !emailController!.contains('.com')) {
+      setState(() {
+        errorMessage = 'Email is not a valid email';
+      });
+      return false;
+    }
+    return isCorrect;
   }
 }

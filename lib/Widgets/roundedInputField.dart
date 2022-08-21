@@ -23,6 +23,7 @@ class _RoundedInputFieldState extends State<RoundedInputField> {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      autocorrect: true,
       obscureText: widget.obscureText,
       onChanged: widget.onChanged,
       decoration: InputDecoration(

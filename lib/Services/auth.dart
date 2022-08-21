@@ -31,6 +31,12 @@ class AuthService {
     print('Google Sign in');
   }
 
+  // is Email used?
+  Future isEmailChecked(email) async {
+    //call database().user().where
+    print('Checking if user exist');
+  }
+
   //Sign out
   Future signOut() async {
     try {
