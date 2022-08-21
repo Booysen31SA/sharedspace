@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:sharedspace/Configs/themes.dart';
+import 'package:sharedspace/Services/auth.dart';
 import 'package:sharedspace/Widgets/roundedInputField.dart';
 
 class SignIn extends StatefulWidget {
@@ -12,162 +13,242 @@ class SignIn extends StatefulWidget {
 }
 
 class _SignInState extends State<SignIn> {
+  final AuthService _auth = AuthService();
+  String? emailController;
+  String? passwordController;
+  String? errorMessage = null;
+  bool passText = true;
+  ScrollController _controller = ScrollController();
+
   @override
   Widget build(BuildContext context) {
-    String emailController = '';
-    String passwordController = '';
-    bool passText = true;
+    bool validation() {
+      var isCorrect = true;
+      if (emailController == null || passwordController == null) {
+        setState(() {
+          errorMessage = 'Please Provide a Eamil and Password';
+        });
+        return false;
+      }
+      if (emailController == '' || passwordController == '') {
+        setState(() {
+          errorMessage = 'Please Provide a Eamil and Password';
+        });
+        return false;
+      }
+
+      if (!emailController!.contains('@') ||
+          !emailController!.contains('.com')) {
+        setState(() {
+          errorMessage = 'Email is not a valid email';
+        });
+        return false;
+      }
+
+      if (passwordController!.length < 6) {
+        setState(() {
+          errorMessage = 'Password Must be longer than 6 characters';
+        });
+        return false;
+      }
+      return isCorrect;
+    }
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _controller.animateTo(_controller.position.maxScrollExtent,
+          duration: Duration(seconds: 1), curve: Curves.ease);
+      //.then((value) async {
+      // await Future.delayed(Duration(seconds: 2));
+      // _controller.animateTo(_controller.position.minScrollExtent,
+      //     duration: Duration(seconds: 1), curve: Curves.ease);
+    });
 
     return Scaffold(
       backgroundColor: primaryClr,
       body: SafeArea(
-        child: Column(
-          children: [
-            //header(context),
-            const SizedBox(
-              height: 25,
-            ),
-            const Center(
-              child: Text(
-                'WELCOME',
-                style: loginFormHeaders,
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            const Center(
-              child: Text(
-                'TO',
-                style: loginFormHeaders,
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            header(context),
-            TextFieldContainer(
-              child: RoundedInputField(
-                hintText: 'Email',
-                IconData: const Icon(
-                  Icons.person,
-                  color: primaryLightClr,
+        child: Container(
+          margin: const EdgeInsets.only(top: 80),
+          child: SingleChildScrollView(
+            controller: _controller,
+            child: Column(
+              children: [
+                //header(context),
+                // const SizedBox(
+                //   height: 25,
+                // ),
+                // const Center(
+                //   child: Text(
+                //     'WELCOME',
+                //     style: loginFormHeaders,
+                //   ),
+                // ),
+                // const SizedBox(
+                //   height: 10,
+                // ),
+                // const Center(
+                //   child: Text(
+                //     'TO',
+                //     style: loginFormHeaders,
+                //   ),
+                // ),
+
+                header(context),
+                const SizedBox(
+                  height: 50,
                 ),
-                onChanged: (value) {
-                  emailController = value;
-                },
-              ),
-            ),
-            TextFieldContainer(
-              child: RoundedInputField(
-                obscureText: passText,
-                hintText: 'Password',
-                IconData: const Icon(
-                  Icons.lock,
-                  color: primaryLightClr,
-                ),
-                suffixIcon: const Icon(
-                  Icons.visibility,
-                  color: primaryLightClr,
-                ),
-                onChanged: (value) {
-                  passwordController = value;
-                },
-              ),
-            ),
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(29),
-                color: Colors.red,
-              ),
-              width: MediaQuery.of(context).size.width * 0.8,
-              child: TextButton(
-                onPressed: () {},
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 10,
-                    horizontal: 40,
-                  ),
-                  child: const Text(
-                    'Login',
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                const Text(
-                  "Dont't have an Account ? ",
-                  style: TextStyle(color: primaryLightClr),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Get.toNamed('/register');
-                  },
-                  child: const Text(
-                    'Sign up',
-                    style: TextStyle(
+                TextFieldContainer(
+                  child: RoundedInputField(
+                    hintText: 'Email',
+                    IconData: const Icon(
+                      Icons.person,
                       color: primaryLightClr,
-                      fontWeight: FontWeight.bold,
                     ),
+                    onChanged: (value) {
+                      setState(() {
+                        errorMessage = null;
+                        emailController = value;
+                      });
+                    },
                   ),
-                )
-              ],
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            Container(
-              width: MediaQuery.of(context).size.width * 0.8,
-              child: Row(
-                children: <Widget>[
-                  divider(),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10),
-                    child: Text(
-                      'OR',
-                      style: TextStyle(
-                        color: primaryLightClr,
-                        fontWeight: FontWeight.w600,
+                ),
+                TextFieldContainer(
+                  child: RoundedInputField(
+                    obscureText: passText,
+                    hintText: 'Password',
+                    IconData: const Icon(
+                      Icons.lock,
+                      color: primaryLightClr,
+                    ),
+                    suffixIcon: const Icon(
+                      Icons.visibility,
+                      color: primaryLightClr,
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        errorMessage = null;
+                        passwordController = value;
+                      });
+                    },
+                  ),
+                ),
+                errorMessage == null
+                    ? Container()
+                    : Container(
+                        margin: const EdgeInsets.only(bottom: 15),
+                        child: Text(
+                          errorMessage!,
+                          style: const TextStyle(color: Colors.red),
+                        ),
+                      ),
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(29),
+                    color: Colors.red,
+                  ),
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  child: TextButton(
+                    onPressed: () {
+                      var isCorrect = validation();
+                      if (isCorrect) {
+                        _auth.emailAndPasswordSignIn(
+                            emailController, passwordController);
+                      }
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 10,
+                        horizontal: 40,
+                      ),
+                      child: const Text(
+                        'Login',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
-                  divider(),
-                ],
-              ),
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      width: 2,
-                      color: primaryLightClr,
+                ),
+                const SizedBox(
+                  height: 40,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    const Text(
+                      "Dont't have an Account ? ",
+                      style: TextStyle(color: primaryLightClr),
                     ),
-                    shape: BoxShape.circle,
+                    GestureDetector(
+                      onTap: () {
+                        Get.toNamed('/register');
+                      },
+                      child: const Text(
+                        'Sign up',
+                        style: TextStyle(
+                          color: primaryLightClr,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  child: Row(
+                    children: <Widget>[
+                      divider(),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: Text(
+                          'OR',
+                          style: TextStyle(
+                            color: primaryLightClr,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 40,
+                      ),
+                      divider(),
+                    ],
                   ),
-                  child: SvgPicture.asset(
-                    'images/socialMediaSVG/google.svg',
-                    height: 20,
-                    width: 20,
-                    color: Colors.white,
-                  ),
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          width: 2,
+                          color: primaryLightClr,
+                        ),
+                        shape: BoxShape.circle,
+                      ),
+                      child: GestureDetector(
+                        onTap: () {
+                          _auth.googleSignIn();
+                        },
+                        child: SvgPicture.asset(
+                          'images/socialMediaSVG/google.svg',
+                          height: 20,
+                          width: 20,
+                          color: Colors.white,
+                        ),
+                      ),
+                    )
+                  ],
                 )
               ],
-            )
-          ],
+            ),
+          ),
         ),
       ),
     );
@@ -188,7 +269,7 @@ class _SignInState extends State<SignIn> {
       children: [
         Padding(
           padding: const EdgeInsets.only(
-            bottom: 20,
+            bottom: 45,
             left: 20,
           ),
           child: Row(
@@ -196,7 +277,7 @@ class _SignInState extends State<SignIn> {
               const Text(
                 "Shared",
                 style: TextStyle(
-                  fontSize: 26,
+                  fontSize: 45,
                   color: Colors.white,
                 ),
               ),
@@ -214,7 +295,7 @@ class _SignInState extends State<SignIn> {
                 child: const Text(
                   "Space",
                   style: TextStyle(
-                    fontSize: 26,
+                    fontSize: 45,
                     color: primaryClr,
                   ),
                 ),

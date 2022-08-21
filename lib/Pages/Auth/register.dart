@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sharedspace/Configs/themes.dart';
+import 'package:sharedspace/Services/auth.dart';
 
 class Register extends StatefulWidget {
   const Register({Key? key}) : super(key: key);
@@ -11,6 +12,7 @@ class Register extends StatefulWidget {
 
 int currentStep = 0;
 int maxStep = getSteps().length - 1;
+final AuthService _auth = AuthService();
 
 List<Step> getSteps() => [
       Step(
@@ -121,6 +123,7 @@ class _RegisterState extends State<Register> {
           }
           if (isLastStep) {
             print('Completed');
+            _auth.registerWithEmailAndPassword('email', 'password');
           }
           if (currentStep < maxStep) {
             setState(() {
