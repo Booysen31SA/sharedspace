@@ -17,7 +17,8 @@ class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   // register with email and password
-  Future registerWithEmailAndPassword(email, password) async {
+  Future registerWithEmailAndPassword(
+      email, password, firstname, surname) async {
     print('Register With Email and password');
   }
 

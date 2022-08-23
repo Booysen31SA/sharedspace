@@ -45,3 +45,8 @@ const loginFormHeaders = TextStyle(
   fontSize: 18,
   fontWeight: FontWeight.bold,
 );
+
+const stepHeadding = TextStyle(
+  fontSize: 16,
+  fontWeight: FontWeight.normal,
+);

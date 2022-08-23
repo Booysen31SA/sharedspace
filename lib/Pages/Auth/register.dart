@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:sharedspace/Configs/themes.dart';
 import 'package:sharedspace/Services/auth.dart';
 import 'package:sharedspace/Widgets/roundedInputField.dart';
-import 'package:sharedspace/Widgets/textFieldContainer.dart';
 
 class Register extends StatefulWidget {
   const Register({Key? key}) : super(key: key);
@@ -21,45 +20,80 @@ class _RegisterState extends State<Register> {
         Step(
           state: currentStep > 0 ? StepState.complete : StepState.indexed,
           isActive: currentStep >= 0,
-          title: const Text('Email'),
-          content: Center(
-            child: stepOne(),
+          title: const Text(
+            'Email',
+            style: stepHeadding,
           ),
+          content: stepOne(),
         ),
         Step(
           state: currentStep > 1 ? StepState.complete : StepState.indexed,
           isActive: currentStep >= 1,
-          title: const Text('Basic Information'),
-          content: const Center(
-            child: Text('Basic Information'),
+          title: const Text(
+            'Basic Information',
+            style: stepHeadding,
           ),
+          content: stepTwo(),
         ),
         Step(
           state: currentStep > 2 ? StepState.complete : StepState.indexed,
           isActive: currentStep >= 2,
-          title: const Text('Security'),
-          content: const Center(
-            child: Text('Security'),
+          title: const Text(
+            'Security',
+            style: stepHeadding,
           ),
+          content: stepThree(),
         )
       ];
 
   // Controllers
-  String? errorMessage;
+  String? emailErrorMessage;
   String? emailController;
+
+  String? firstNameController;
+  String? firstNameErrorMessage;
+
+  String? surnameErrorMessage;
+  String? surnameController;
+
+  String? passwordErrorMessage;
+  String? passwordController;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: primaryClr,
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.only(top: 15),
-          child: Column(
-            children: [
-              header(context),
-              stepForm(),
-            ],
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                header(context),
+                stepForm(),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    const Text(
+                      "Already have an account ? ",
+                      style: TextStyle(color: Colors.black),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Get.toNamed('/signin');
+                      },
+                      child: const Text(
+                        'Sign in',
+                        style: TextStyle(
+                          color: primaryClr,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    )
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -81,7 +115,7 @@ class _RegisterState extends State<Register> {
                 "Shared",
                 style: TextStyle(
                   fontSize: 26,
-                  color: Colors.white,
+                  color: primaryClr,
                 ),
               ),
               Container(
@@ -89,7 +123,7 @@ class _RegisterState extends State<Register> {
                   right: 15,
                 ),
                 decoration: const BoxDecoration(
-                  color: Colors.white,
+                  color: primaryClr,
                   borderRadius: BorderRadius.only(
                     topRight: Radius.circular(40),
                     bottomRight: Radius.circular(40),
@@ -99,7 +133,7 @@ class _RegisterState extends State<Register> {
                   "Space",
                   style: TextStyle(
                     fontSize: 26,
-                    color: primaryClr,
+                    color: Colors.white,
                   ),
                 ),
               ),
@@ -113,9 +147,10 @@ class _RegisterState extends State<Register> {
   stepForm() {
     return Theme(
       data: ThemeData(
-        primaryColor: Colors.orange,
-        colorScheme: const ColorScheme.light(primary: Colors.orange),
-        textTheme: Theme.of(context).textTheme.apply(bodyColor: Colors.black),
+        colorScheme: const ColorScheme.light(primary: primaryClr),
+        textTheme: Theme.of(context).textTheme.apply(
+              bodyColor: Colors.black,
+            ),
       ),
       child: Stepper(
         type: StepperType.vertical,
@@ -124,29 +159,7 @@ class _RegisterState extends State<Register> {
         onStepTapped: (step) => setState(() {
           currentStep = step;
         }),
-        onStepContinue: () {
-          final isLastStep = currentStep == getSteps().length - 1;
-
-          if (currentStep == 0) {
-            if (validation()) {
-              _auth.isEmailChecked(emailController);
-              // more validataion
-            }
-          }
-          if (isLastStep) {
-            if (errorMessage == null) {
-              print('Completed');
-              _auth.registerWithEmailAndPassword(emailController, 'password');
-            } else {
-              print('Add error message in last step');
-            }
-          }
-          if (currentStep < (getSteps().length - 1) && validation() == true) {
-            setState(() {
-              currentStep += 1;
-            });
-          }
-        },
+        onStepContinue: onStepContinue,
         onStepCancel: () {
           if (currentStep > 0) {
             setState(() {
@@ -173,7 +186,7 @@ class _RegisterState extends State<Register> {
                   Expanded(
                     child: ElevatedButton(
                       onPressed: controls.onStepCancel,
-                      child: const Text('Back'),
+                      child: const Text('BACK'),
                     ),
                   )
               ],
@@ -184,30 +197,65 @@ class _RegisterState extends State<Register> {
     );
   }
 
+  void onStepContinue() {
+    final isLastStep = currentStep == getSteps().length - 1;
+    bool canContinue = false;
+
+    if (currentStep == 0) {
+      if (emailValidation()) {
+        _auth.isEmailChecked(emailController);
+        canContinue = true;
+      }
+    }
+    if (currentStep == 1) {
+      if (firstNameValidation() && surnameValidation()) {
+        canContinue = true;
+      } else {
+        canContinue = false;
+      }
+    }
+
+    if (currentStep == 2) {
+      if (passwordValidation()) {
+        canContinue = true;
+      } else {
+        canContinue = false;
+      }
+    }
+    if (isLastStep && canContinue == true) {
+      _auth.registerWithEmailAndPassword(emailController, passwordController,
+          firstNameController, surnameController);
+    }
+    if (currentStep < (getSteps().length - 1) && canContinue == true) {
+      setState(() {
+        currentStep += 1;
+      });
+    }
+  }
+
   stepOne() {
     return Column(
       children: [
-        TextFieldContainer(
-          child: RoundedInputField(
-            hintText: 'Email',
-            IconData: const Icon(
-              Icons.person,
-              color: primaryLightClr,
-            ),
-            onChanged: (value) {
-              setState(() {
-                errorMessage = null;
-                emailController = value;
-              });
-            },
+        RoundedInputField(
+          isBorder: true,
+          hintText: 'Email',
+          IconData: const Icon(
+            Icons.email,
+            color: primaryClr,
           ),
+          onChanged: (value) {
+            setState(() {
+              emailErrorMessage = null;
+              emailController = value;
+            });
+          },
         ),
-        errorMessage == null
+        emailErrorMessage == null
             ? Container()
             : Container(
                 margin: const EdgeInsets.only(top: 10),
                 child: Text(
-                  errorMessage!,
+                  emailErrorMessage!,
                   style: const TextStyle(color: Colors.red),
                 ),
               ),
@@ -215,21 +263,149 @@ class _RegisterState extends State<Register> {
     );
   }
 
-  bool validation() {
+  stepTwo() {
+    return Column(
+      children: [
+        firstName(),
+        surname(),
+      ],
+    );
+  }
+
+  stepThree() {
+    return Column(
+      children: [
+        RoundedInputField(
+          isBorder: true,
+          hintText: 'Password',
+          IconData: const Icon(
+            Icons.lock,
+            color: primaryClr,
+          ),
+          onChanged: (value) {
+            setState(() {
+              passwordErrorMessage = null;
+              passwordController = value;
+            });
+          },
+        ),
+        passwordErrorMessage == null
+            ? Container()
+            : Container(
+                margin: const EdgeInsets.only(top: 10),
+                child: Text(
+                  passwordErrorMessage!,
+                  style: const TextStyle(color: Colors.red),
+                ),
+              )
+      ],
+    );
+  }
+
+  firstName() {
+    return Column(
+      children: [
+        RoundedInputField(
+          isBorder: true,
+          hintText: 'First Name',
+          IconData: const Icon(
+            Icons.person,
+            color: primaryClr,
+          ),
+          onChanged: (value) {
+            setState(() {
+              firstNameErrorMessage = null;
+              firstNameController = value;
+            });
+          },
+        ),
+        firstNameErrorMessage == null
+            ? Container()
+            : Container(
+                margin: const EdgeInsets.only(top: 10),
+                child: Text(
+                  firstNameErrorMessage!,
+                  style: const TextStyle(color: Colors.red),
+                ),
+              ),
+      ],
+    );
+  }
+
+  surname() {
+    return Column(
+      children: [
+        RoundedInputField(
+          isBorder: true,
+          hintText: 'Surname',
+          IconData: const Icon(
+            Icons.person,
+            color: primaryClr,
+          ),
+          onChanged: (value) {
+            setState(() {
+              surnameErrorMessage = null;
+              surnameController = value;
+            });
+          },
+        ),
+        surnameErrorMessage == null
+            ? Container()
+            : Container(
+                margin: const EdgeInsets.only(top: 10),
+                child: Text(
+                  surnameErrorMessage!,
+                  style: const TextStyle(color: Colors.red),
+                ),
+              ),
+      ],
+    );
+  }
+
+  bool emailValidation() {
     var isCorrect = true;
     if (emailController == null) {
       setState(() {
-        errorMessage = 'Please Provide a valid Email';
+        emailErrorMessage = 'Please Provide a valid Email';
       });
       return false;
     }
 
     if (!emailController!.contains('@') || !emailController!.contains('.com')) {
       setState(() {
-        errorMessage = 'Email is not a valid email';
+        emailErrorMessage = 'Email is not a valid email';
       });
       return false;
     }
     return isCorrect;
+  }
+
+  bool firstNameValidation() {
+    if (firstNameController == null) {
+      setState(() {
+        firstNameErrorMessage = 'Please enter your first name';
+      });
+      return false;
+    }
+    return true;
+  }
+
+  bool surnameValidation() {
+    if (surnameController == null) {
+      setState(() {
+        surnameErrorMessage = 'Please enter your surname';
+      });
+      return false;
+    }
+    return true;
+  }
+
+  bool passwordValidation() {
+    if (passwordController == null || passwordController!.length < 6) {
+      setState(() {
+        passwordErrorMessage = 'Password needs to be greater than 6 character';
+      });
+    }
+    return true;
   }
 }

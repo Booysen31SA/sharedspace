@@ -162,7 +162,7 @@ class _SignInState extends State<SignIn> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     const Text(
-                      "Dont't have an Account ? ",
+                      "Dont't have an account ? ",
                       style: TextStyle(color: primaryLightClr),
                     ),
                     GestureDetector(

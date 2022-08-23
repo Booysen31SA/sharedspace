@@ -5,6 +5,7 @@ class RoundedInputField extends StatefulWidget {
   final IconData;
   final suffixIcon;
   bool obscureText;
+  final isBorder;
   final ValueChanged<String> onChanged;
   RoundedInputField({
     Key? key,
@@ -13,6 +14,7 @@ class RoundedInputField extends StatefulWidget {
     required this.onChanged,
     this.suffixIcon,
     this.obscureText = false,
+    this.isBorder = false,
   }) : super(key: key);
 
   @override
@@ -29,7 +31,7 @@ class _RoundedInputFieldState extends State<RoundedInputField> {
       decoration: InputDecoration(
         icon: widget.IconData,
         hintText: widget.hintText,
-        border: InputBorder.none,
+        border: widget.isBorder ? null : InputBorder.none,
         suffixIcon: widget.suffixIcon != null
             ? SizedBox(
                 height: 5,
