@@ -3,28 +3,54 @@ import 'package:sharedspace/Models/userModel.dart';
 
 class AuthService {
   // create user Object
-  UserModel? _userFromFirebase(User user) {
+  UserModel? _userFromFirebase(User? user) {
     return user != null ? UserModel(uid: user.uid) : null;
   }
 
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 // auth stream
   Stream<UserModel?> get userStream {
-    return _auth
-        .authStateChanges()
-        .map((User? user) => _userFromFirebase(user!));
+    return _auth.authStateChanges().map(
+          (User? user) => (user == null) ? null : _userFromFirebase(user),
+        );
   }
 
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  inputData() {
+    final User? user = _auth.currentUser;
+    return _userFromFirebase(user);
+    // here you write the codes to input the data into firestore
+  }
 
   // register with email and password
   Future registerWithEmailAndPassword(
       email, password, firstname, surname) async {
-    print('Register With Email and password');
+    try {
+      await _auth.createUserWithEmailAndPassword(
+              email: email, password: password)
+          //.timeout(const Duration(seconds: 10))
+          ;
+
+      //return authResult;
+    } on FirebaseAuthException catch (e) {
+      return e.message;
+    }
   }
 
   //Sign in with email and password,
   Future emailAndPasswordSignIn(email, password) async {
-    print('Email and Password Sign in');
+    try {
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
+      return 'Signed in';
+    } on FirebaseAuthException catch (e) {
+      var errorCode = e.code;
+      var errorMessage = e.message;
+      print(errorMessage);
+      if (errorCode == 'auth/wrong-password') {
+        return ('Wrong Password.');
+      } else {
+        return errorMessage;
+      }
+    }
   }
 
   // Sign in with google
@@ -41,7 +67,8 @@ class AuthService {
   //Sign out
   Future signOut() async {
     try {
-      return await _auth.signOut();
+      await _auth.signOut();
+      return 'Signed Out';
     } catch (e) {
       print(e.toString());
       return null;

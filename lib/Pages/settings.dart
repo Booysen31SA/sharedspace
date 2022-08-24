@@ -120,6 +120,7 @@ mainSettings(context) {
                 TextButton(
                   onPressed: () async {
                     await _auth.signOut();
+                    Navigator.pushReplacementNamed(context, '/');
                   },
                   style: ButtonStyle(
                     foregroundColor: MaterialStateProperty.all(Colors.red),
