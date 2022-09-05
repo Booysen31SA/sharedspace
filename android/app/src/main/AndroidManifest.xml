@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.sharedspace">
+    package="com.booyse31sa.sharedspace">
    <application
         android:label="sharedspace"
         android:name="${applicationName}"

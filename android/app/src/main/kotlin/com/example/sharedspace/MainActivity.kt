@@ -1,4 +1,4 @@
-package com.example.sharedspace
+package com.booyse31sa.sharedspace
 
 import io.flutter.embedding.android.FlutterActivity
 
