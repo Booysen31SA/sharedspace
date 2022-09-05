@@ -43,7 +43,7 @@ class _SignInViewState extends State<SignInView> {
             controller: _controller,
             child: Column(
               children: [
-                Logo(),
+                const Logo(),
                 signInForm(),
                 const SizedBox(
                   height: 20,
