@@ -11,14 +11,9 @@ class FlutterFireAuthService {
 
   Stream<User?> get authStateChanges => _firebaseAuth.idTokenChanges();
 
-  Future<void> signOut() async {
+  Future<void> signOut({required BuildContext context}) async {
     await _firebaseAuth.signOut();
-    // Navigator.push(
-    //     context,
-    //     MaterialPageRoute(
-    //         builder: (context) => LoadingView();
-    //     )
-    // );
+    Navigator.pushReplacementNamed(context, '/');
   }
 
   Future<String> signInWithEmailAndPassword(
@@ -30,8 +25,7 @@ class FlutterFireAuthService {
           email: email, password: password);
       print('Signed in');
 
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => LoadingView()));
+      Navigator.pushReplacementNamed(context, '/');
       return 'Success';
     } on FirebaseAuthException catch (e) {
       print(e.toString());
@@ -48,11 +42,7 @@ class FlutterFireAuthService {
           email: email, password: password);
       print('Signed in');
 
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => LoadingView(),
-          ));
+      Navigator.pushReplacementNamed(context, '/');
       return 'Success';
     } on FirebaseAuthException catch (e) {
       print(e.toString());

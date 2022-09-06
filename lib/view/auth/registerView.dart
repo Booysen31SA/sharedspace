@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:provider/provider.dart';
 import 'package:sharedspace/components/logo.dart';
 import 'package:sharedspace/configs/themes.dart';
@@ -67,84 +68,76 @@ class _RegisterViewState extends State<RegisterView> {
     );
   }
 
-  registerForm(){
+  registerForm() {
     return FormBuilder(
-      key: _registerFormKey,
-      child: column(
-        children: <Widget>[
+        key: _registerFormKey,
+        child: Column(children: <Widget>[
           FormBuilderTextField(
-              key: _registerEmailFieldKey,
-              name: 'email',
-              validator: FormBuilderValidators.compose([
-                FormBuilderValidators.required(),
-                FormBuilderValidators.email(),
-              ]),
-            decoration: inputDecoration('Email', Colors.white),
+            key: _registerEmailFieldKey,
+            name: 'email',
+            validator: FormBuilderValidators.compose([
+              FormBuilderValidators.required(),
+              FormBuilderValidators.email(),
+            ]),
+            decoration: inputDecoration(hintText: 'Email', color: Colors.white),
             style: const TextStyle(color: Colors.white),
           ),
-
           const SizedBox(
             height: 10,
           ),
-
           FormBuilderTextField(
-              key: _registerFirstNameFieldKey,
-              name: 'firstname',
-              validator: FormBuilderValidators.compose([
-                FormBuilderValidators.required()
-              ]),
-            decoration: inputDecoration('First Name', Colors.white),
+            key: _registerFirstNameFieldKey,
+            name: 'firstname',
+            validator: FormBuilderValidators.compose(
+                [FormBuilderValidators.required()]),
+            decoration:
+                inputDecoration(hintText: 'First Name', color: Colors.white),
             style: const TextStyle(color: Colors.white),
           ),
-
           const SizedBox(
             height: 10,
           ),
-
           FormBuilderTextField(
-              key: _registerLastNameFieldKey,
-              name: 'lastname',
-              validator: FormBuilderValidators.compose([
-                FormBuilderValidators.required(),
-              ]),
-            decoration: inputDecoration('Last Name', Colors.white),
+            key: _registerLastNameFieldKey,
+            name: 'lastname',
+            validator: FormBuilderValidators.compose([
+              FormBuilderValidators.required(),
+            ]),
+            decoration:
+                inputDecoration(hintText: 'Last Name', color: Colors.white),
             style: const TextStyle(color: Colors.white),
           ),
-
           const SizedBox(
             height: 10,
           ),
-
           FormBuilderTextField(
-              key: _registerPasswordFieldKey,
-              obscureText: !_passwordVisible,
-              name: 'password',
-              validator: FormBuilderValidators.compose([
-                FormBuilderValidators.required(),
-                FormBuilderValidators.minLength(6),
-              ]),
-            decoration: inputDecoration('Password', Colors.white),
+            key: _registerPasswordFieldKey,
+            obscureText: !_passwordVisible,
+            name: 'password',
+            validator: FormBuilderValidators.compose([
+              FormBuilderValidators.required(),
+              FormBuilderValidators.minLength(6),
+            ]),
+            decoration: inputDecoration(
+              hintText: 'Password',
+              color: Colors.white,
+              suffixIcon: IconButton(
+                  icon: Icon(
+                    // based on _passwordVisible
+                    _passwordVisible ? Icons.visibility : Icons.visibility_off,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _passwordVisible = !_passwordVisible;
+                    });
+                  }),
+            ),
             style: const TextStyle(color: Colors.white),
-                          sufficIcon: IconButton(
-                icon: Icon(
-                  // based on _passwordVisible
-                  _passwordVisible
-                  ? Icons.visibility
-                  : Icons.visibility_off,
-                  color: primaryClr
-                ),
-                onPressed: (){
-                  setState(() {
-                    _passwordVisible = !_passwordVisible;
-                  });
-                }
-              )
           ),
-
           const SizedBox(
             height: 10,
           ),
-
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10.0),
@@ -161,16 +154,11 @@ class _RegisterViewState extends State<RegisterView> {
                 }
               },
               child: const Text(
-                'LOGIN',
+                'REGISTER',
                 style: TextStyle(color: Colors.white),
               ),
             ),
           )
-
-
-        ]
-      );
-    );
+        ]));
   }
-
 }

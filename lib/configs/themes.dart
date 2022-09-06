@@ -19,7 +19,7 @@ class Themes {
       brightness: Brightness.dark);
 }
 
-inputDecoration(String hintText, Color color) {
+inputDecoration({hintText, color, suffixIcon}) {
   return InputDecoration(
     enabledBorder: const OutlineInputBorder(
       borderSide: BorderSide(color: Colors.white),
@@ -40,6 +40,8 @@ inputDecoration(String hintText, Color color) {
     ),
     fillColor: color,
     hintText: hintText,
+    hintStyle: TextStyle(color: Colors.grey[500]),
     labelStyle: const TextStyle(color: Colors.white),
+    suffixIcon: suffixIcon,
   );
 }

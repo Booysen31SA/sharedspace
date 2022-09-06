@@ -129,7 +129,7 @@ class _SignInViewState extends State<SignInView> {
               FormBuilderValidators.required(),
               FormBuilderValidators.email(),
             ]),
-            decoration: inputDecoration('Email', Colors.white),
+            decoration: inputDecoration(hintText: 'Email', color: Colors.white),
             style: const TextStyle(color: Colors.white),
           ),
           const SizedBox(
@@ -144,22 +144,20 @@ class _SignInViewState extends State<SignInView> {
               FormBuilderValidators.minLength(6),
             ]),
             decoration: inputDecoration(
-              'Password', 
-              Colors.white,
-              sufficIcon: IconButton(
-                icon: Icon(
-                  // based on _passwordVisible
-                  _passwordVisible
-                  ? Icons.visibility
-                  : Icons.visibility_off,
-                  color: primaryClr
-                ),
-                onPressed: (){
-                  setState(() {
-                    _passwordVisible = !_passwordVisible;
-                  });
-                }
-              ), ),
+              hintText: 'Password',
+              color: Colors.white,
+              suffixIcon: IconButton(
+                  icon: Icon(
+                    // based on _passwordVisible
+                    _passwordVisible ? Icons.visibility : Icons.visibility_off,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _passwordVisible = !_passwordVisible;
+                    });
+                  }),
+            ),
             style: const TextStyle(color: Colors.white),
           ),
           const SizedBox(
