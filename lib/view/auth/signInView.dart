@@ -18,9 +18,11 @@ class _SignInViewState extends State<SignInView> {
   final ScrollController _controller = ScrollController();
 
   //Form Key
-  final _formKey = GlobalKey<FormBuilderState>();
+  final _signInformKey = GlobalKey<FormBuilderState>();
   final _emailFieldKey = GlobalKey<FormBuilderFieldState>();
   final _passwordFieldKey = GlobalKey<FormBuilderFieldState>();
+
+  var _passwordVisible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +59,7 @@ class _SignInViewState extends State<SignInView> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        Navigator.pushNamed(context, '/register');
+                        Navigator.pushReplacementNamed(context, '/register');
                       },
                       child: const Text(
                         'Sign up',
@@ -117,7 +119,7 @@ class _SignInViewState extends State<SignInView> {
 
   signInForm() {
     return FormBuilder(
-      key: _formKey,
+      key: _signInformKey,
       child: Column(
         children: <Widget>[
           FormBuilderTextField(
@@ -135,12 +137,29 @@ class _SignInViewState extends State<SignInView> {
           ),
           FormBuilderTextField(
             key: _passwordFieldKey,
+            obscureText: !_passwordVisible,
             name: 'password',
             validator: FormBuilderValidators.compose([
               FormBuilderValidators.required(),
               FormBuilderValidators.minLength(6),
             ]),
-            decoration: inputDecoration('Password', Colors.white),
+            decoration: inputDecoration(
+              'Password', 
+              Colors.white,
+              sufficIcon: IconButton(
+                icon: Icon(
+                  // based on _passwordVisible
+                  _passwordVisible
+                  ? Icons.visibility
+                  : Icons.visibility_off,
+                  color: primaryClr
+                ),
+                onPressed: (){
+                  setState(() {
+                    _passwordVisible = !_passwordVisible;
+                  });
+                }
+              ), ),
             style: const TextStyle(color: Colors.white),
           ),
           const SizedBox(
@@ -155,10 +174,10 @@ class _SignInViewState extends State<SignInView> {
             child: MaterialButton(
               onPressed: () {
                 final validateSuccess =
-                    _formKey.currentState!.saveAndValidate();
+                    _signInformKey.currentState!.saveAndValidate();
 
                 if (validateSuccess) {
-                  print(_formKey.currentState!.value);
+                  print(_signInformKey.currentState!.value);
                 }
               },
               child: const Text(
