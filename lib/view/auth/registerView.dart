@@ -19,6 +19,8 @@ class _RegisterViewState extends State<RegisterView> {
   final _registerLastNameFieldKey = GlobalKey<FormBuilderState>();
   final _registerPasswordFieldKey = GlobalKey<FormBuilderState>();
 
+  var _passwordVisible = false;
+
   // use Flutter Form Builder
   @override
   Widget build(BuildContext context) {
@@ -115,7 +117,7 @@ class _RegisterViewState extends State<RegisterView> {
 
           FormBuilderTextField(
               key: _registerPasswordFieldKey,
-              obscureText: true,
+              obscureText: !_passwordVisible,
               name: 'password',
               validator: FormBuilderValidators.compose([
                 FormBuilderValidators.required(),
@@ -123,6 +125,20 @@ class _RegisterViewState extends State<RegisterView> {
               ]),
             decoration: inputDecoration('Password', Colors.white),
             style: const TextStyle(color: Colors.white),
+                          sufficIcon: IconButton(
+                icon: Icon(
+                  // based on _passwordVisible
+                  _passwordVisible
+                  ? Icons.visibility
+                  : Icons.visibility_off,
+                  color: primaryClr
+                ),
+                onPressed: (){
+                  setState(() {
+                    _passwordVisible = !_passwordVisible;
+                  });
+                }
+              )
           ),
 
           const SizedBox(
