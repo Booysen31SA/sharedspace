@@ -7,10 +7,10 @@ import 'package:sharedspace/configs/themes.dart';
 import 'package:sharedspace/database/firebase.dart';
 
 class RegisterView extends StatefulWidget {
-  RegisterView({Key? key}) : super(key: key);
+  const RegisterView({Key? key}) : super(key: key);
 
   @override
-  _RegisterViewState createState() => _RegisterViewState();
+  State<RegisterView> createState() => _RegisterViewState();
 }
 
 class _RegisterViewState extends State<RegisterView> {
@@ -26,7 +26,6 @@ class _RegisterViewState extends State<RegisterView> {
   // use Flutter Form Builder
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       backgroundColor: primaryClr,
       body: SafeArea(
@@ -146,7 +145,7 @@ class _RegisterViewState extends State<RegisterView> {
             ),
             width: MediaQuery.of(context).size.width * 1,
             child: MaterialButton(
-              onPressed: () {
+              onPressed: () async {
                 final validateSuccess =
                     _registerFormKey.currentState!.saveAndValidate();
 
@@ -156,7 +155,7 @@ class _RegisterViewState extends State<RegisterView> {
 
                 if (validateSuccess) {
                   final values = _registerFormKey.currentState!.value;
-                  var result = context
+                  var result = await context
                       .read<FlutterFireAuthService>()
                       .signUpWithEmailAndPassword(
                           email: values['email'],
@@ -164,6 +163,12 @@ class _RegisterViewState extends State<RegisterView> {
                           firstname: values['firstname'],
                           lastname: values['lastname'],
                           context: context);
+
+                  if (result != 'Success') {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(result.toString())),
+                    );
+                  }
                 }
               },
               child: const Text(

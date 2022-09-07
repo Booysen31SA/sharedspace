@@ -8,10 +8,10 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:sharedspace/database/firebase.dart';
 
 class SignInView extends StatefulWidget {
-  SignInView({Key? key}) : super(key: key);
+  const SignInView({Key? key}) : super(key: key);
 
   @override
-  _SignInViewState createState() => _SignInViewState();
+  State<SignInView> createState() => _SignInViewState();
 }
 
 class _SignInViewState extends State<SignInView> {
@@ -171,13 +171,13 @@ class _SignInViewState extends State<SignInView> {
             ),
             width: MediaQuery.of(context).size.width * 1,
             child: MaterialButton(
-              onPressed: () {
+              onPressed: () async {
                 final validateSuccess =
                     _signInformKey.currentState!.saveAndValidate();
 
                 if (validateSuccess) {
                   final values = _signInformKey.currentState!.value;
-                  var result = context
+                  var result = await context
                       .read<FlutterFireAuthService>()
                       .signInWithEmailAndPassword(
                           email: values['email'],

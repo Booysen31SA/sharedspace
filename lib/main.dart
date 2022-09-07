@@ -58,9 +58,9 @@ class MyApp extends StatelessWidget {
         // Routing
         home: const LoadingView(),
         routes: {
-          '/signin': (context) => SignInView(),
-          '/register': (context) => RegisterView(),
-          '/home': (context) => HomeView(),
+          '/signin': (context) => const SignInView(),
+          '/register': (context) => const RegisterView(),
+          '/home': (context) => const HomeView(),
           '/settings': (context) => SettingView(),
           '/sharedspace': (context) => SharedSpaceView()
         },
