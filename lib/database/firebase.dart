@@ -21,11 +21,12 @@ class FlutterFireAuthService {
       required String password,
       required BuildContext context}) async {
     try {
-      await _firebaseAuth.signInWithEmailAndPassword(
+      var result = await _firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
+      print(result);
       print('Signed in');
 
-      Navigator.pushReplacementNamed(context, '/');
+      //Navigator.pushReplacementNamed(context, '/');
       return 'Success';
     } on FirebaseAuthException catch (e) {
       print(e.toString());
@@ -36,13 +37,16 @@ class FlutterFireAuthService {
   Future<String> signUpWithEmailAndPassword(
       {required String email,
       required String password,
+      required String firstname,
+      required String lastname,
       required BuildContext context}) async {
     try {
-      await _firebaseAuth.createUserWithEmailAndPassword(
+      var result = await _firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password);
+      print(result);
       print('Signed in');
 
-      Navigator.pushReplacementNamed(context, '/');
+      //Navigator.pushReplacementNamed(context, '/');
       return 'Success';
     } on FirebaseAuthException catch (e) {
       print(e.toString());

@@ -4,6 +4,7 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:provider/provider.dart';
 import 'package:sharedspace/components/logo.dart';
 import 'package:sharedspace/configs/themes.dart';
+import 'package:sharedspace/database/firebase.dart';
 
 class RegisterView extends StatefulWidget {
   RegisterView({Key? key}) : super(key: key);
@@ -149,8 +150,20 @@ class _RegisterViewState extends State<RegisterView> {
                 final validateSuccess =
                     _registerFormKey.currentState!.saveAndValidate();
 
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Processing Data')),
+                );
+
                 if (validateSuccess) {
-                  print(_registerFormKey.currentState!.value);
+                  final values = _registerFormKey.currentState!.value;
+                  var result = context
+                      .read<FlutterFireAuthService>()
+                      .signUpWithEmailAndPassword(
+                          email: values['email'],
+                          password: values['password'],
+                          firstname: values['firstname'],
+                          lastname: values['lastname'],
+                          context: context);
                 }
               },
               child: const Text(

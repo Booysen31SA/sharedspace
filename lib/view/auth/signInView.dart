@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:sharedspace/components/logo.dart';
 import 'package:sharedspace/configs/themes.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:sharedspace/database/firebase.dart';
 
 class SignInView extends StatefulWidget {
   SignInView({Key? key}) : super(key: key);
@@ -175,7 +176,18 @@ class _SignInViewState extends State<SignInView> {
                     _signInformKey.currentState!.saveAndValidate();
 
                 if (validateSuccess) {
-                  print(_signInformKey.currentState!.value);
+                  final values = _signInformKey.currentState!.value;
+                  var result = context
+                      .read<FlutterFireAuthService>()
+                      .signInWithEmailAndPassword(
+                          email: values['email'],
+                          password: values['password'],
+                          context: context);
+                  if (result != 'Success') {
+                    _signInformKey.currentState!.invalidateField(
+                        name: 'password',
+                        errorText: 'Username or Password is incorrect!');
+                  }
                 }
               },
               child: const Text(
