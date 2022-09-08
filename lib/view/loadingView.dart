@@ -41,9 +41,11 @@ class _LoadingViewState extends State<LoadingView>
   getRedirectRoute(firebaseUser) {
     Future.delayed(const Duration(seconds: 3), () async {
       if (firebaseUser != null) {
-        Navigator.pushReplacementNamed(context, '/home');
+        Navigator.pushNamedAndRemoveUntil(
+            context, '/home', (Route<dynamic> route) => false);
       } else {
-        Navigator.pushReplacementNamed(context, '/signin');
+        Navigator.pushNamedAndRemoveUntil(
+            context, '/signin', (Route<dynamic> route) => false);
       }
     });
   }

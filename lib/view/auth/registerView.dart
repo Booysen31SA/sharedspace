@@ -48,7 +48,10 @@ class _RegisterViewState extends State<RegisterView> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        Navigator.pushReplacementNamed(context, '/signin');
+                        Navigator.popAndPushNamed(
+                          context, '/signin',
+                          //(Route<dynamic> route) => false
+                        );
                       },
                       child: const Text(
                         'Sign in',

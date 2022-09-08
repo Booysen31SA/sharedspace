@@ -60,7 +60,7 @@ class _SignInViewState extends State<SignInView> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        Navigator.pushReplacementNamed(context, '/register');
+                        Navigator.pushNamed(context, '/register');
                       },
                       child: const Text(
                         'Sign up',
@@ -174,6 +174,10 @@ class _SignInViewState extends State<SignInView> {
               onPressed: () async {
                 final validateSuccess =
                     _signInformKey.currentState!.saveAndValidate();
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Processing Data')),
+                );
 
                 if (validateSuccess) {
                   final values = _signInformKey.currentState!.value;

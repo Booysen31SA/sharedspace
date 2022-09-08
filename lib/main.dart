@@ -61,7 +61,7 @@ class MyApp extends StatelessWidget {
           '/signin': (context) => const SignInView(),
           '/register': (context) => const RegisterView(),
           '/home': (context) => const HomeView(),
-          '/settings': (context) => SettingView(),
+          '/settings': (context) => const SettingView(),
           '/sharedspace': (context) => SharedSpaceView()
         },
       ),

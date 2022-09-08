@@ -17,7 +17,6 @@ class FlutterFireAuthService {
 
   Future<void> signOut({required BuildContext context}) async {
     await _firebaseAuth.signOut();
-    Navigator.pushReplacementNamed(context, '/');
   }
 
   Future<String> signInWithEmailAndPassword(

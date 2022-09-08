@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sharedspace/components/header.dart';
 import 'package:sharedspace/configs/themes.dart';
 import 'package:sharedspace/database/firebase.dart';
 
@@ -22,7 +23,50 @@ class _HomeViewState extends State<HomeView> {
       body: SafeArea(
         child: Column(
           children: [
-            Text(firebaseUser!.uid.toString()),
+            Header(
+              heading: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.only(left: 15),
+                    decoration: const BoxDecoration(
+                        color: primaryClr,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(40),
+                            bottomLeft: Radius.circular(40))),
+                    child: const Text(
+                      "Shared",
+                      style: TextStyle(
+                        fontSize: 35,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                  const Text(
+                    "Space",
+                    style: TextStyle(
+                      fontSize: 35,
+                      color: primaryClr,
+                    ),
+                  ),
+                ],
+              ),
+              suffixIcon: GestureDetector(
+                child: const Icon(
+                  Icons.settings,
+                  color: primaryClr,
+                ),
+                onTap: () => {
+                  Navigator.pushNamed(context, '/settings'),
+                },
+              ),
+            ),
+            Text(
+                firebaseUser == null
+                    ? 'User is not logged in'
+                    : firebaseUser.uid.toString(),
+                style: const TextStyle(
+                  fontSize: 20,
+                )),
             Center(
               child: MaterialButton(
                 onPressed: () {
