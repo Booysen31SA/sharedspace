@@ -30,7 +30,7 @@ class UserModel {
 
   factory UserModel.fromDS(String id, Map<String, dynamic> data) {
     return UserModel(
-        uid: id,
+        uid: data['uid'],
         firstname: data['firstname'],
         surname: data['surname'],
         email: data['email'],
@@ -44,8 +44,7 @@ class UserModel {
       "surname": surname,
       "firstname": firstname,
       "email": email,
-      "dateCreated":
-          DateFormat('yyyy-MM-dd').parse(dateCreated.toString()).toString(),
+      "dateCreated": DateFormat('yyyy-MM-dd').parse(dateCreated.toString()),
       "uid": uid,
       "color": color
     };

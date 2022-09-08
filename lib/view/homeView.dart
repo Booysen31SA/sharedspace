@@ -1,10 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_helpers/firebase_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sharedspace/components/card.dart';
 import 'package:sharedspace/components/header.dart';
 import 'package:sharedspace/configs/themes.dart';
-import 'package:sharedspace/database/firebase.dart';
+import 'package:sharedspace/database/firebase_helpers.dart';
+import 'package:sharedspace/models/usermodel.dart';
+import 'package:sharedspace/util/convertStringToColor.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);
@@ -16,9 +19,20 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   // use new Color(matchDetail['colorString']),
 
+  getUserDetails(firebaseUser) async {
+    //UserModel user = UserModel(uid: firebaseUser.uid, firstname: 'dsfds');
+    var data = await userDBS.streamQueryList(
+        args: [QueryArgsV2('uid', isEqualTo: firebaseUser!.uid)]);
+
+    var result = await data.first;
+    return result[0];
+  }
+
   @override
   Widget build(BuildContext context) {
     final firebaseUser = context.watch<User?>();
+    var userdetails = getUserDetails(firebaseUser);
+    //print(userdetails.color);
 
     return Scaffold(
       body: SafeArea(
@@ -71,7 +85,35 @@ class _HomeViewState extends State<HomeView> {
             ),
 
             //card
-            const CardBox()
+            FutureBuilder(
+              future: getUserDetails(firebaseUser),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if (snapshot.hasError) {
+                    return Center(
+                      child: Text(
+                        '${snapshot.error} occurred',
+                        style: const TextStyle(fontSize: 18),
+                      ),
+                    );
+                  } else if (snapshot.hasData) {
+                    var data = snapshot.data as UserModel;
+
+                    //Color myColor = data.color as Color;
+                    return CardBox(
+                      boxColor: data.color == null
+                          ? primaryClr
+                          : StringToColor(data.color),
+                    );
+                  }
+                }
+
+                // Displaying LoadingSpinner to indicate waiting state
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              },
+            )
           ],
         ),
       ),

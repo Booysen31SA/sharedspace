@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:sharedspace/configs/themes.dart';
 
 class CardBox extends StatelessWidget {
-  const CardBox({Key? key}) : super(key: key);
+  final Color? boxColor;
+  const CardBox({Key? key, this.boxColor}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +15,7 @@ class CardBox extends StatelessWidget {
       ),
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: primaryClr,
+        color: boxColor,
         borderRadius: BorderRadius.circular(30), // change to user value
       ),
       child: Row(
