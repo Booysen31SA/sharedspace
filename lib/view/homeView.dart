@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sharedspace/components/card.dart';
 import 'package:sharedspace/components/header.dart';
 import 'package:sharedspace/configs/themes.dart';
 import 'package:sharedspace/database/firebase.dart';
@@ -22,6 +23,7 @@ class _HomeViewState extends State<HomeView> {
     return Scaffold(
       body: SafeArea(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Header(
               heading: Row(
@@ -60,26 +62,16 @@ class _HomeViewState extends State<HomeView> {
                 },
               ),
             ),
-            Text(
-                firebaseUser == null
-                    ? 'User is not logged in'
-                    : firebaseUser.uid.toString(),
-                style: const TextStyle(
-                  fontSize: 20,
-                )),
-            Center(
-              child: MaterialButton(
-                onPressed: () {
-                  var result = context
-                      .read<FlutterFireAuthService>()
-                      .signOut(context: context);
-                },
-                child: const Text(
-                  'LogOut',
-                  style: TextStyle(color: Colors.black),
-                ),
+            Padding(
+              padding: const EdgeInsets.only(left: 20, top: 20, bottom: 20),
+              child: Text(
+                'MY PROFILE',
+                style: headingStyle,
               ),
             ),
+
+            //card
+            const CardBox()
           ],
         ),
       ),

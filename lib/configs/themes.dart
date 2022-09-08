@@ -45,3 +45,11 @@ inputDecoration({hintText, color, suffixIcon}) {
     suffixIcon: suffixIcon,
   );
 }
+
+TextStyle get headingStyle {
+  return TextStyle(
+    fontSize: 15,
+    fontWeight: FontWeight.bold,
+    color: Colors.grey.shade600,
+  );
+}
