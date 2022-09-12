@@ -18,23 +18,41 @@ class Header extends StatelessWidget {
   Widget build(BuildContext context) {
     bool isAction = suffixIcon == null ? false : true;
     bool isLeading = prefixIcon == null ? false : true;
-    return Container(
-      margin: const EdgeInsets.only(top: 5),
-      child: AppBar(
-        elevation: 0.0,
-        titleSpacing: 0,
-        backgroundColor: context.theme.backgroundColor,
-        leading: isLeading ? prefixIcon : Container(),
-        title: heading,
-        actions: isAction
-            ? <Widget>[
-                suffixIcon,
-                const SizedBox(
-                  width: 15,
-                ),
-              ]
-            : [],
-      ),
-    );
+    return isLeading
+        ? Container(
+            margin: const EdgeInsets.only(top: 5),
+            child: AppBar(
+              elevation: 0.0,
+              titleSpacing: 0,
+              backgroundColor: context.theme.backgroundColor,
+              leading: isLeading ? prefixIcon : Container(),
+              title: heading,
+              actions: isAction
+                  ? <Widget>[
+                      suffixIcon,
+                      const SizedBox(
+                        width: 15,
+                      ),
+                    ]
+                  : [],
+            ),
+          )
+        : Container(
+            margin: const EdgeInsets.only(left: 10, top: 5),
+            child: AppBar(
+              elevation: 0.0,
+              titleSpacing: 0,
+              backgroundColor: context.theme.backgroundColor,
+              title: heading,
+              actions: isAction
+                  ? <Widget>[
+                      suffixIcon,
+                      const SizedBox(
+                        width: 15,
+                      ),
+                    ]
+                  : [],
+            ),
+          );
   }
 }

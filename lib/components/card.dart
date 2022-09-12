@@ -3,7 +3,8 @@ import 'package:sharedspace/configs/themes.dart';
 
 class CardBox extends StatelessWidget {
   final Color? boxColor;
-  const CardBox({Key? key, this.boxColor}) : super(key: key);
+  final String? name;
+  const CardBox({Key? key, this.boxColor, this.name}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,10 +35,12 @@ class CardBox extends StatelessWidget {
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
+                children: [
                   Text(
-                    'Matthew Booysen',
-                    style: TextStyle(
+                    name != null
+                        ? '$name'
+                        : 'No name given, Please update details',
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 20,
                     ),
