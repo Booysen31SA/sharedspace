@@ -7,35 +7,42 @@ class UserModel {
   final String? email;
   final DateTime? dateCreated;
   final String? color;
+  final String? groupid;
 
-  UserModel(
-      {required this.uid,
-      this.firstname,
-      this.surname,
-      this.email,
-      this.dateCreated,
-      this.color});
+  UserModel({
+    required this.uid,
+    this.firstname,
+    this.surname,
+    this.email,
+    this.dateCreated,
+    this.color,
+    this.groupid,
+  });
 
   factory UserModel.fromMap(Map data) {
     return UserModel(
-        uid: data['uid'],
-        firstname: data['firstname'],
-        surname: data['surname'],
-        email: data['email'],
-        dateCreated:
-            DateFormat('yyyy-MM-dd').parse(data['dateCreated'].toString()),
-        color: data['color']);
+      uid: data['uid'],
+      firstname: data['firstname'],
+      surname: data['surname'],
+      email: data['email'],
+      dateCreated:
+          DateFormat('yyyy-MM-dd').parse(data['dateCreated'].toString()),
+      color: data['color'],
+      groupid: data['groupid'],
+    );
   }
 
   factory UserModel.fromDS(String id, Map<String, dynamic> data) {
     return UserModel(
-        uid: data['uid'],
-        firstname: data['firstname'],
-        surname: data['surname'],
-        email: data['email'],
-        dateCreated:
-            DateFormat('yyyy-MM-dd').parse(data['dateCreated'].toString()),
-        color: data['color']);
+      uid: data['uid'],
+      firstname: data['firstname'],
+      surname: data['surname'],
+      email: data['email'],
+      dateCreated:
+          DateFormat('yyyy-MM-dd').parse(data['dateCreated'].toString()),
+      color: data['color'],
+      groupid: data['groupid'],
+    );
   }
 
   Map<String, dynamic> toMap() {
@@ -45,7 +52,8 @@ class UserModel {
       "email": email,
       "dateCreated": DateFormat('yyyy-MM-dd').parse(dateCreated.toString()),
       "uid": uid,
-      "color": color
+      "color": color,
+      "groupid": groupid,
     };
   }
 }

@@ -184,14 +184,32 @@ class _HomeViewState extends State<HomeView> {
               ),
             );
           } else if (snapshot.hasData) {
-            var data = snapshot.data as UserModel;
+            var data = snapshot.data as List;
 
             //Color myColor = data.color as Color;
-            return CardBox(
-              name: '${data.firstname!} ${data.surname!}',
-              boxColor:
-                  data.color == null ? primaryClr : StringToColor(data.color),
-            );
+            return ListView.builder(
+                shrinkWrap: true,
+                itemCount: data.length,
+                itemBuilder: ((context, index) {
+                  return data.isNotEmpty
+                      ? SingleChildScrollView(
+                          child: GestureDetector(
+                          onTap: () {
+                            print(data[index].groupid);
+                          },
+                          child: CardBox(
+                            name:
+                                '${data[index].firstname!} ${data[index].surname!}',
+                            boxColor: data[index].color == null
+                                ? primaryClr
+                                : StringToColor(data[index].color),
+                          ),
+                        ))
+                      : const SizedBox(
+                          height: 0,
+                          width: 0,
+                        );
+                }));
           }
         }
 

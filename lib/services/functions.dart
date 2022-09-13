@@ -3,18 +3,19 @@
 import 'package:firebase_helpers/firebase_helpers.dart';
 import 'package:sharedspace/models/sharedspacegroup.dart';
 import 'package:sharedspace/models/sharedspacegroup_user.dart';
+import 'package:sharedspace/models/usermodel.dart';
 import '../database/firebase_helpers.dart';
 
 getUserDetails(firebaseUser) async {
-  //UserModel user = UserModel(uid: firebaseUser.uid, firstname: 'dsfds');
-  var data = await userDBS.streamQueryList(
-      args: [QueryArgsV2('uid', isEqualTo: firebaseUser!.uid)]);
-
-  var result = await data.first;
-  return result[0];
+  List<UserModel> groupList = [];
+  var data = await userDBS
+      .getQueryList(args: [QueryArgsV2('uid', isEqualTo: firebaseUser!.uid)])
+      .then((value) => {groupList = value.toList()})
+      .catchError((error) => {print(error)});
+  return groupList;
 }
 
-Future getUserSpaces(firebaseUser) async {
+getUserSpaces(firebaseUser) async {
   try {
     List<sharedSpaceGroup_User> groupList = [];
     List<SharedSpaceGroup> sharedSpaceList = [];
