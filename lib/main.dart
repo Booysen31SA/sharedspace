@@ -13,7 +13,6 @@ import 'package:sharedspace/view/homeView.dart';
 import 'package:sharedspace/view/loadingView.dart';
 import 'package:sharedspace/view/settings.dart';
 import 'package:sharedspace/view/sharedSpaceView.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 
@@ -62,7 +61,7 @@ class MyApp extends StatelessWidget {
           '/register': (context) => const RegisterView(),
           '/home': (context) => const HomeView(),
           '/settings': (context) => const SettingView(),
-          '/sharedspace': (context) => SharedSpaceView()
+          '/sharedspace': (context) => const SharedSpaceView()
         },
       ),
     );

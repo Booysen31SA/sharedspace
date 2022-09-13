@@ -39,6 +39,7 @@ class _HomeViewState extends State<HomeView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Header(
+              prefixIcon: null,
               heading: Row(
                 children: [
                   Container(
@@ -71,7 +72,11 @@ class _HomeViewState extends State<HomeView> {
                   color: primaryClr,
                 ),
                 onTap: () => {
-                  Navigator.pushNamed(context, '/settings'),
+                  Navigator.pushNamed(
+                    context,
+                    '/settings',
+                    arguments: {'isMain': true},
+                  ),
                 },
               ),
             ),
@@ -147,6 +152,11 @@ class _HomeViewState extends State<HomeView> {
                           child: GestureDetector(
                             onTap: () {
                               print(data[index].groupid);
+                              Navigator.pushNamed(context, '/sharedspace',
+                                  arguments: {
+                                    'groupid': data[index].groupid,
+                                    'groupname': data[index].groupname,
+                                  });
                             },
                             child: CardBox(
                               name: data[index].groupname,
@@ -196,6 +206,12 @@ class _HomeViewState extends State<HomeView> {
                           child: GestureDetector(
                           onTap: () {
                             print(data[index].groupid);
+                            Navigator.pushNamed(context, '/sharedspace',
+                                arguments: {
+                                  'groupid': data[index].groupid,
+                                  'groupname':
+                                      '${data[index].firstname!} ${data[index].surname!}'
+                                });
                           },
                           child: CardBox(
                             name:

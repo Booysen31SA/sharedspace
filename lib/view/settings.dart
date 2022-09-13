@@ -19,6 +19,9 @@ class _SettingViewState extends State<SettingView> {
   @override
   Widget build(BuildContext context) {
     final firebaseUser = context.watch<User?>();
+    final arguments = (ModalRoute.of(context)?.settings.arguments ??
+        <String, dynamic>{}) as Map;
+    print(arguments['isMain']);
 
     return Scaffold(
       body: SafeArea(
@@ -39,7 +42,9 @@ class _SettingViewState extends State<SettingView> {
                 ),
               ),
             ),
-            mainSettings(firebaseUser),
+            arguments['isMain']
+                ? mainSettings(firebaseUser)
+                : groupSettings(firebaseUser),
           ],
         ),
       ),
@@ -161,6 +166,20 @@ class _SettingViewState extends State<SettingView> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  groupSettings(firebaseUser) {
+    // Group name
+    // Group Color
+    //Group id read only
+    // Group admin read only
+    // date created read only
+    // users in group
+    return Container(
+      child: const Center(
+        child: Text('Group Setting'),
       ),
     );
   }
