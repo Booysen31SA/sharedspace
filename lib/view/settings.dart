@@ -44,39 +44,42 @@ class _SettingViewState extends State<SettingView> {
     //'groupid': arguments['groupid']
 
     return Scaffold(
+      appBar: Header(
+        appBar: AppBar(),
+        prefixIcon: GestureDetector(
+          onTap: () => {
+            if (arguments['isMain'])
+              {
+                Navigator.pushReplacementNamed(context, '/home'),
+              }
+            else
+              {
+                Navigator.pushReplacementNamed(context, '/sharedspace',
+                    arguments: {
+                      'groupid': arguments['groupid'],
+                      'groupname': arguments['groupname'],
+                    }),
+              }
+          },
+          child: Icon(backArrow, color: primaryClr),
+        ),
+        heading: Text(
+          arguments['isMain'] ? 'Settings' : 'Group Settings',
+          style: const TextStyle(
+            fontSize: 26,
+            color: primaryClr,
+          ),
+        ),
+      ),
       body: SafeArea(
-        child: Column(
-          children: [
-            Header(
-              prefixIcon: GestureDetector(
-                onTap: () => {
-                  if (arguments['isMain'])
-                    {
-                      Navigator.pushReplacementNamed(context, '/home'),
-                    }
-                  else
-                    {
-                      Navigator.pushReplacementNamed(context, '/sharedspace',
-                          arguments: {
-                            'groupid': arguments['groupid'],
-                            'groupname': arguments['groupname'],
-                          }),
-                    }
-                },
-                child: Icon(backArrow, color: primaryClr),
-              ),
-              heading: Text(
-                arguments['isMain'] ? 'Settings' : 'Group Settings',
-                style: const TextStyle(
-                  fontSize: 26,
-                  color: primaryClr,
-                ),
-              ),
-            ),
-            arguments['isMain']
-                ? mainSettings(firebaseUser)
-                : groupSettings(firebaseUser, arguments['groupid']),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              arguments['isMain']
+                  ? mainSettings(firebaseUser)
+                  : groupSettings(firebaseUser, arguments['groupid']),
+            ],
+          ),
         ),
       ),
     );
@@ -204,109 +207,110 @@ class _SettingViewState extends State<SettingView> {
     // Group admin read only
     // date created read only
     // users in group do last
-    return SingleChildScrollView(
-      child: Container(
-        margin: const EdgeInsets.only(
-          top: 15,
-          left: 15,
-        ),
-        child: FutureBuilder(
-          future: getSharedSpaceDetailsByGroupId(groupid),
-          builder: ((context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              if (snapshot.hasError) {
-                return Center(
-                  child: Text(
-                    '${snapshot.error} occurred',
-                    style: const TextStyle(fontSize: 18),
-                  ),
-                );
-              } else if (snapshot.hasData) {
-                var data = snapshot.data as SharedSpaceGroup;
-                if (!isReloading) {
-                  __groupSettingGroupColorFieldKey =
-                      stringToColor(data.groupcolor.toString());
-                }
-                return FormBuilder(
-                  key: _groupSettingFormKey,
-                  child: Column(
-                    children: <Widget>[
-                      // Group id
-                      nameTextBox(
-                        text: 'Group ID',
-                        key: _groupSettingGroupIDFieldKey,
-                        data: data.groupid.toString(),
-                        readOnly: true,
-                      ),
-                      // Group Name
-                      nameTextBox(
-                        text: 'Group Name',
-                        key: _groupSettingGroupNameFieldKey,
-                        data: data.groupname.toString(),
-                      ),
+    return Container(
+      padding: const EdgeInsets.only(
+        top: 15,
+        left: 15,
+      ),
+      child: FutureBuilder(
+        future: getSharedSpaceDetailsByGroupId(groupid),
+        builder: ((context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasError) {
+              return Center(
+                child: Text(
+                  '${snapshot.error} occurred',
+                  style: const TextStyle(fontSize: 18),
+                ),
+              );
+            } else if (snapshot.hasData) {
+              var data = snapshot.data as SharedSpaceGroup;
+              if (!isReloading) {
+                __groupSettingGroupColorFieldKey =
+                    stringToColor(data.groupcolor.toString());
+              }
+              return FormBuilder(
+                key: _groupSettingFormKey,
+                child: Column(
+                  children: <Widget>[
+                    // Group id
+                    nameTextBox(
+                      text: 'Group ID',
+                      key: _groupSettingGroupIDFieldKey,
+                      data: data.groupid.toString(),
+                      readOnly: true,
+                    ),
+                    // Group Name
+                    nameTextBox(
+                      text: 'Group Name',
+                      key: _groupSettingGroupNameFieldKey,
+                      data: data.groupname.toString(),
+                    ),
 
-                      // Colour Picker
-                      Container(
-                        margin: const EdgeInsets.only(top: 15, right: 15),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Change Color',
-                              style: settingSizes,
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                colorPicker(
-                                  context: context,
+                    // Colour Picker
+                    Container(
+                      margin: const EdgeInsets.only(top: 15, right: 15),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Change Color',
+                            style: settingSizes,
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              colorPicker(
+                                context: context,
+                                color: __groupSettingGroupColorFieldKey,
+                                onPress: changeColorOnTap,
+                                onChange: changeColor,
+                              );
+                            },
+                            child: SizedBox(
+                              width: 260,
+                              height: 40,
+                              child: Container(
+                                decoration: BoxDecoration(
                                   color: __groupSettingGroupColorFieldKey,
-                                  onPress: changeColorOnTap,
-                                  onChange: changeColor,
-                                );
-                              },
-                              child: SizedBox(
-                                width: 260,
-                                height: 40,
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: __groupSettingGroupColorFieldKey,
-                                    shape: BoxShape.rectangle,
-                                    borderRadius: const BorderRadius.all(
-                                      Radius.circular(8),
-                                    ),
+                                  shape: BoxShape.rectangle,
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(8),
                                   ),
                                 ),
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
+                    ),
 
-                      // Created User
-                      nameTextBox(
-                        text: 'Created by',
-                        key: _groupSettingUserUidFieldKey,
-                        data: data.useruid,
-                        readOnly: true,
-                      ),
+                    // Created User
+                    nameTextBox(
+                      text: 'Created by',
+                      key: _groupSettingUserUidFieldKey,
+                      data: data.useruid,
+                      readOnly: true,
+                    ),
 
-                      // Date Created
-                      nameTextBox(
-                        text: 'Date Created',
-                        key: _groupSettingDateCreatedFieldKey,
-                        data: data.datecreated.toString(),
-                        readOnly: true,
-                      ),
-                    ],
-                  ),
-                );
+                    // Date Created
+                    nameTextBox(
+                      text: 'Date Created',
+                      key: _groupSettingDateCreatedFieldKey,
+                      data: data.datecreated.toString(),
+                      readOnly: true,
+                    ),
+                    Padding(
+                        padding: EdgeInsets.only(
+                            bottom: MediaQuery.of(context).viewInsets.bottom))
+                  ],
+                ),
+              );
 
-                //return Text(data.groupname.toString());
-              }
+              //return Text(data.groupname.toString());
             }
-            return const DataLoading();
-          }),
-        ),
+          }
+          return const DataLoading();
+        }),
       ),
     );
   }
