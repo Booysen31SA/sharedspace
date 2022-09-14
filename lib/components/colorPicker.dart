@@ -9,7 +9,7 @@ colorPicker({context, color, onPress, onChange}) {
         actions: [
           MaterialButton(
             onPressed: onPress,
-            child: const Text('Group Color'),
+            child: const Text('Change Color'),
           ),
         ],
         content: SingleChildScrollView(
