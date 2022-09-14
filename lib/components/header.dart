@@ -39,7 +39,7 @@ class Header extends StatelessWidget implements PreferredSizeWidget {
           )
         : AppBar(
             elevation: 0.0,
-            titleSpacing: 10,
+            titleSpacing: 11,
             backgroundColor: context.theme.backgroundColor,
             title: heading,
             actions: isAction
