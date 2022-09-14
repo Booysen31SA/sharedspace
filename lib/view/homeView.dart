@@ -73,7 +73,7 @@ class _HomeViewState extends State<HomeView> {
                   color: primaryClr,
                 ),
                 onTap: () => {
-                  Navigator.pushNamed(
+                  Navigator.pushReplacementNamed(
                     context,
                     '/settings',
                     arguments: {'isMain': true},
@@ -153,7 +153,8 @@ class _HomeViewState extends State<HomeView> {
                           child: GestureDetector(
                             onTap: () {
                               print(data[index].groupid);
-                              Navigator.pushNamed(context, '/sharedspace',
+                              Navigator.pushReplacementNamed(
+                                  context, '/sharedspace',
                                   arguments: {
                                     'groupid': data[index].groupid,
                                     'groupname': data[index].groupname,
@@ -204,7 +205,8 @@ class _HomeViewState extends State<HomeView> {
                           child: GestureDetector(
                           onTap: () {
                             print(data[index].groupid);
-                            Navigator.pushNamed(context, '/sharedspace',
+                            Navigator.pushReplacementNamed(
+                                context, '/sharedspace',
                                 arguments: {
                                   'groupid': data[index].groupid,
                                   'groupname':
