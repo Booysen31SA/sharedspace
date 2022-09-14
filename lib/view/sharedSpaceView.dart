@@ -79,7 +79,11 @@ class _SharedSpaceState extends State<SharedSpaceView> {
                       Navigator.pushNamed(
                         context,
                         '/settings',
-                        arguments: {'isMain': false},
+                        arguments: {
+                          'isMain': false,
+                          'groupid': arguments['groupid'],
+                          'groupname': arguments['groupname']
+                        },
                       ),
                     },
                   ),

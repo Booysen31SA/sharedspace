@@ -46,17 +46,27 @@ getSharedSpaceDetails(List<sharedSpaceGroup_User> groupList) async {
   List<SharedSpaceGroup> sharedSpaceList = [];
 
   for (int i = 0; i < groupList.length; i++) {
-    await sharedSpaceDBS.getQueryList(
-      args: [QueryArgsV2('Groupid', isEqualTo: groupList[i].groupid)],
-    ).then((value) {
-      if (value.isNotEmpty) {
-        sharedSpaceList.add(value.first);
-      }
-    }).catchError(
-      (error) => {
-        print(error),
-      },
+    sharedSpaceList.add(
+      await getSharedSpaceDetailsByGroupId(groupList[i].groupid),
     );
   }
   return sharedSpaceList;
+}
+
+getSharedSpaceDetailsByGroupId(String? groupid) async {
+  List<SharedSpaceGroup> sharedSpaceList = [];
+  await sharedSpaceDBS.getQueryList(
+    args: [QueryArgsV2('Groupid', isEqualTo: groupid)],
+  ).then((value) {
+    if (value.isNotEmpty) {
+      sharedSpaceList.add(value.first);
+    }
+  }).catchError(
+    (error) => {
+      print('Error'),
+      print(error),
+    },
+  );
+
+  return sharedSpaceList[0];
 }

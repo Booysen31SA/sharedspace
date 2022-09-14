@@ -19,11 +19,11 @@ class Themes {
       brightness: Brightness.dark);
 }
 
-inputDecoration({hintText, color, suffixIcon}) {
+inputDecoration({hintText, color, suffixIcon, borderColor, isfocusBorder}) {
   return InputDecoration(
-    enabledBorder: const OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.white),
-      borderRadius: BorderRadius.all(
+    enabledBorder: OutlineInputBorder(
+      borderSide: BorderSide(color: borderColor ?? Colors.white),
+      borderRadius: const BorderRadius.all(
         Radius.circular(10.0),
       ),
     ),
@@ -32,9 +32,11 @@ inputDecoration({hintText, color, suffixIcon}) {
         Radius.circular(10.0),
       ),
     ),
-    focusedBorder: const OutlineInputBorder(
-      borderSide: BorderSide(color: Colors.white),
-      borderRadius: BorderRadius.all(
+    focusedBorder: OutlineInputBorder(
+      borderSide: isfocusBorder == null
+          ? const BorderSide(color: Colors.white)
+          : const BorderSide(color: primaryClr),
+      borderRadius: const BorderRadius.all(
         Radius.circular(10.0),
       ),
     ),
@@ -51,5 +53,11 @@ TextStyle get headingStyle {
     fontSize: 15,
     fontWeight: FontWeight.bold,
     color: Colors.grey.shade600,
+  );
+}
+
+TextStyle get settingSizes {
+  return const TextStyle(
+    fontSize: 20,
   );
 }

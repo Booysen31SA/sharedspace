@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sharedspace/components/card.dart';
 import 'package:sharedspace/components/header.dart';
+import 'package:sharedspace/components/loading.dart';
 import 'package:sharedspace/configs/themes.dart';
 import 'package:sharedspace/models/usermodel.dart';
 import 'package:sharedspace/services/functions.dart';
@@ -30,7 +31,7 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     final firebaseUser = context.watch<User?>();
-    var list = getUserSpaces(firebaseUser);
+    //var list = getUserSpaces(firebaseUser);
     //print(userdetails.color);
 
     return Scaffold(
@@ -173,10 +174,7 @@ class _HomeViewState extends State<HomeView> {
                 }));
           }
         }
-        // Displaying LoadingSpinner to indicate waiting state
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
+        return const DataLoading();
       },
     );
   }
@@ -229,10 +227,7 @@ class _HomeViewState extends State<HomeView> {
           }
         }
 
-        // Displaying LoadingSpinner to indicate waiting state
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
+        return const DataLoading();
       },
     );
   }
