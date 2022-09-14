@@ -35,52 +35,53 @@ class _HomeViewState extends State<HomeView> {
     //print(userdetails.color);
 
     return Scaffold(
+      appBar: Header(
+        appBar: AppBar(),
+        prefixIcon: null,
+        heading: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.only(left: 15),
+              decoration: const BoxDecoration(
+                  color: primaryClr,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(40),
+                      bottomLeft: Radius.circular(40))),
+              child: const Text(
+                "Shared",
+                style: TextStyle(
+                  fontSize: 35,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            const Text(
+              "Space",
+              style: TextStyle(
+                fontSize: 35,
+                color: primaryClr,
+              ),
+            ),
+          ],
+        ),
+        suffixIcon: GestureDetector(
+          child: const Icon(
+            Icons.settings,
+            color: primaryClr,
+          ),
+          onTap: () => {
+            Navigator.pushReplacementNamed(
+              context,
+              '/settings',
+              arguments: {'isMain': true},
+            ),
+          },
+        ),
+      ),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Header(
-              prefixIcon: null,
-              heading: Row(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.only(left: 15),
-                    decoration: const BoxDecoration(
-                        color: primaryClr,
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(40),
-                            bottomLeft: Radius.circular(40))),
-                    child: const Text(
-                      "Shared",
-                      style: TextStyle(
-                        fontSize: 35,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  const Text(
-                    "Space",
-                    style: TextStyle(
-                      fontSize: 35,
-                      color: primaryClr,
-                    ),
-                  ),
-                ],
-              ),
-              suffixIcon: GestureDetector(
-                child: const Icon(
-                  Icons.settings,
-                  color: primaryClr,
-                ),
-                onTap: () => {
-                  Navigator.pushReplacementNamed(
-                    context,
-                    '/settings',
-                    arguments: {'isMain': true},
-                  ),
-                },
-              ),
-            ),
             Padding(
               padding: const EdgeInsets.only(left: 20, top: 20, bottom: 20),
               child: Text(

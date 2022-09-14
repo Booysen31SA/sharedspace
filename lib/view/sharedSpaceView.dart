@@ -37,6 +37,39 @@ class _SharedSpaceState extends State<SharedSpaceView> {
     ];
 
     return Scaffold(
+        appBar: Header(
+          appBar: AppBar(),
+          prefixIcon: GestureDetector(
+            onTap: () => {
+              Navigator.pushReplacementNamed(context, '/home'),
+            },
+            child: Icon(backArrow, color: primaryClr),
+          ),
+          heading: Text(
+            arguments['groupname'],
+            style: const TextStyle(
+              fontSize: 26,
+              color: primaryClr,
+            ),
+          ),
+          suffixIcon: GestureDetector(
+            child: const Icon(
+              Icons.settings,
+              color: primaryClr,
+            ),
+            onTap: () => {
+              Navigator.pushReplacementNamed(
+                context,
+                '/settings',
+                arguments: {
+                  'isMain': false,
+                  'groupid': arguments['groupid'],
+                  'groupname': arguments['groupname']
+                },
+              ),
+            },
+          ),
+        ),
         floatingActionButton: FloatingActionButton(
           onPressed: () => {
             print('Add Event'),
@@ -56,38 +89,6 @@ class _SharedSpaceState extends State<SharedSpaceView> {
             padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
             child: Column(
               children: [
-                Header(
-                  prefixIcon: GestureDetector(
-                    onTap: () => {
-                      Navigator.pushReplacementNamed(context, '/home'),
-                    },
-                    child: Icon(backArrow, color: primaryClr),
-                  ),
-                  heading: Text(
-                    arguments['groupname'],
-                    style: const TextStyle(
-                      fontSize: 26,
-                      color: primaryClr,
-                    ),
-                  ),
-                  suffixIcon: GestureDetector(
-                    child: const Icon(
-                      Icons.settings,
-                      color: primaryClr,
-                    ),
-                    onTap: () => {
-                      Navigator.pushReplacementNamed(
-                        context,
-                        '/settings',
-                        arguments: {
-                          'isMain': false,
-                          'groupid': arguments['groupid'],
-                          'groupname': arguments['groupname']
-                        },
-                      ),
-                    },
-                  ),
-                ),
                 IndexedStack(
                   index: _selectedIndex,
                   children: _pages,
