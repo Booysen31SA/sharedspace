@@ -4,6 +4,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import 'package:sharedspace/components/colorPicker.dart';
 import 'package:sharedspace/components/header.dart';
 import 'package:sharedspace/components/loading.dart';
 import 'package:sharedspace/configs/themes.dart';
@@ -11,6 +12,8 @@ import 'package:sharedspace/database/firebase.dart';
 import 'package:sharedspace/models/sharedspacegroup.dart';
 import 'package:sharedspace/services/functions.dart';
 import 'package:sharedspace/services/services.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:sharedspace/util/convertStringToColor.dart';
 
 class SettingView extends StatefulWidget {
   const SettingView({Key? key}) : super(key: key);
@@ -25,6 +28,11 @@ class _SettingViewState extends State<SettingView> {
   final _groupSettingFormKey = GlobalKey<FormBuilderState>();
   final _groupSettingGroupNameFieldKey = GlobalKey<FormBuilderState>();
   final _groupSettingGroupIDFieldKey = GlobalKey<FormBuilderState>();
+  var __groupSettingGroupColorFieldKey;
+  final _groupSettingUserUidFieldKey = GlobalKey<FormBuilderState>();
+  final _groupSettingDateCreatedFieldKey = GlobalKey<FormBuilderState>();
+
+  bool isReloading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -193,57 +201,112 @@ class _SettingViewState extends State<SettingView> {
 
   groupSettings(firebaseUser, groupid) {
     // Group Color
-
     // Group admin read only
     // date created read only
     // users in group do last
-    return Container(
-      margin: const EdgeInsets.only(
-        top: 15,
-        left: 15,
-      ),
-      child: FutureBuilder(
-        future: getSharedSpaceDetailsByGroupId(groupid),
-        builder: ((context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.hasError) {
-              return Center(
-                child: Text(
-                  '${snapshot.error} occurred',
-                  style: const TextStyle(fontSize: 18),
-                ),
-              );
-            } else if (snapshot.hasData) {
-              var data = snapshot.data as SharedSpaceGroup;
+    return SingleChildScrollView(
+      child: Container(
+        margin: const EdgeInsets.only(
+          top: 15,
+          left: 15,
+        ),
+        child: FutureBuilder(
+          future: getSharedSpaceDetailsByGroupId(groupid),
+          builder: ((context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              if (snapshot.hasError) {
+                return Center(
+                  child: Text(
+                    '${snapshot.error} occurred',
+                    style: const TextStyle(fontSize: 18),
+                  ),
+                );
+              } else if (snapshot.hasData) {
+                var data = snapshot.data as SharedSpaceGroup;
+                if (!isReloading) {
+                  __groupSettingGroupColorFieldKey =
+                      stringToColor(data.groupcolor.toString());
+                }
+                return FormBuilder(
+                  key: _groupSettingFormKey,
+                  child: Column(
+                    children: <Widget>[
+                      // Group id
+                      nameTextBox(
+                        text: 'Group ID',
+                        key: _groupSettingGroupIDFieldKey,
+                        data: data.groupid.toString(),
+                        readOnly: true,
+                      ),
+                      // Group Name
+                      nameTextBox(
+                        text: 'Group Name',
+                        key: _groupSettingGroupNameFieldKey,
+                        data: data.groupname.toString(),
+                      ),
 
-              return FormBuilder(
-                key: _groupSettingFormKey,
-                child: Column(
-                  children: <Widget>[
-                    // Group id
-                    nameTextBox(
-                      text: 'Group ID',
-                      key: _groupSettingGroupIDFieldKey,
-                      data: data.groupid.toString(),
-                      readOnly: true,
-                    ),
-                    // Group Name
-                    nameTextBox(
-                      text: 'Group Name',
-                      key: _groupSettingGroupNameFieldKey,
-                      data: data.groupname.toString(),
-                    ),
+                      // Colour Picker
+                      Container(
+                        margin: const EdgeInsets.only(top: 15, right: 15),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Change Color',
+                              style: settingSizes,
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                colorPicker(
+                                  context: context,
+                                  color: __groupSettingGroupColorFieldKey,
+                                  onPress: changeColorOnTap,
+                                  onChange: changeColor,
+                                );
+                              },
+                              child: SizedBox(
+                                width: 260,
+                                height: 40,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: __groupSettingGroupColorFieldKey,
+                                    shape: BoxShape.rectangle,
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(8),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
 
-                    // next fields
-                  ],
-                ),
-              );
+                      // Created User
+                      nameTextBox(
+                        text: 'Created by',
+                        key: _groupSettingUserUidFieldKey,
+                        data: data.useruid,
+                        readOnly: true,
+                      ),
 
-              //return Text(data.groupname.toString());
+                      // Date Created
+                      nameTextBox(
+                        text: 'Date Created',
+                        key: _groupSettingDateCreatedFieldKey,
+                        data: data.datecreated.toString(),
+                        readOnly: true,
+                      ),
+                    ],
+                  ),
+                );
+
+                //return Text(data.groupname.toString());
+              }
             }
-          }
-          return const DataLoading();
-        }),
+            return const DataLoading();
+          }),
+        ),
       ),
     );
   }
@@ -277,5 +340,17 @@ class _SettingViewState extends State<SettingView> {
         ],
       ),
     );
+  }
+
+  void changeColorOnTap() {
+    setState(() {
+      __groupSettingGroupColorFieldKey = __groupSettingGroupColorFieldKey;
+    });
+    Navigator.of(context).pop();
+  }
+
+  void changeColor(Color color) {
+    isReloading = true;
+    setState(() => {__groupSettingGroupColorFieldKey = color});
   }
 }

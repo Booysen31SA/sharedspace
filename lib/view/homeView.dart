@@ -164,7 +164,7 @@ class _HomeViewState extends State<HomeView> {
                               name: data[index].groupname,
                               boxColor: data[index].groupcolor == null
                                   ? primaryClr
-                                  : StringToColor(data[index].groupcolor),
+                                  : stringToColor(data[index].groupcolor),
                             ),
                           ),
                         )
@@ -218,7 +218,7 @@ class _HomeViewState extends State<HomeView> {
                                 '${data[index].firstname!} ${data[index].surname!}',
                             boxColor: data[index].color == null
                                 ? primaryClr
-                                : StringToColor(data[index].color),
+                                : stringToColor(data[index].color),
                           ),
                         ))
                       : const SizedBox(

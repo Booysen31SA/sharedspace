@@ -17,10 +17,10 @@ class SharedSpaceGroup {
 
   factory SharedSpaceGroup.fromMap(Map data) {
     return SharedSpaceGroup(
-      groupid: data['Groupid'],
-      groupname: data['GroupName'],
-      groupcolor: data['GroupColor'],
-      useruid: data['User_uid'],
+      groupid: data['groupid'],
+      groupname: data['groupname'],
+      groupcolor: data['groupcolor'],
+      useruid: data['user_uid'],
       datecreated:
           DateFormat('yyyy-MM-dd').parse(data['date_created'].toString()),
     );
@@ -28,10 +28,10 @@ class SharedSpaceGroup {
 
   factory SharedSpaceGroup.fromDS(String id, Map<String, dynamic> data) {
     return SharedSpaceGroup(
-      groupid: data['Groupid'],
-      groupname: data['GroupName'],
-      groupcolor: data['GroupColor'],
-      useruid: data['User_uid'],
+      groupid: data['groupid'],
+      groupname: data['groupname'],
+      groupcolor: data['groupcolor'],
+      useruid: data['user_uid'],
       datecreated:
           DateFormat('yyyy-MM-dd').parse(data['date_created'].toString()),
     );
@@ -39,11 +39,11 @@ class SharedSpaceGroup {
 
   Map<String, dynamic> toMap() {
     return {
-      "Groupid": groupid,
-      "GroupName": groupname,
-      "GroupColor": groupcolor,
+      "groupid": groupid,
+      "groupname": groupname,
+      "groupcolor": groupcolor,
       "date_created": DateFormat('yyyy-MM-dd').parse(datecreated.toString()),
-      "User_uid": useruid,
+      "user_uid": useruid,
     };
   }
 }

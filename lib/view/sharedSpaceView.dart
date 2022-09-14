@@ -29,7 +29,7 @@ class _SharedSpaceState extends State<SharedSpaceView> {
   Widget build(BuildContext context) {
     final arguments = (ModalRoute.of(context)?.settings.arguments ??
         <String, dynamic>{}) as Map;
-    print(arguments['groupid']);
+    //print(arguments['groupid']);
 
     const List<Widget> _pages = <Widget>[
       CalendarView(),

@@ -56,7 +56,7 @@ getSharedSpaceDetails(List<sharedSpaceGroup_User> groupList) async {
 getSharedSpaceDetailsByGroupId(String? groupid) async {
   List<SharedSpaceGroup> sharedSpaceList = [];
   await sharedSpaceDBS.getQueryList(
-    args: [QueryArgsV2('Groupid', isEqualTo: groupid)],
+    args: [QueryArgsV2('groupid', isEqualTo: groupid)],
   ).then((value) {
     if (value.isNotEmpty) {
       sharedSpaceList.add(value.first);
