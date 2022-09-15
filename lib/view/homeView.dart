@@ -211,7 +211,8 @@ class _HomeViewState extends State<HomeView> {
                                 arguments: {
                                   'groupid': data[index].groupid,
                                   'groupname':
-                                      '${data[index].firstname!} ${data[index].surname!}'
+                                      '${data[index].firstname!} ${data[index].surname!}',
+                                  'isprofile': true
                                 });
                           },
                           child: CardBox(

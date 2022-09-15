@@ -63,6 +63,7 @@ class _SharedSpaceState extends State<SharedSpaceView> {
                 '/settings',
                 arguments: {
                   'isMain': false,
+                  'isprofile': arguments['isprofile'] ?? false,
                   'groupid': arguments['groupid'],
                   'groupname': arguments['groupname']
                 },

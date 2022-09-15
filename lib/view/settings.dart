@@ -10,6 +10,7 @@ import 'package:sharedspace/components/loading.dart';
 import 'package:sharedspace/configs/themes.dart';
 import 'package:sharedspace/database/firebase.dart';
 import 'package:sharedspace/models/sharedspacegroup.dart';
+import 'package:sharedspace/models/usermodel.dart';
 import 'package:sharedspace/services/functions.dart';
 import 'package:sharedspace/services/services.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
@@ -24,14 +25,24 @@ class SettingView extends StatefulWidget {
 
 class _SettingViewState extends State<SettingView> {
   var isDarkMode = Get.isDarkMode;
-  //Form Key
+  //Form Key for Group settings
   final _groupSettingFormKey = GlobalKey<FormBuilderState>();
   final _groupSettingGroupNameFieldKey = GlobalKey<FormBuilderState>();
   final _groupSettingGroupIDFieldKey = GlobalKey<FormBuilderState>();
-  var __groupSettingGroupColorFieldKey;
   final _groupSettingUserUidFieldKey = GlobalKey<FormBuilderState>();
   final _groupSettingDateCreatedFieldKey = GlobalKey<FormBuilderState>();
 
+  //Form Key for Profile
+  final _profileGroupSettingFormKey = GlobalKey<FormBuilderState>();
+  final _profileGroupSettingGroupIDFieldKey = GlobalKey<FormBuilderState>();
+  final _profileGroupSettingUidFieldKey = GlobalKey<FormBuilderState>();
+  final _profileGroupSettingEmailFieldKey = GlobalKey<FormBuilderState>();
+  final _profileGroupSettingFirstNameFieldKey = GlobalKey<FormBuilderState>();
+  final _profileGroupSettingSurnameFieldKey = GlobalKey<FormBuilderState>();
+  final _profileGroupSettingDateCreatedFieldKey = GlobalKey<FormBuilderState>();
+
+//general
+  var __groupSettingGroupColorFieldKey;
   bool isReloading = false;
 
   @override
@@ -77,7 +88,9 @@ class _SettingViewState extends State<SettingView> {
             children: [
               arguments['isMain']
                   ? mainSettings(firebaseUser)
-                  : groupSettings(firebaseUser, arguments['groupid']),
+                  : arguments['isprofile']
+                      ? profileGroupSettings(firebaseUser)
+                      : groupSettings(firebaseUser, arguments['groupid']),
             ],
           ),
         ),
@@ -248,41 +261,7 @@ class _SettingViewState extends State<SettingView> {
                     ),
 
                     // Colour Picker
-                    Container(
-                      margin: const EdgeInsets.only(top: 15, right: 15),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            'Change Color',
-                            style: settingSizes,
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              colorPicker(
-                                context: context,
-                                color: __groupSettingGroupColorFieldKey,
-                                onPress: changeColorOnTap,
-                                onChange: changeColor,
-                              );
-                            },
-                            child: SizedBox(
-                              width: 260,
-                              height: 40,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: __groupSettingGroupColorFieldKey,
-                                  shape: BoxShape.rectangle,
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(8),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                    ColorPickerContainer(context),
 
                     // Created User
                     nameTextBox(
@@ -311,6 +290,131 @@ class _SettingViewState extends State<SettingView> {
           }
           return const DataLoading();
         }),
+      ),
+    );
+  }
+
+  profileGroupSettings(firebaseUser) {
+    return Container(
+      padding: const EdgeInsets.only(
+        top: 15,
+        left: 15,
+      ),
+      child: FutureBuilder(
+        future: getUserDetails(firebaseUser),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasError) {
+              return Center(
+                child: Text(
+                  '${snapshot.error} occurred',
+                  style: const TextStyle(fontSize: 18),
+                ),
+              );
+            } else if (snapshot.hasData) {
+              var data = snapshot.data as List;
+              if (!isReloading) {
+                __groupSettingGroupColorFieldKey =
+                    stringToColor(data[0].color.toString());
+              }
+
+              return FormBuilder(
+                key: _profileGroupSettingFormKey,
+                child: Column(
+                  children: <Widget>[
+                    // Group id
+                    nameTextBox(
+                      text: 'Group ID',
+                      key: _profileGroupSettingGroupIDFieldKey,
+                      data: data[0].groupid.toString(),
+                      readOnly: true,
+                    ),
+
+                    // uid
+                    nameTextBox(
+                      text: 'Unique ID',
+                      key: _profileGroupSettingUidFieldKey,
+                      data: data[0].uid.toString(),
+                      readOnly: true,
+                    ),
+
+                    // email
+                    nameTextBox(
+                      text: 'Email',
+                      key: _profileGroupSettingEmailFieldKey,
+                      data: data[0].email.toString(),
+                      readOnly: true,
+                    ),
+
+                    // Firstname
+                    nameTextBox(
+                      text: 'First Name',
+                      key: _profileGroupSettingFirstNameFieldKey,
+                      data: data[0].firstname.toString(),
+                    ),
+
+                    // Surname
+                    nameTextBox(
+                      text: 'Surname',
+                      key: _profileGroupSettingSurnameFieldKey,
+                      data: data[0].surname.toString(),
+                    ),
+
+                    // Colour Picker
+                    ColorPickerContainer(context),
+
+                    // Date Created
+                    nameTextBox(
+                      text: 'Date Created',
+                      key: _profileGroupSettingDateCreatedFieldKey,
+                      data: data[0].dateCreated.toString(),
+                      readOnly: true,
+                    ),
+                  ],
+                ),
+              );
+            }
+          }
+          return const DataLoading();
+        },
+      ),
+    );
+  }
+
+  Container ColorPickerContainer(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(top: 15, right: 15),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            'Change Color',
+            style: settingSizes,
+          ),
+          GestureDetector(
+            onTap: () {
+              colorPicker(
+                context: context,
+                color: __groupSettingGroupColorFieldKey,
+                onPress: changeColorOnTap,
+                onChange: changeColor,
+              );
+            },
+            child: SizedBox(
+              width: 260,
+              height: 40,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: __groupSettingGroupColorFieldKey,
+                  shape: BoxShape.rectangle,
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(8),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
