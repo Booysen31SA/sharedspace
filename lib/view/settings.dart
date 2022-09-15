@@ -75,7 +75,11 @@ class _SettingViewState extends State<SettingView> {
           child: Icon(backArrow, color: primaryClr),
         ),
         heading: Text(
-          arguments['isMain'] ? 'Settings' : 'Group Settings',
+          arguments['isMain']
+              ? 'Settings'
+              : arguments['isprofile']
+                  ? 'Profile Settings'
+                  : 'Group Settings',
           style: const TextStyle(
             fontSize: 26,
             color: primaryClr,
