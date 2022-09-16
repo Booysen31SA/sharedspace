@@ -9,6 +9,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:sharedspace/services/services.dart';
 import 'package:sharedspace/view/auth/registerView.dart';
 import 'package:sharedspace/view/auth/signInView.dart';
+import 'package:sharedspace/view/forms/creationForms.dart';
 import 'package:sharedspace/view/homeView.dart';
 import 'package:sharedspace/view/loadingView.dart';
 import 'package:sharedspace/view/settings.dart';
@@ -61,7 +62,8 @@ class MyApp extends StatelessWidget {
           '/register': (context) => const RegisterView(),
           '/home': (context) => const HomeView(),
           '/settings': (context) => const SettingView(),
-          '/sharedspace': (context) => const SharedSpaceView()
+          '/sharedspace': (context) => const SharedSpaceView(),
+          '/creation': (context) => const CreationForms()
         },
       ),
     );

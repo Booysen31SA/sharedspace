@@ -110,6 +110,13 @@ class _HomeViewState extends State<HomeView> {
                       color: primaryClr,
                     ),
                     child: GestureDetector(
+                      onTap: () {
+                        Navigator.pushReplacementNamed(context, '/creation',
+                            arguments: {
+                              'creationtitle': 'Create Shared Space',
+                              'screen': 'home'
+                            });
+                      },
                       child: const Icon(
                         Icons.add,
                         size: 30,

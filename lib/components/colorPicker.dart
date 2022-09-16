@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:sharedspace/configs/themes.dart';
 
 colorPicker({context, color, onPress, onChange}) {
   return showDialog(
@@ -20,5 +21,43 @@ colorPicker({context, color, onPress, onChange}) {
         ),
       );
     },
+  );
+}
+
+Container colorPickerContainer({context, onTap, onChange, key}) {
+  return Container(
+    margin: const EdgeInsets.only(top: 15, right: 15),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          'Change Color',
+          style: settingSizes,
+        ),
+        GestureDetector(
+          onTap: () {
+            colorPicker(
+              context: context,
+              color: key,
+              onPress: onTap,
+              onChange: onChange,
+            );
+          },
+          child: SizedBox(
+            width: 260,
+            height: 40,
+            child: Container(
+              decoration: BoxDecoration(
+                color: key,
+                shape: BoxShape.rectangle,
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(8),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    ),
   );
 }

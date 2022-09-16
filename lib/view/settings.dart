@@ -4,6 +4,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import 'package:sharedspace/components/NameTextBoxGlobal.dart';
 import 'package:sharedspace/components/colorPicker.dart';
 import 'package:sharedspace/components/header.dart';
 import 'package:sharedspace/components/loading.dart';
@@ -251,24 +252,33 @@ class _SettingViewState extends State<SettingView> {
                 child: Column(
                   children: <Widget>[
                     // Group id
-                    nameTextBox(
+
+                    nameTextBoxGlobal(
                       text: 'Group ID',
                       key: _groupSettingGroupIDFieldKey,
                       data: data.groupid.toString(),
                       readOnly: true,
                     ),
                     // Group Name
-                    nameTextBox(
+
+                    nameTextBoxGlobal(
                       text: 'Group Name',
                       key: _groupSettingGroupNameFieldKey,
                       data: data.groupname.toString(),
+                      readOnly: false,
                     ),
 
                     // Colour Picker
-                    ColorPickerContainer(context),
+                    colorPickerContainer(
+                      context: context,
+                      key: __groupSettingGroupColorFieldKey,
+                      onTap: changeColorOnTap,
+                      onChange: changeColor,
+                    ),
 
                     // Created User
-                    nameTextBox(
+
+                    nameTextBoxGlobal(
                       text: 'Created by',
                       key: _groupSettingUserUidFieldKey,
                       data: data.useruid,
@@ -276,7 +286,8 @@ class _SettingViewState extends State<SettingView> {
                     ),
 
                     // Date Created
-                    nameTextBox(
+
+                    nameTextBoxGlobal(
                       text: 'Date Created',
                       key: _groupSettingDateCreatedFieldKey,
                       data: data.datecreated.toString(),
@@ -365,7 +376,12 @@ class _SettingViewState extends State<SettingView> {
                     ),
 
                     // Colour Picker
-                    ColorPickerContainer(context),
+                    colorPickerContainer(
+                      context: context,
+                      key: __groupSettingGroupColorFieldKey,
+                      onTap: changeColorOnTap,
+                      onChange: changeColor,
+                    ),
 
                     // Date Created
                     nameTextBox(
@@ -381,44 +397,6 @@ class _SettingViewState extends State<SettingView> {
           }
           return const DataLoading();
         },
-      ),
-    );
-  }
-
-  Container ColorPickerContainer(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(top: 15, right: 15),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            'Change Color',
-            style: settingSizes,
-          ),
-          GestureDetector(
-            onTap: () {
-              colorPicker(
-                context: context,
-                color: __groupSettingGroupColorFieldKey,
-                onPress: changeColorOnTap,
-                onChange: changeColor,
-              );
-            },
-            child: SizedBox(
-              width: 260,
-              height: 40,
-              child: Container(
-                decoration: BoxDecoration(
-                  color: __groupSettingGroupColorFieldKey,
-                  shape: BoxShape.rectangle,
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(8),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
