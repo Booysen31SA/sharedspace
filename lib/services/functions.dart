@@ -1,5 +1,6 @@
 // ignore_for_file: invalid_return_type_for_catch_error
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_helpers/firebase_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -131,6 +132,29 @@ updateGroupSetting({id, data}) async {
     );
 
     await sharedSpaceDBS.updateData(id, data.toMap());
+    return true;
+  } catch (e) {
+    print(e);
+    return false;
+  }
+}
+
+updateProfileSetting({id, data}) async {
+  try {
+    UserModel userModel = UserModel(
+      uid: data.uid,
+      firstname: data.firstname,
+      surname: data.surname,
+      dateCreated: data.dateCreated,
+      color: data.color.toString(),
+      groupid: data.groupid,
+      email: data.email,
+    );
+
+    await userDBS.updateData(
+      id,
+      data.toMap(),
+    );
     return true;
   } catch (e) {
     print(e);

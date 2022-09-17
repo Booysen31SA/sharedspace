@@ -348,8 +348,9 @@ class _SettingViewState extends State<SettingView> {
                       ),
                     ),
                     Padding(
-                        padding: EdgeInsets.only(
-                            bottom: MediaQuery.of(context).viewInsets.bottom))
+                      padding: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).viewInsets.bottom),
+                    )
                   ],
                 ),
               );
@@ -444,6 +445,67 @@ class _SettingViewState extends State<SettingView> {
                       data: data[0].dateCreated.toString(),
                       readOnly: true,
                     ),
+
+                    Container(
+                      margin: const EdgeInsets.only(
+                        top: 20,
+                        right: 15,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10.0),
+                        color: primaryClr,
+                      ),
+                      width: MediaQuery.of(context).size.width * 1,
+                      child: MaterialButton(
+                        onPressed: () async {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Processing Data')),
+                          );
+                          final validateSuccess = _profileGroupSettingFormKey
+                              .currentState!
+                              .saveAndValidate();
+
+                          if (validateSuccess) {
+                            var fielddata =
+                                _profileGroupSettingFormKey.currentState!.value;
+
+                            UserModel userModel = UserModel(
+                              uid: fielddata['Unique ID'],
+                              firstname: fielddata['First Name'],
+                              surname: fielddata['Surname'],
+                              dateCreated: fielddata['Date Created'].toString(),
+                              color:
+                                  __groupSettingGroupColorFieldKey.toString(),
+                              groupid: fielddata['Group ID'],
+                              email: fielddata['Email'],
+                            );
+
+                            var result = await updateProfileSetting(
+                                id: data[0].updateid, data: userModel);
+
+                            if (!result) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Failed, Please try again'),
+                                ),
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('Sucess!')),
+                              );
+                            }
+                          }
+                        },
+                        child: const Text(
+                          'Update Profile',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).viewInsets.bottom),
+                    )
                   ],
                 ),
               );
