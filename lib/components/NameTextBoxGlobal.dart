@@ -3,7 +3,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:sharedspace/configs/themes.dart';
 
-nameTextBoxGlobal({text, key, data, readOnly}) {
+nameTextBoxGlobal({text, key, data, readOnly, name}) {
   return Container(
     margin: const EdgeInsets.only(top: 15, right: 15),
     child: Row(

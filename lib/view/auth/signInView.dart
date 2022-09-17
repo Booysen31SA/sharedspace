@@ -36,7 +36,6 @@ class _SignInViewState extends State<SignInView> {
       //     duration: Duration(seconds: 1), curve: Curves.ease);
     });
 
-    // TODO: implement build
     return Scaffold(
       backgroundColor: primaryClr,
       body: SafeArea(

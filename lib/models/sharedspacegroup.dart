@@ -5,7 +5,8 @@ class SharedSpaceGroup {
   final String? groupname;
   final String? groupcolor;
   final String? useruid;
-  final DateTime? datecreated;
+  final String? datecreated;
+  final String? updateid;
 
   SharedSpaceGroup({
     this.groupid,
@@ -13,6 +14,7 @@ class SharedSpaceGroup {
     this.groupcolor,
     this.useruid,
     this.datecreated,
+    this.updateid,
   });
 
   factory SharedSpaceGroup.fromMap(Map data) {
@@ -21,19 +23,22 @@ class SharedSpaceGroup {
       groupname: data['groupname'],
       groupcolor: data['groupcolor'],
       useruid: data['user_uid'],
-      datecreated:
-          DateFormat('yyyy-MM-dd').parse(data['date_created'].toString()),
+      datecreated: DateFormat('yyyy-MM-dd')
+          .parse(data['date_created'].toString())
+          .toString(),
     );
   }
 
   factory SharedSpaceGroup.fromDS(String id, Map<String, dynamic> data) {
     return SharedSpaceGroup(
+      updateid: id,
       groupid: data['groupid'],
       groupname: data['groupname'],
       groupcolor: data['groupcolor'],
       useruid: data['user_uid'],
-      datecreated:
-          DateFormat('yyyy-MM-dd').parse(data['date_created'].toString()),
+      datecreated: DateFormat('yyyy-MM-dd')
+          .parse(data['date_created'].toString())
+          .toString(),
     );
   }
 
@@ -42,7 +47,8 @@ class SharedSpaceGroup {
       "groupid": groupid,
       "groupname": groupname,
       "groupcolor": groupcolor,
-      "date_created": DateFormat('yyyy-MM-dd').parse(datecreated.toString()),
+      "date_created":
+          DateFormat('yyyy-MM-dd').parse(datecreated.toString()).toString(),
       "user_uid": useruid,
     };
   }

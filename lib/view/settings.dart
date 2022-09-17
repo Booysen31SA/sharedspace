@@ -293,6 +293,60 @@ class _SettingViewState extends State<SettingView> {
                       data: data.datecreated.toString(),
                       readOnly: true,
                     ),
+
+                    Container(
+                      margin: const EdgeInsets.only(
+                        top: 20,
+                        right: 15,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10.0),
+                        color: primaryClr,
+                      ),
+                      width: MediaQuery.of(context).size.width * 1,
+                      child: MaterialButton(
+                        onPressed: () async {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Processing Data')),
+                          );
+                          final validateSuccess = _groupSettingFormKey
+                              .currentState!
+                              .saveAndValidate();
+
+                          if (validateSuccess) {
+                            var fielddata =
+                                _groupSettingFormKey.currentState!.value;
+
+                            SharedSpaceGroup sharedGroup = SharedSpaceGroup(
+                                groupid: fielddata['Group ID'],
+                                groupname: fielddata['Group Name'],
+                                groupcolor:
+                                    __groupSettingGroupColorFieldKey.toString(),
+                                useruid: fielddata['Created by'],
+                                datecreated:
+                                    fielddata['Date Created'].toString());
+
+                            var result = await updateGroupSetting(
+                                id: data.updateid, data: sharedGroup);
+
+                            if (!result) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text('Failed, Please try again')),
+                              );
+                            } else {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('Sucess!')),
+                              );
+                            }
+                          }
+                        },
+                        child: const Text(
+                          'Update Group',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
                     Padding(
                         padding: EdgeInsets.only(
                             bottom: MediaQuery.of(context).viewInsets.bottom))

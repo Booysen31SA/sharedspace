@@ -7,9 +7,11 @@ import 'package:sharedspace/configs/themes.dart';
 import 'package:sharedspace/database/firebase_helpers.dart';
 import 'package:sharedspace/models/usermodel.dart';
 import 'package:sharedspace/view/loadingView.dart';
+import 'package:uuid/uuid.dart';
 
 class FlutterFireAuthService {
   final FirebaseAuth _firebaseAuth;
+  final uuid = const Uuid();
 
   FlutterFireAuthService(this._firebaseAuth);
 
@@ -51,8 +53,10 @@ class FlutterFireAuthService {
         surname: lastname.trim(),
         email: email.trim(),
         dateCreated: DateFormat('yyy-MM-dd')
-            .parse(result.user!.metadata.creationTime.toString()),
+            .parse(result.user!.metadata.creationTime.toString())
+            .toString(),
         color: primaryClr.toString(),
+        groupid: uuid.v1(),
       );
 
       userDBS.create(user.toMap());

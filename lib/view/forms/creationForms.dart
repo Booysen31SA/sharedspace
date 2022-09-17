@@ -1,11 +1,14 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:provider/provider.dart';
 import 'package:sharedspace/components/NameTextBoxGlobal.dart';
 import 'package:sharedspace/components/colorPicker.dart';
 import 'package:sharedspace/components/header.dart';
 import 'package:sharedspace/configs/themes.dart';
+import 'package:sharedspace/services/functions.dart';
 import 'package:sharedspace/util/convertStringToColor.dart';
 
 class CreationForms extends StatefulWidget {
@@ -26,6 +29,7 @@ class _CreationFormsState extends State<CreationForms> {
 
   @override
   Widget build(BuildContext context) {
+    final firebaseUser = context.watch<User?>();
     final arguments = (ModalRoute.of(context)?.settings.arguments ??
         <String, dynamic>{}) as Map;
 
@@ -54,14 +58,16 @@ class _CreationFormsState extends State<CreationForms> {
         child: FormBuilder(
             child: Column(
           children: <Widget>[
-            arguments['screen'] == 'home' ? sharedSpaceCreation() : Container(),
+            arguments['screen'] == 'home'
+                ? sharedSpaceCreation(firebaseUser)
+                : Container(),
           ],
         )),
       ),
     );
   }
 
-  sharedSpaceCreation() {
+  sharedSpaceCreation(firebaseUser) {
     if (!isReloading) {
       _groupSettingGroupColorFieldKey = primaryClr;
     }
@@ -89,6 +95,49 @@ class _CreationFormsState extends State<CreationForms> {
               onTap: changeColorOnTap,
               onChange: changeColor,
             ),
+
+            Container(
+              margin: const EdgeInsets.only(
+                top: 20,
+                right: 15,
+              ),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10.0),
+                color: primaryClr,
+              ),
+              width: MediaQuery.of(context).size.width * 1,
+              child: MaterialButton(
+                onPressed: () async {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Processing Data')),
+                  );
+                  final validateSuccess = _creationSharedSpaceFormKey
+                      .currentState!
+                      .saveAndValidate();
+                  if (validateSuccess) {
+                    var data = _creationSharedSpaceFormKey.currentState!.value;
+
+                    var result = await createSharedSpaceGroup(
+                      context: context,
+                      groupname: data['Group Name'],
+                      groupcolor: _groupSettingGroupColorFieldKey,
+                      useruid: firebaseUser.uid.toString(),
+                    );
+
+                    if (!result) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                            content: Text('Failed, Please try again')),
+                      );
+                    }
+                  }
+                },
+                child: const Text(
+                  'Create Group',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            )
           ],
         ),
       ),
