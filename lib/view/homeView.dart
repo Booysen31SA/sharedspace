@@ -160,7 +160,6 @@ class _HomeViewState extends State<HomeView> {
                       ? SingleChildScrollView(
                           child: GestureDetector(
                             onTap: () {
-                              print(data[index].groupid);
                               Navigator.pushReplacementNamed(
                                   context, '/sharedspace',
                                   arguments: {
@@ -212,7 +211,6 @@ class _HomeViewState extends State<HomeView> {
                       ? SingleChildScrollView(
                           child: GestureDetector(
                           onTap: () {
-                            print(data[index].groupid);
                             Navigator.pushReplacementNamed(
                                 context, '/sharedspace',
                                 arguments: {

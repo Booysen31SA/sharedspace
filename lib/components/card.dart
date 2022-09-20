@@ -33,24 +33,25 @@ class CardBox extends StatelessWidget {
               const SizedBox(
                 width: 20,
               ),
-              Expanded(
+              SizedBox(
+                width: 220,
                 child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    name != null
-                        ? '$name'
-                        : 'No name given, Please update details',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        softWrap: false,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      name != null
+                          ? '$name'
+                          : 'No name given, Please update details',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      softWrap: false,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                      ),
                     ),
-                  ),
-                ],
-              ),
+                  ],
+                ),
               ),
             ],
           ),
