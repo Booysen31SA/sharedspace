@@ -370,147 +370,150 @@ class _SettingViewState extends State<SettingView> {
         top: 15,
         left: 15,
       ),
-      child: FutureBuilder(
-        future: getUserDetails(firebaseUser),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.hasError) {
-              return Center(
-                child: Text(
-                  '${snapshot.error} occurred',
-                  style: const TextStyle(fontSize: 18),
-                ),
-              );
-            } else if (snapshot.hasData) {
-              var data = snapshot.data as List;
-              if (!isReloading) {
-                __groupSettingGroupColorFieldKey =
-                    stringToColor(data[0].color.toString());
-              }
-
-              return FormBuilder(
-                key: _profileGroupSettingFormKey,
-                child: Column(
-                  children: <Widget>[
-                    // Group id
-                    nameTextBox(
-                      text: 'Group ID',
-                      key: _profileGroupSettingGroupIDFieldKey,
-                      data: data[0].groupid.toString(),
-                      readOnly: true,
-                    ),
-
-                    // uid
-                    nameTextBox(
-                      text: 'Unique ID',
-                      key: _profileGroupSettingUidFieldKey,
-                      data: data[0].uid.toString(),
-                      readOnly: true,
-                    ),
-
-                    // email
-                    nameTextBox(
-                      text: 'Email',
-                      key: _profileGroupSettingEmailFieldKey,
-                      data: data[0].email.toString(),
-                      readOnly: true,
-                    ),
-
-                    // Firstname
-                    nameTextBox(
-                      text: 'First Name',
-                      key: _profileGroupSettingFirstNameFieldKey,
-                      data: data[0].firstname.toString(),
-                    ),
-
-                    // Surname
-                    nameTextBox(
-                      text: 'Surname',
-                      key: _profileGroupSettingSurnameFieldKey,
-                      data: data[0].surname.toString(),
-                    ),
-
-                    // Colour Picker
-                    colorPickerContainer(
-                      context: context,
-                      key: __groupSettingGroupColorFieldKey,
-                      onTap: changeColorOnTap,
-                      onChange: changeColor,
-                    ),
-
-                    // Date Created
-                    nameTextBox(
-                      text: 'Date Created',
-                      key: _profileGroupSettingDateCreatedFieldKey,
-                      data: data[0].dateCreated.toString(),
-                      readOnly: true,
-                    ),
-
-                    Container(
-                      margin: const EdgeInsets.only(
-                        top: 20,
-                        right: 15,
+      child: StreamBuilder(
+        stream: getUserDetails(firebaseUser),
+        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+          if (snapshot.hasError) {
+            return Center(
+              child: Text(
+                '${snapshot.error} occurred',
+                style: const TextStyle(fontSize: 18),
+              ),
+            );
+          } else if (snapshot.hasData) {
+            return ListView(
+              shrinkWrap: true,
+              children: snapshot.data.docs.map<Widget>((document) {
+                if (!isReloading) {
+                  __groupSettingGroupColorFieldKey =
+                      stringToColor(document['color'].toString());
+                }
+                return FormBuilder(
+                  key: _profileGroupSettingFormKey,
+                  child: Column(
+                    children: <Widget>[
+                      // Group id
+                      nameTextBox(
+                        text: 'Group ID',
+                        key: _profileGroupSettingGroupIDFieldKey,
+                        data: document['groupid'].toString(),
+                        readOnly: true,
                       ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.0),
-                        color: primaryClr,
+
+                      // uid
+                      nameTextBox(
+                        text: 'Unique ID',
+                        key: _profileGroupSettingUidFieldKey,
+                        data: document['uid'].toString(),
+                        readOnly: true,
                       ),
-                      width: MediaQuery.of(context).size.width * 1,
-                      child: MaterialButton(
-                        onPressed: () async {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Processing Data')),
-                          );
-                          final validateSuccess = _profileGroupSettingFormKey
-                              .currentState!
-                              .saveAndValidate();
 
-                          if (validateSuccess) {
-                            var fielddata =
-                                _profileGroupSettingFormKey.currentState!.value;
+                      // email
+                      nameTextBox(
+                        text: 'Email',
+                        key: _profileGroupSettingEmailFieldKey,
+                        data: document['email'].toString(),
+                        readOnly: true,
+                      ),
 
-                            UserModel userModel = UserModel(
-                              uid: fielddata['Unique ID'],
-                              firstname: fielddata['First Name'],
-                              surname: fielddata['Surname'],
-                              dateCreated: fielddata['Date Created'].toString(),
-                              color:
-                                  __groupSettingGroupColorFieldKey.toString(),
-                              groupid: fielddata['Group ID'],
-                              email: fielddata['Email'],
+                      // Firstname
+                      nameTextBox(
+                        text: 'First Name',
+                        key: _profileGroupSettingFirstNameFieldKey,
+                        data: document['firstname'].toString(),
+                      ),
+
+                      // Surname
+                      nameTextBox(
+                        text: 'Surname',
+                        key: _profileGroupSettingSurnameFieldKey,
+                        data: document['surname'].toString(),
+                      ),
+
+                      // Colour Picker
+                      colorPickerContainer(
+                        context: context,
+                        key: __groupSettingGroupColorFieldKey,
+                        onTap: changeColorOnTap,
+                        onChange: changeColor,
+                      ),
+
+                      // Date Created
+                      nameTextBox(
+                        text: 'Date Created',
+                        key: _profileGroupSettingDateCreatedFieldKey,
+                        data: document['dateCreated'].toString(),
+                        readOnly: true,
+                      ),
+
+                      Container(
+                        margin: const EdgeInsets.only(
+                          top: 20,
+                          right: 15,
+                        ),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                          color: primaryClr,
+                        ),
+                        width: MediaQuery.of(context).size.width * 1,
+                        child: MaterialButton(
+                          onPressed: () async {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text('Processing Data')),
                             );
+                            final validateSuccess = _profileGroupSettingFormKey
+                                .currentState!
+                                .saveAndValidate();
 
-                            var result = await updateProfileSetting(
-                                id: data[0].updateid, data: userModel);
+                            if (validateSuccess) {
+                              var fielddata = _profileGroupSettingFormKey
+                                  .currentState!.value;
 
-                            if (!result) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Failed, Please try again'),
-                                ),
+                              UserModel userModel = UserModel(
+                                uid: fielddata['Unique ID'],
+                                firstname: fielddata['First Name'],
+                                surname: fielddata['Surname'],
+                                dateCreated:
+                                    fielddata['Date Created'].toString(),
+                                color:
+                                    __groupSettingGroupColorFieldKey.toString(),
+                                groupid: fielddata['Group ID'],
+                                email: fielddata['Email'],
                               );
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Sucess!')),
-                              );
+
+                              var result = await updateProfileSetting(
+                                  id: document.id, data: userModel);
+
+                              if (!result) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Failed, Please try again'),
+                                  ),
+                                );
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(content: Text('Sucess!')),
+                                );
+                              }
                             }
-                          }
-                        },
-                        child: const Text(
-                          'Update Profile',
-                          style: TextStyle(color: Colors.white),
+                          },
+                          child: const Text(
+                            'Update Profile',
+                            style: TextStyle(color: Colors.white),
+                          ),
                         ),
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).viewInsets.bottom),
-                    )
-                  ],
-                ),
-              );
-            }
+                      Padding(
+                        padding: EdgeInsets.only(
+                            bottom: MediaQuery.of(context).viewInsets.bottom),
+                      )
+                    ],
+                  ),
+                );
+              }).toList(),
+            );
           }
+
           return const DataLoading();
         },
       ),

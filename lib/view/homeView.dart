@@ -1,10 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_helpers/firebase_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sharedspace/components/card.dart';
 import 'package:sharedspace/components/header.dart';
 import 'package:sharedspace/components/loading.dart';
 import 'package:sharedspace/configs/themes.dart';
+import 'package:sharedspace/database/firebase_helpers.dart';
 import 'package:sharedspace/models/usermodel.dart';
 import 'package:sharedspace/services/functions.dart';
 import 'package:sharedspace/util/convertStringToColor.dart';
@@ -187,53 +190,47 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-  FutureBuilder<Object?> myProfileCard(User? firebaseUser) {
-    return FutureBuilder(
-      future: getUserDetails(firebaseUser),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.hasError) {
-            return Center(
-              child: Text(
-                '${snapshot.error} occurred',
-                style: const TextStyle(fontSize: 18),
-              ),
-            );
-          } else if (snapshot.hasData) {
-            var data = snapshot.data as List;
+  StreamBuilder myProfileCard(User? firebaseUser) {
+    return StreamBuilder(
+      stream: getUserDetails(firebaseUser),
+      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+        if (snapshot.hasError) {
+          return Center(
+            child: Text(
+              '${snapshot.error} occurred',
+              style: const TextStyle(fontSize: 18),
+            ),
+          );
+        } else if (snapshot.hasData) {
+          // var idk = snapshot.data.docs.map((document) {
+          //   Map<String, dynamic> data =
+          //       document.data()! as Map<String, dynamic>;
+          //   print(data);
+          // });
 
-            //Color myColor = data.color as Color;
-            return ListView.builder(
-                shrinkWrap: true,
-                itemCount: data.length,
-                itemBuilder: ((context, index) {
-                  return data.isNotEmpty
-                      ? SingleChildScrollView(
-                          child: GestureDetector(
-                          onTap: () {
-                            Navigator.pushReplacementNamed(
-                                context, '/sharedspace',
-                                arguments: {
-                                  'groupid': data[index].groupid,
-                                  'groupname':
-                                      '${data[index].firstname!} ${data[index].surname!}',
-                                  'isprofile': true
-                                });
-                          },
-                          child: CardBox(
-                            name:
-                                '${data[index].firstname!} ${data[index].surname!}',
-                            boxColor: data[index].color == null
-                                ? primaryClr
-                                : stringToColor(data[index].color),
-                          ),
-                        ))
-                      : const SizedBox(
-                          height: 0,
-                          width: 0,
-                        );
-                }));
-          }
+          //Color myColor = data.color as Color;
+          return ListView(
+            shrinkWrap: true,
+            children: snapshot.data.docs.map<Widget>((document) {
+              return GestureDetector(
+                onTap: () {
+                  Navigator.pushReplacementNamed(context, '/sharedspace',
+                      arguments: {
+                        'groupid': document['groupid'],
+                        'groupname':
+                            '${document['firstname']!} ${document['surname']!}',
+                        'isprofile': true
+                      });
+                },
+                child: CardBox(
+                  name: '${document['firstname']!} ${document['surname']!}',
+                  boxColor: document['color'] == null
+                      ? primaryClr
+                      : stringToColor(document['color'] as String),
+                ),
+              );
+            }).toList(),
+          );
         }
 
         return const DataLoading();

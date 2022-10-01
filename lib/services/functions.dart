@@ -10,16 +10,17 @@ import 'package:sharedspace/models/sharedspacegroup_user.dart';
 import 'package:sharedspace/models/usermodel.dart';
 import '../database/firebase_helpers.dart';
 import 'package:uuid/uuid.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 var uuid = const Uuid();
 
-getUserDetails(firebaseUser) async {
+Stream<QuerySnapshot> getUserDetails(firebaseUser) {
   List<UserModel> groupList = [];
-  var data = await userDBS
-      .getQueryList(args: [QueryArgsV2('uid', isEqualTo: firebaseUser!.uid)])
-      .then((value) => {groupList = value.toList()})
-      .catchError((error) => {print(error)});
-  return groupList;
+
+  return FirebaseFirestore.instance
+      .collection('User')
+      .where('uid', isEqualTo: firebaseUser!.uid)
+      .snapshots();
 }
 
 getUserSpaces(firebaseUser) async {
