@@ -14,3 +14,9 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
+
+# IOS m1
+sudo arch -x86_64 gem install ffi
+# go to ios folder then run
+arch -x86_64 pod install
