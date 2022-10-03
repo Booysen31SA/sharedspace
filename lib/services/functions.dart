@@ -48,7 +48,7 @@ Stream<List<dynamic> test2 (firebaseUser) async* {
 
 // get user group
       var group_userSnapshot = await FirebaseFirestore.instance.collection('SharedSpaceGroup_User').where('groupid', isEqualTo: groupid).get();
-      
+      // https://stackoverflow.com/questions/59061225/how-do-i-join-data-from-two-firestore-collections-in-flutter
       //check if value exist
 
       //if it does add to sharedspaceList
