@@ -23,6 +23,20 @@ Stream<QuerySnapshot> getUserDetails(firebaseUser) {
       .snapshots();
 }
 
+Stream<List<dynamic>> getUserSpaces(firebaseUser) async* {
+  var sharedGroup_UserStream = FirebaseFirestore.instance.collection('SharedSpaceGroup_User').where('User_uid', isEqualTo: firebaseUser!.uid).snapshots();
+  var sharedSpaceDetails = List<SharedSpaceGroup>();
+
+  await for(var group_User in sharedGroup_UserStream){
+    for(var groupid in group_User.docs){
+      var spaceDetails;
+      var details = await FirebaseFirestore.instance.collection('SharedSpaceGroup').where('groupid', isEqualTo: groupid['groupid']).snapshot();
+      sharedSpaceDetails.add(spaceDetails);
+    }
+    yield sharedSpaceDetails;
+  }
+}
+
 getUserSpaces(firebaseUser) async {
   try {
     List<sharedSpaceGroup_User> groupList = [];
