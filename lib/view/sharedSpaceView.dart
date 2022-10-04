@@ -58,7 +58,7 @@ class _SharedSpaceState extends State<SharedSpaceView> {
               color: primaryClr,
             ),
             onTap: () => {
-              Navigator.pushReplacementNamed(
+              Navigator.pushNamed(
                 context,
                 '/settings',
                 arguments: {

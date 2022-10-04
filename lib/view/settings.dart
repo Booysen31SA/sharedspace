@@ -62,10 +62,12 @@ class _SettingViewState extends State<SettingView> {
           onTap: () => {
             if (arguments['isMain'])
               {
-                Navigator.pushReplacementNamed(context, '/home'),
+                Navigator.pop(context),
               }
             else
               {
+                Navigator.pop(context),
+                Navigator.pop(context),
                 Navigator.pushReplacementNamed(context, '/sharedspace',
                     arguments: {
                       'groupid': arguments['groupid'],

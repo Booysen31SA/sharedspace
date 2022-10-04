@@ -73,7 +73,7 @@ class _HomeViewState extends State<HomeView> {
             color: primaryClr,
           ),
           onTap: () => {
-            Navigator.pushReplacementNamed(
+            Navigator.pushNamed(
               context,
               '/settings',
               arguments: {'isMain': true},
@@ -114,11 +114,10 @@ class _HomeViewState extends State<HomeView> {
                     ),
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.pushReplacementNamed(context, '/creation',
-                            arguments: {
-                              'creationtitle': 'Create Shared Space',
-                              'screen': 'home'
-                            });
+                        Navigator.pushNamed(context, '/creation', arguments: {
+                          'creationtitle': 'Create Shared Space',
+                          'screen': 'home'
+                        });
                       },
                       child: const Icon(
                         Icons.add,
@@ -155,7 +154,7 @@ class _HomeViewState extends State<HomeView> {
               shrinkWrap: true,
               children: snapshots.data.docs.map<Widget>((groups) {
                 return StreamBuilder(
-                  stream: getGroupDetails(groups['Groupid']),
+                  stream: getGroupDetails(groups['groupid']),
                   builder: (context, AsyncSnapshot<dynamic> snapshot) {
                     if (snapshot.hasError) {
                       return Center(
@@ -170,8 +169,7 @@ class _HomeViewState extends State<HomeView> {
                         children: snapshot.data.docs.map<Widget>((details) {
                           return GestureDetector(
                             onTap: () {
-                              Navigator.pushReplacementNamed(
-                                  context, '/sharedspace',
+                              Navigator.pushNamed(context, '/sharedspace',
                                   arguments: {
                                     'groupid': details['groupid'],
                                     'groupname': details['groupname'],
@@ -223,13 +221,12 @@ class _HomeViewState extends State<HomeView> {
             children: snapshot.data.docs.map<Widget>((document) {
               return GestureDetector(
                 onTap: () {
-                  Navigator.pushReplacementNamed(context, '/sharedspace',
-                      arguments: {
-                        'groupid': document['groupid'],
-                        'groupname':
-                            '${document['firstname']!} ${document['surname']!}',
-                        'isprofile': true
-                      });
+                  Navigator.pushNamed(context, '/sharedspace', arguments: {
+                    'groupid': document['groupid'],
+                    'groupname':
+                        '${document['firstname']!} ${document['surname']!}',
+                    'isprofile': true
+                  });
                 },
                 child: CardBox(
                   name: '${document['firstname']!} ${document['surname']!}',

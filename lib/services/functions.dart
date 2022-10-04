@@ -23,32 +23,10 @@ Stream<QuerySnapshot> getUserDetails(firebaseUser) {
       .snapshots();
 }
 
-// first group_user then inside do a stream to group
-// Stream getCurrentUserModelStream() {
-//   return FirebaseAuth.instance.authStateChanges().asyncExpand(
-//     (currentUser) {
-//       if (currentUser == null) {
-//         return Stream.value(null);
-//       }
-//       return FirebaseFirestore.instance
-//           .collection('users')
-//           .doc(currentUser.uid)
-//           .snapshots()
-//           .map((doc) {
-//         final userData = doc.data();
-//         if (userData == null) {
-//           return null;
-//         }
-//         return UserModel.fromJson(userData);
-//       });
-//     },
-//   );
-// }
-
 Stream<QuerySnapshot> getSpaceGroups(firebaseUser) {
   return FirebaseFirestore.instance
       .collection('SharedSpaceGroup_User')
-      .where('User_uid', isEqualTo: firebaseUser!.uid)
+      .where('user_uid', isEqualTo: firebaseUser!.uid)
       .snapshots();
 }
 
@@ -57,44 +35,6 @@ Stream getGroupDetails(groupid) {
       .collection('SharedSpaceGroup')
       .where('groupid', isEqualTo: groupid)
       .snapshots();
-}
-
-getUserSpaces(firebaseUser) async {
-  try {
-    List<sharedSpaceGroup_User> groupList = [];
-    List<SharedSpaceGroup> sharedSpaceList = [];
-
-    var groupUser = await sharedSpaceGroupUser
-        .getQueryList(
-          args: [QueryArgsV2('User_uid', isEqualTo: firebaseUser!.uid)],
-        )
-        .then((value) => {
-              groupList = value.toList(),
-            })
-        .catchError(
-          (error) => {
-            print(error),
-          },
-        );
-
-    sharedSpaceList = await getSharedSpaceDetails(groupList);
-
-    // get sharedSpaceGroup by on data recieced from list above
-    return sharedSpaceList;
-  } catch (e) {
-    print(e.toString());
-  }
-}
-
-getSharedSpaceDetails(List<sharedSpaceGroup_User> groupList) async {
-  List<SharedSpaceGroup> sharedSpaceList = [];
-
-  for (int i = 0; i < groupList.length; i++) {
-    sharedSpaceList.add(
-      await getSharedSpaceDetailsByGroupId(groupList[i].groupid),
-    );
-  }
-  return sharedSpaceList;
 }
 
 getSharedSpaceDetailsByGroupId(String? groupid) async {
@@ -133,7 +73,7 @@ createSharedSpaceGroup({context, groupname, groupcolor, useruid}) async {
         await createSharedSpaceLink(groupuuid: groupuuid, useruid: useruid);
 
     if (result) {
-      Navigator.pushReplacementNamed(context, '/home');
+      Navigator.pop(context);
     }
     return true;
   } catch (error) {

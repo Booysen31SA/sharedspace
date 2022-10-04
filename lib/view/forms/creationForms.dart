@@ -40,7 +40,7 @@ class _CreationFormsState extends State<CreationForms> {
           onTap: () => {
             if (arguments['screen'] == 'home')
               {
-                Navigator.pushReplacementNamed(context, '/home'),
+                Navigator.pop(context),
               },
           },
           child: Icon(backArrow, color: primaryClr),
