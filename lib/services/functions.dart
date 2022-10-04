@@ -23,38 +23,40 @@ Stream<QuerySnapshot> getUserDetails(firebaseUser) {
       .snapshots();
 }
 
-Stream<List<dynamic>> getUserSpaces(firebaseUser) async* {
-  var sharedGroup_UserStream = FirebaseFirestore.instance.collection('SharedSpaceGroup_User').where('User_uid', isEqualTo: firebaseUser!.uid).snapshots();
-  var sharedSpaceDetails = List<SharedSpaceGroup>();
+// first group_user then inside do a stream to group
+// Stream getCurrentUserModelStream() {
+//   return FirebaseAuth.instance.authStateChanges().asyncExpand(
+//     (currentUser) {
+//       if (currentUser == null) {
+//         return Stream.value(null);
+//       }
+//       return FirebaseFirestore.instance
+//           .collection('users')
+//           .doc(currentUser.uid)
+//           .snapshots()
+//           .map((doc) {
+//         final userData = doc.data();
+//         if (userData == null) {
+//           return null;
+//         }
+//         return UserModel.fromJson(userData);
+//       });
+//     },
+//   );
+// }
 
-  await for(var group_User in sharedGroup_UserStream){
-    for(var groupid in group_User.docs){
-      var spaceDetails;
-      var details = await FirebaseFirestore.instance.collection('SharedSpaceGroup').where('groupid', isEqualTo: groupid['groupid']).snapshot();
-      sharedSpaceDetails.add(details);
-    }
-    yield sharedSpaceDetails;
-  }
+Stream<QuerySnapshot> getSpaceGroups(firebaseUser) {
+  return FirebaseFirestore.instance
+      .collection('SharedSpaceGroup_User')
+      .where('User_uid', isEqualTo: firebaseUser!.uid)
+      .snapshots();
 }
 
-Stream<List<dynamic> test2 (firebaseUser) async* {
-  var sharedSpaceDetails = FirebaseFirestore.instance.collection('SharedSpaceGroup').snapshot();
-  var sharedspaceList = List<SharedSpaceGroup>();
-
-  await for(var sharedSpace in sharedSpaceDetails){
-    for(var details in sharedSpace.docs){
-      final groupid = details['groupid']
-      var group;
-
-// get user group
-      var group_userSnapshot = await FirebaseFirestore.instance.collection('SharedSpaceGroup_User').where('groupid', isEqualTo: groupid).get();
-      // https://stackoverflow.com/questions/59061225/how-do-i-join-data-from-two-firestore-collections-in-flutter
-      //check if value exist
-
-      //if it does add to sharedspaceList
-    }
-    yield sharedspaceList;
-  }
+Stream getGroupDetails(groupid) {
+  return FirebaseFirestore.instance
+      .collection('SharedSpaceGroup')
+      .where('groupid', isEqualTo: groupid)
+      .snapshots();
 }
 
 getUserSpaces(firebaseUser) async {

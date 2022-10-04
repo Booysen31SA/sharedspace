@@ -132,62 +132,71 @@ class _HomeViewState extends State<HomeView> {
             ),
 
             // My Spaces
-            mySpaces(firebaseUser)
+            myspaceStream(firebaseUser)
           ],
         ),
       ),
     );
   }
 
-  FutureBuilder<dynamic> mySpaces(User? firebaseUser) {
-    return FutureBuilder(
-      future: getUserSpaces(firebaseUser),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          if (snapshot.hasError) {
+  StreamBuilder myspaceStream(User? firebaseUser) {
+    return StreamBuilder(
+        stream: getSpaceGroups(firebaseUser),
+        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshots) {
+          if (snapshots.hasError) {
             return Center(
               child: Text(
-                '${snapshot.error} occurred',
+                '${snapshots.error} occurred',
                 style: const TextStyle(fontSize: 18),
               ),
             );
-          } else if (snapshot.hasData) {
-            // display ListView builder
-            var data = snapshot.data as List;
-
-            return ListView.builder(
-                shrinkWrap: true,
-                itemCount: data.length,
-                itemBuilder: ((context, index) {
-                  return data.isNotEmpty
-                      ? SingleChildScrollView(
-                          child: GestureDetector(
+          } else if (snapshots.hasData) {
+            return ListView(
+              shrinkWrap: true,
+              children: snapshots.data.docs.map<Widget>((groups) {
+                return StreamBuilder(
+                  stream: getGroupDetails(groups['Groupid']),
+                  builder: (context, AsyncSnapshot<dynamic> snapshot) {
+                    if (snapshot.hasError) {
+                      return Center(
+                        child: Text(
+                          '${snapshot.error} occurred',
+                          style: const TextStyle(fontSize: 18),
+                        ),
+                      );
+                    } else if (snapshot.hasData) {
+                      return ListView(
+                        shrinkWrap: true,
+                        children: snapshot.data.docs.map<Widget>((details) {
+                          return GestureDetector(
                             onTap: () {
                               Navigator.pushReplacementNamed(
                                   context, '/sharedspace',
                                   arguments: {
-                                    'groupid': data[index].groupid,
-                                    'groupname': data[index].groupname,
+                                    'groupid': details['groupid'],
+                                    'groupname': details['groupname'],
                                   });
                             },
                             child: CardBox(
-                              name: data[index].groupname,
-                              boxColor: data[index].groupcolor == null
+                              name: details['groupname'],
+                              boxColor: details['groupcolor'] == null
                                   ? primaryClr
-                                  : stringToColor(data[index].groupcolor),
+                                  : stringToColor(details['groupcolor']),
                             ),
-                          ),
-                        )
-                      : const SizedBox(
-                          height: 0,
-                          width: 0,
-                        );
-                }));
+                          );
+                        }).toList(),
+                      );
+                    }
+
+                    return const DataLoading();
+                  },
+                );
+              }).toList(),
+            );
           }
-        }
-        return const DataLoading();
-      },
-    );
+
+          return const DataLoading();
+        });
   }
 
   StreamBuilder myProfileCard(User? firebaseUser) {

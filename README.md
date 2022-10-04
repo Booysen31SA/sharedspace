@@ -21,25 +21,6 @@ sudo arch -x86_64 gem install ffi
 # go to ios folder then run
 arch -x86_64 pod install
 
-# Test this example
-// first group_user then inside do a stream to group
-  Stream<UserModel?> getCurrentUserModelStream() {
-    return FirebaseAuth.instance.authStateChanges().asyncExpand<UserModel?>(
-      (currentUser) {
-        if (currentUser == null) {
-          return Stream.value(null);
-        }
-        return FirebaseFirestore.instance
-            .collection('users')
-            .doc(currentUser.uid)
-            .snapshots()
-            .map((doc) {
-          final userData = doc.data();
-          if (userData == null) {
-            return null;
-          }
-          return UserModel.fromJson(userData);
-        });
-      },
-    );
-  }
+# Todo
+
+changing routes to pushNamed and not replaced
