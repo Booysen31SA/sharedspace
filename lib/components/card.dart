@@ -34,7 +34,7 @@ class CardBox extends StatelessWidget {
                 width: 20,
               ),
               SizedBox(
-                width: 220,
+                width: MediaQuery.of(context).size.width * 0.5,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

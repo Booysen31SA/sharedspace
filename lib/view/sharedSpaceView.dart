@@ -41,7 +41,7 @@ class _SharedSpaceState extends State<SharedSpaceView> {
           appBar: AppBar(),
           prefixIcon: GestureDetector(
             onTap: () => {
-              Navigator.pushReplacementNamed(context, '/home'),
+              Navigator.pop(context),
             },
             child: Icon(backArrow, color: primaryClr),
           ),

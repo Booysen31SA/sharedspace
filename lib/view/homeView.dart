@@ -150,46 +150,55 @@ class _HomeViewState extends State<HomeView> {
               ),
             );
           } else if (snapshots.hasData) {
-            return ListView(
-              shrinkWrap: true,
-              children: snapshots.data.docs.map<Widget>((groups) {
-                return StreamBuilder(
-                  stream: getGroupDetails(groups['groupid']),
-                  builder: (context, AsyncSnapshot<dynamic> snapshot) {
-                    if (snapshot.hasError) {
-                      return Center(
-                        child: Text(
-                          '${snapshot.error} occurred',
-                          style: const TextStyle(fontSize: 18),
-                        ),
-                      );
-                    } else if (snapshot.hasData) {
-                      return ListView(
-                        shrinkWrap: true,
-                        children: snapshot.data.docs.map<Widget>((details) {
-                          return GestureDetector(
-                            onTap: () {
-                              Navigator.pushNamed(context, '/sharedspace',
-                                  arguments: {
-                                    'groupid': details['groupid'],
-                                    'groupname': details['groupname'],
-                                  });
-                            },
-                            child: CardBox(
-                              name: details['groupname'],
-                              boxColor: details['groupcolor'] == null
-                                  ? primaryClr
-                                  : stringToColor(details['groupcolor']),
+            return Container(
+              height: MediaQuery.of(context).size.height / 1.7,
+              child: ListView(
+                shrinkWrap: true,
+                children: snapshots.data.docs.map<Widget>((groups) {
+                  return SizedBox(
+                    child: StreamBuilder(
+                      stream: getGroupDetails(groups['groupid']),
+                      builder: (context, AsyncSnapshot<dynamic> snapshot) {
+                        if (snapshot.hasError) {
+                          return Center(
+                            child: Text(
+                              '${snapshot.error} occurred',
+                              style: const TextStyle(fontSize: 18),
                             ),
                           );
-                        }).toList(),
-                      );
-                    }
+                        } else if (snapshot.hasData) {
+                          return SizedBox(
+                            child: ListView(
+                              shrinkWrap: true,
+                              physics: ScrollPhysics(),
+                              children:
+                                  snapshot.data.docs.map<Widget>((details) {
+                                return GestureDetector(
+                                  onTap: () {
+                                    Navigator.pushNamed(context, '/sharedspace',
+                                        arguments: {
+                                          'groupid': details['groupid'],
+                                          'groupname': details['groupname'],
+                                        });
+                                  },
+                                  child: CardBox(
+                                    name: details['groupname'],
+                                    boxColor: details['groupcolor'] == null
+                                        ? primaryClr
+                                        : stringToColor(details['groupcolor']),
+                                  ),
+                                );
+                              }).toList(),
+                            ),
+                          );
+                        }
 
-                    return const DataLoading();
-                  },
-                );
-              }).toList(),
+                        return const DataLoading();
+                      },
+                    ),
+                  );
+                }).toList(),
+              ),
             );
           }
 

@@ -45,6 +45,7 @@ class _SettingViewState extends State<SettingView> {
 //general
   var __groupSettingGroupColorFieldKey;
   bool isReloading = false;
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -60,20 +61,7 @@ class _SettingViewState extends State<SettingView> {
         appBar: AppBar(),
         prefixIcon: GestureDetector(
           onTap: () => {
-            if (arguments['isMain'])
-              {
-                Navigator.pop(context),
-              }
-            else
-              {
-                Navigator.pop(context),
-                Navigator.pop(context),
-                Navigator.pushReplacementNamed(context, '/sharedspace',
-                    arguments: {
-                      'groupid': arguments['groupid'],
-                      'groupname': arguments['groupname'],
-                    }),
-              }
+            Navigator.pop(context),
           },
           child: Icon(backArrow, color: primaryClr),
         ),
@@ -306,48 +294,58 @@ class _SettingViewState extends State<SettingView> {
                         color: primaryClr,
                       ),
                       width: MediaQuery.of(context).size.width * 1,
-                      child: MaterialButton(
-                        onPressed: () async {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Processing Data')),
-                          );
-                          final validateSuccess = _groupSettingFormKey
-                              .currentState!
-                              .saveAndValidate();
+                      child: isLoading
+                          ? const CircularProgressIndicator()
+                          : MaterialButton(
+                              onPressed: () async {
+                                if (!isLoading) {
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+                                  final validateSuccess = _groupSettingFormKey
+                                      .currentState!
+                                      .saveAndValidate();
 
-                          if (validateSuccess) {
-                            var fielddata =
-                                _groupSettingFormKey.currentState!.value;
+                                  if (validateSuccess) {
+                                    var fielddata = _groupSettingFormKey
+                                        .currentState!.value;
 
-                            SharedSpaceGroup sharedGroup = SharedSpaceGroup(
-                                groupid: fielddata['Group ID'],
-                                groupname: fielddata['Group Name'],
-                                groupcolor:
-                                    __groupSettingGroupColorFieldKey.toString(),
-                                useruid: fielddata['Created by'],
-                                datecreated:
-                                    fielddata['Date Created'].toString());
+                                    SharedSpaceGroup sharedGroup =
+                                        SharedSpaceGroup(
+                                            groupid: fielddata['Group ID'],
+                                            groupname: fielddata['Group Name'],
+                                            groupcolor:
+                                                __groupSettingGroupColorFieldKey
+                                                    .toString(),
+                                            useruid: fielddata['Created by'],
+                                            datecreated:
+                                                fielddata['Date Created']
+                                                    .toString());
 
-                            var result = await updateGroupSetting(
-                                id: data.updateid, data: sharedGroup);
+                                    var result = await updateGroupSetting(
+                                        id: data.updateid, data: sharedGroup);
 
-                            if (!result) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text('Failed, Please try again')),
-                              );
-                            } else {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Sucess!')),
-                              );
-                            }
-                          }
-                        },
-                        child: const Text(
-                          'Update Group',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
+                                    if (!result) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
+                                        const SnackBar(
+                                            content: Text(
+                                                'Failed, Please try again')),
+                                      );
+                                    } else {
+                                      setState(() {
+                                        isLoading = false;
+                                      });
+                                      Navigator.pop(context);
+                                    }
+                                  }
+                                }
+                              },
+                              child: const Text(
+                                'Update Group',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
                     ),
                     Padding(
                       padding: EdgeInsets.only(

@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:sharedspace/components/NameTextBoxGlobal.dart';
 import 'package:sharedspace/components/colorPicker.dart';
 import 'package:sharedspace/components/header.dart';
+import 'package:sharedspace/components/loading.dart';
 import 'package:sharedspace/configs/themes.dart';
 import 'package:sharedspace/services/functions.dart';
 import 'package:sharedspace/util/convertStringToColor.dart';
@@ -26,6 +27,7 @@ class _CreationFormsState extends State<CreationForms> {
   //general
   var _groupSettingGroupColorFieldKey;
   bool isReloading = false;
+  bool isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -106,37 +108,40 @@ class _CreationFormsState extends State<CreationForms> {
                 color: primaryClr,
               ),
               width: MediaQuery.of(context).size.width * 1,
-              child: MaterialButton(
-                onPressed: () async {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Processing Data')),
-                  );
-                  final validateSuccess = _creationSharedSpaceFormKey
-                      .currentState!
-                      .saveAndValidate();
-                  if (validateSuccess) {
-                    var data = _creationSharedSpaceFormKey.currentState!.value;
+              child: isLoading
+                  ? const CircularProgressIndicator()
+                  : MaterialButton(
+                      onPressed: () async {
+                        setState(() {
+                          isLoading = true;
+                        });
+                        final validateSuccess = _creationSharedSpaceFormKey
+                            .currentState!
+                            .saveAndValidate();
+                        if (validateSuccess) {
+                          var data =
+                              _creationSharedSpaceFormKey.currentState!.value;
 
-                    var result = await createSharedSpaceGroup(
-                      context: context,
-                      groupname: data['Group Name'],
-                      groupcolor: _groupSettingGroupColorFieldKey,
-                      useruid: firebaseUser.uid.toString(),
-                    );
+                          var result = await createSharedSpaceGroup(
+                            context: context,
+                            groupname: data['Group Name'],
+                            groupcolor: _groupSettingGroupColorFieldKey,
+                            useruid: firebaseUser.uid.toString(),
+                          );
 
-                    if (!result) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                            content: Text('Failed, Please try again')),
-                      );
-                    }
-                  }
-                },
-                child: const Text(
-                  'Create Group',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
+                          if (!result) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text('Failed, Please try again')),
+                            );
+                          }
+                        }
+                      },
+                      child: const Text(
+                        'Create Group',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
             )
           ],
         ),
