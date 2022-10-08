@@ -10,11 +10,11 @@ class CardBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(
-        top: 15,
+        top: 10,
         left: 15,
         right: 15,
       ),
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: boxColor,
         borderRadius: BorderRadius.circular(30), // change to user value
