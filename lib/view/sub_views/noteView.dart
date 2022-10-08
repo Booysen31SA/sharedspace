@@ -48,21 +48,20 @@ class _NoteViewState extends State<NoteView> {
                   );
                 } else if (snapshot.hasData) {
                   if (snapshot.data.size == 0) {
-                    return const NoteCard();
-                    //   return const Center(
-                    //     child: Text('No notes available'),
-                    //   );
-                    // }
-                    // return ListView(
-                    //     shrinkWrap: true,
-                    //     children: snapshot.data.docs.map<Widget>(
-                    //       (details) {
-                    //        return const NoteCard();
-                    //    },
-                    //     )
-                    // );
+                    return const Center(
+                      child: Text('No notes available'),
+                    );
                   }
+                  return ListView(
+                    shrinkWrap: true,
+                    children: snapshot.data.docs.map<Widget>(
+                      (details) {
+                        return const NoteCard();
+                      },
+                    ),
+                  );
                 }
+
                 return const DataLoading();
               },
             ),
