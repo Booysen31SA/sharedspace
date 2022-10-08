@@ -82,57 +82,59 @@ class _HomeViewState extends State<HomeView> {
         ),
       ),
       body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 20, top: 20, bottom: 20),
-              child: Text(
-                'MY PROFILE',
-                style: headingStyle,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 20, top: 20, bottom: 20),
+                child: Text(
+                  'MY PROFILE',
+                  style: headingStyle,
+                ),
               ),
-            ),
 
-            //card
-            // when creating a profile, create a Space for profile also
-            myProfileCard(firebaseUser),
+              //card
+              // when creating a profile, create a Space for profile also
+              myProfileCard(firebaseUser),
 
-            Padding(
-              padding: const EdgeInsets.only(
-                  left: 20, top: 20, bottom: 20, right: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'MY SPACE',
-                    style: headingStyle,
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                      color: primaryClr,
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: 20, top: 20, bottom: 20, right: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'MY SPACE',
+                      style: headingStyle,
                     ),
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamed(context, '/creation', arguments: {
-                          'creationtitle': 'Create Shared Space',
-                          'screen': 'home'
-                        });
-                      },
-                      child: const Icon(
-                        Icons.add,
-                        size: 30,
-                        color: Colors.white,
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50),
+                        color: primaryClr,
                       ),
-                    ),
-                  )
-                ],
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, '/creation', arguments: {
+                            'creationtitle': 'Create Shared Space',
+                            'screen': 'home'
+                          });
+                        },
+                        child: const Icon(
+                          Icons.add,
+                          size: 30,
+                          color: Colors.white,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ),
-            ),
 
-            // My Spaces
-            myspaceStream(firebaseUser)
-          ],
+              // My Spaces
+              myspaceStream(firebaseUser)
+            ],
+          ),
         ),
       ),
     );

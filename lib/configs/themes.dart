@@ -49,10 +49,24 @@ inputDecoration({hintText, color, suffixIcon, borderColor, isfocusBorder}) {
 }
 
 TextStyle get headingStyle {
-  return TextStyle(
+  return const TextStyle(
     fontSize: 15,
     fontWeight: FontWeight.bold,
-    color: Colors.grey.shade600,
+  );
+}
+
+TextStyle get notesHeadingStyle {
+  return const TextStyle(
+    fontSize: 30,
+    fontWeight: FontWeight.bold,
+  );
+}
+
+TextStyle get notesListHeadingStyle {
+  return const TextStyle(
+    fontSize: 15,
+    fontWeight: FontWeight.bold,
+    color: Colors.white,
   );
 }
 

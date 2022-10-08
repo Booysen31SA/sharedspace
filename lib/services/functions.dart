@@ -37,6 +37,22 @@ Stream getGroupDetails(groupid) {
       .snapshots();
 }
 
+Stream<QuerySnapshot> getGroupNotes(groupid) {
+  return FirebaseFirestore.instance
+      .collection('Notes')
+      .where('groupid', isEqualTo: groupid)
+      .snapshots();
+}
+
+getUserDetailsFuture(firebaseUser) async {
+  List<UserModel> groupList = [];
+  var data = await userDBS
+      .getQueryList(args: [QueryArgsV2('uid', isEqualTo: firebaseUser!.uid)])
+      .then((value) => {groupList = value.toList()})
+      .catchError((error) => {print(error)});
+  return groupList;
+}
+
 getSharedSpaceDetailsByGroupId(String? groupid) async {
   List<SharedSpaceGroup> sharedSpaceList = [];
   await sharedSpaceDBS.getQueryList(

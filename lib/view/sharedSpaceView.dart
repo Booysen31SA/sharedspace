@@ -31,9 +31,12 @@ class _SharedSpaceState extends State<SharedSpaceView> {
         <String, dynamic>{}) as Map;
     //print(arguments['groupid']);
 
-    const List<Widget> _pages = <Widget>[
-      CalendarView(),
-      NoteView(),
+    List<Widget> _pages = <Widget>[
+      const CalendarView(),
+      NoteView(
+        groupid: arguments['groupid'],
+        groupName: arguments['groupname'],
+      ),
     ];
 
     return Scaffold(
@@ -73,7 +76,14 @@ class _SharedSpaceState extends State<SharedSpaceView> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () => {
-            print('Add Event'),
+            if (_selectedIndex == 0)
+              {
+                print('Calander add screen'),
+              }
+            else if (_selectedIndex == 1)
+              {
+                print('Notes add screen'),
+              }
           },
           backgroundColor: primaryClr,
           child: const Center(
