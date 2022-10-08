@@ -1,4 +1,4 @@
-class Note {
+class NoteModel {
   final String? key;
   final String? groupid;
   final String? usercreated;
@@ -6,19 +6,20 @@ class Note {
   final String? description;
   final String? timecreated;
   final bool? important;
+  final bool? isEditable;
 
-  Note({
-    this.key,
-    this.groupid,
-    this.usercreated,
-    this.title,
-    this.description,
-    this.timecreated,
-    this.important,
-  });
+  NoteModel(
+      {this.key,
+      this.groupid,
+      this.usercreated,
+      this.title,
+      this.description,
+      this.timecreated,
+      this.important,
+      this.isEditable});
 
-  factory Note.fromMap(Map data) {
-    return Note(
+  factory NoteModel.fromMap(Map data) {
+    return NoteModel(
       key: data['key'],
       groupid: data['groupid'],
       usercreated: data['usercreated'],
@@ -26,11 +27,12 @@ class Note {
       description: data['description'],
       timecreated: data['timecreated'],
       important: data['important'],
+      isEditable: data['isEditable'],
     );
   }
 
-  factory Note.fromDS(String id, Map<String, dynamic> data) {
-    return Note(
+  factory NoteModel.fromDS(String id, Map<String, dynamic> data) {
+    return NoteModel(
       key: data['key'],
       groupid: data['groupid'],
       usercreated: data['usercreated'],
@@ -38,6 +40,7 @@ class Note {
       description: data['description'],
       timecreated: data['timecreated'],
       important: data['important'],
+      isEditable: data['isEditable'],
     );
   }
 
@@ -49,7 +52,8 @@ class Note {
       "title": title,
       "description": description,
       "timecreated": timecreated,
-      "important": important
+      "important": important,
+      "isEditable": isEditable,
     };
   }
 }

@@ -1,10 +1,12 @@
 // ignore_for_file: invalid_return_type_for_catch_error
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_helpers/firebase_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:sharedspace/models/noteModel.dart';
 import 'package:sharedspace/models/sharedspacegroup.dart';
 import 'package:sharedspace/models/sharedspacegroup_user.dart';
 import 'package:sharedspace/models/usermodel.dart';
@@ -69,6 +71,40 @@ getSharedSpaceDetailsByGroupId(String? groupid) async {
   );
 
   return sharedSpaceList[0];
+}
+
+createNote(
+    {context, groupid, usercreated, title, description, isEditable}) async {
+  var keyUuid = uuid.v1();
+  var isImportant = false;
+
+  try {
+    var userDetails = await getUserDetailsFuture(usercreated);
+
+    NoteModel note = NoteModel(
+      key: keyUuid,
+      groupid: groupid,
+      usercreated: '${userDetails[0].firstname} ${userDetails[0].surname}',
+      title: title,
+      description: description,
+      timecreated: DateFormat('yyy-MM-dd hh:mm:ss')
+          .parse(DateTime.now().toString())
+          .toString(),
+      important: isImportant,
+      isEditable: isEditable == 'Yes' ? true : false,
+    );
+
+    var result = await noteDBS.create(note.toMap());
+
+    if (result.id.length > 0) {
+      Navigator.pop(context);
+    }
+    return true;
+  } catch (error) {
+    print(error);
+    return false;
+  }
+  //timecreated
 }
 
 createSharedSpaceGroup({context, groupname, groupcolor, useruid}) async {

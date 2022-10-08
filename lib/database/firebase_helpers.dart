@@ -1,5 +1,5 @@
 import 'package:firebase_helpers/firebase_helpers.dart';
-import 'package:sharedspace/models/note.dart';
+import 'package:sharedspace/models/noteModel.dart';
 import 'package:sharedspace/models/sharedspacegroup.dart';
 import 'package:sharedspace/models/sharedspacegroup_user.dart';
 import 'package:sharedspace/models/usermodel.dart';
@@ -22,8 +22,8 @@ DatabaseService<SharedSpaceGroup> sharedSpaceDBS = DatabaseService(
   toMap: (sharedSpaceGroup) => sharedSpaceGroup.toMap(),
 );
 
-DatabaseService<Note> noteDBS = DatabaseService(
+DatabaseService<NoteModel> noteDBS = DatabaseService(
   'Notes',
-  fromDS: (key, data) => Note.fromDS(key, data!),
+  fromDS: (key, data) => NoteModel.fromDS(key, data!),
   toMap: (note) => note.toMap(),
 );

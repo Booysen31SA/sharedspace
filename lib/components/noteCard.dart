@@ -4,7 +4,10 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:sharedspace/configs/themes.dart';
 
 class NoteCard extends StatelessWidget {
-  const NoteCard({super.key});
+  final String? createdBy;
+  final String? title;
+  final String? created;
+  const NoteCard({super.key, this.createdBy, this.title, this.created});
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +46,7 @@ class NoteCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Matthew Booysen',
+            createdBy!,
             style: notesListHeadingStyle,
           ),
           Row(
@@ -52,9 +55,9 @@ class NoteCard extends StatelessWidget {
                 'Title: ',
                 style: notesListHeadingStyle,
               ),
-              const Text(
-                'This is a temp title',
-                style: TextStyle(
+              Text(
+                title!,
+                style: const TextStyle(
                   color: Colors.white,
                 ),
               ),
@@ -66,9 +69,9 @@ class NoteCard extends StatelessWidget {
                 'Created on: ',
                 style: notesListHeadingStyle,
               ),
-              const Text(
-                '20 September 2022',
-                style: TextStyle(
+              Text(
+                created!.toString(),
+                style: const TextStyle(
                   color: Colors.white,
                 ),
               ),

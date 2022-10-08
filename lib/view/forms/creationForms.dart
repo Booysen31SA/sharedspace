@@ -24,10 +24,19 @@ class _CreationFormsState extends State<CreationForms> {
   final _creationSharedSpaceFormKey = GlobalKey<FormBuilderState>();
   final _creationSharedSpaceGroupNameFieldKey = GlobalKey<FormBuilderState>();
 
+  // Creation of Note
+  final _creationNoteFormKey = GlobalKey<FormBuilderState>();
+  final _creationNoteTitleFieldKey = GlobalKey<FormBuilderState>();
+  final _creationNoteDescriptionFieldKey = GlobalKey<FormBuilderState>();
+  final _creationNoteIsEditableFieldKey = GlobalKey<FormBuilderState>();
+
   //general
   var _groupSettingGroupColorFieldKey;
   bool isReloading = false;
   bool isLoading = false;
+
+  // Options
+  List<String> isEditableOptions = ['Yes', 'No'];
 
   @override
   Widget build(BuildContext context) {
@@ -40,10 +49,7 @@ class _CreationFormsState extends State<CreationForms> {
         appBar: AppBar(),
         prefixIcon: GestureDetector(
           onTap: () => {
-            if (arguments['screen'] == 'home')
-              {
-                Navigator.pop(context),
-              },
+            Navigator.pop(context),
           },
           child: Icon(backArrow, color: primaryClr),
         ),
@@ -60,13 +66,22 @@ class _CreationFormsState extends State<CreationForms> {
         child: FormBuilder(
             child: Column(
           children: <Widget>[
-            arguments['screen'] == 'home'
-                ? sharedSpaceCreation(firebaseUser)
-                : Container(),
+            returnScreen(
+                arguments['screen'], firebaseUser, arguments['groupid'])
           ],
         )),
       ),
     );
+  }
+
+  returnScreen(screen, firebaseUser, groupid) {
+    if (screen == 'home') {
+      return sharedSpaceCreation(firebaseUser);
+    } else if (screen == 'note') {
+      return createNoteForm(firebaseUser, groupid);
+    } else if (screen == 'calander') {
+      return createCalander();
+    }
   }
 
   sharedSpaceCreation(firebaseUser) {
@@ -147,6 +162,119 @@ class _CreationFormsState extends State<CreationForms> {
         ),
       ),
     );
+  }
+
+  createNoteForm(firebaseUser, groupid) {
+    return Container(
+      padding: const EdgeInsets.only(
+        top: 15,
+        left: 15,
+      ),
+      child: FormBuilder(
+        key: _creationNoteFormKey,
+        child: Column(
+          children: <Widget>[
+            //Title
+            nameTextBoxGlobal(
+              text: 'Title',
+              key: _creationNoteTitleFieldKey,
+              data: null,
+              readOnly: false,
+            ),
+
+            // Description
+            nameTextBoxGlobal(
+              text: 'Description',
+              key: _creationNoteDescriptionFieldKey,
+              data: null,
+              readOnly: false,
+            ),
+
+            // isEditable
+            Container(
+              margin: const EdgeInsets.only(top: 15, right: 15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Can other edit',
+                    style: settingSizes,
+                  ),
+                  SizedBox(
+                    width: 260,
+                    child: FormBuilderDropdown<String>(
+                      key: _creationNoteIsEditableFieldKey,
+                      name: 'isEditable',
+                      initialValue: 'Yes',
+                      decoration: inputDecoration(
+                        borderColor: primaryClr,
+                        isfocusBorder: true,
+                      ),
+                      validator: FormBuilderValidators.compose([
+                        FormBuilderValidators.required(),
+                      ]),
+                      items: isEditableOptions
+                          .map(
+                            (child) => DropdownMenuItem(
+                              alignment: AlignmentDirectional.center,
+                              value: child,
+                              child: Text(child),
+                            ),
+                          )
+                          .toList(),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            //button
+            Container(
+              margin: const EdgeInsets.only(
+                top: 20,
+                right: 15,
+              ),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10.0),
+                color: primaryClr,
+              ),
+              width: MediaQuery.of(context).size.width * 1,
+              child: isLoading
+                  ? const CircularProgressIndicator()
+                  : MaterialButton(
+                      onPressed: () async {
+                        final validateSuccess = _creationNoteFormKey
+                            .currentState!
+                            .saveAndValidate();
+                        if (validateSuccess) {
+                          var data = _creationNoteFormKey.currentState!.value;
+
+                          // call create note
+                          print(data);
+                          var result = createNote(
+                            context: context,
+                            groupid: groupid,
+                            usercreated: firebaseUser,
+                            title: data['Title'],
+                            description: data['Description'],
+                            isEditable: data['isEditable'],
+                          );
+                        }
+                      },
+                      child: const Text(
+                        'Create Group',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  createCalander() {
+    return Container();
   }
 
   void changeColorOnTap() {

@@ -7,9 +7,7 @@ import 'package:sharedspace/services/functions.dart';
 
 class NoteView extends StatefulWidget {
   final String groupid;
-  final String groupName;
-  const NoteView({Key? key, required this.groupid, required this.groupName})
-      : super(key: key);
+  const NoteView({Key? key, required this.groupid}) : super(key: key);
 
   @override
   State<NoteView> createState() => _NoteViewState();
@@ -56,9 +54,13 @@ class _NoteViewState extends State<NoteView> {
                     shrinkWrap: true,
                     children: snapshot.data.docs.map<Widget>(
                       (details) {
-                        return const NoteCard();
+                        return NoteCard(
+                          title: details['title'],
+                          createdBy: details['usercreated'],
+                          created: details['timecreated'],
+                        );
                       },
-                    ),
+                    ).toList(),
                   );
                 }
 

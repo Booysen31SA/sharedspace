@@ -35,7 +35,6 @@ class _SharedSpaceState extends State<SharedSpaceView> {
       const CalendarView(),
       NoteView(
         groupid: arguments['groupid'],
-        groupName: arguments['groupname'],
       ),
     ];
 
@@ -78,11 +77,18 @@ class _SharedSpaceState extends State<SharedSpaceView> {
           onPressed: () => {
             if (_selectedIndex == 0)
               {
-                print('Calander add screen'),
+                Navigator.pushNamed(context, '/creation', arguments: {
+                  'creationtitle': 'Create Calander event',
+                  'screen': 'calander'
+                }),
               }
             else if (_selectedIndex == 1)
               {
-                print('Notes add screen'),
+                Navigator.pushNamed(context, '/creation', arguments: {
+                  'creationtitle': 'Create Note',
+                  'screen': 'note',
+                  'groupid': arguments['groupid']
+                }),
               }
           },
           backgroundColor: primaryClr,
