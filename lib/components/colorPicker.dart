@@ -31,7 +31,7 @@ Container colorPickerContainer({context, onTap, onChange, key}) {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          'Change Color',
+          'Change Colour',
           style: settingSizes,
         ),
         GestureDetector(

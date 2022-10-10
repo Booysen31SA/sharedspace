@@ -99,6 +99,7 @@ class _CreationFormsState extends State<CreationForms> {
           children: <Widget>[
             //Group Name
             nameTextBoxGlobal(
+              context: context,
               text: 'Group Name',
               key: _creationSharedSpaceGroupNameFieldKey,
               data: null,
@@ -153,7 +154,7 @@ class _CreationFormsState extends State<CreationForms> {
                         }
                       },
                       child: const Text(
-                        'Create Group',
+                        'CREATE GROUP',
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
@@ -176,6 +177,7 @@ class _CreationFormsState extends State<CreationForms> {
           children: <Widget>[
             //Title
             nameTextBoxGlobal(
+              context: context,
               text: 'Title',
               key: _creationNoteTitleFieldKey,
               data: null,
@@ -186,10 +188,13 @@ class _CreationFormsState extends State<CreationForms> {
             //make height bigger so more space
             // make textbox go to next line
             nameTextBoxGlobal(
+              context: context,
               text: 'Description',
               key: _creationNoteDescriptionFieldKey,
               data: null,
               readOnly: false,
+              description: true,
+              validate: false,
             ),
 
             // isEditable
@@ -199,32 +204,20 @@ class _CreationFormsState extends State<CreationForms> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    'Allow others to edit',
-                    style: settingSizes,
-                  ),
+                  // Text(
+                  //   'Allow others to edit',
+                  //   style: settingSizes,
+                  // ),
                   SizedBox(
-                    width: 260,
-                    child: FormBuilderDropdown<String>(
+                    width: MediaQuery.of(context).size.width / 1.08,
+                    child: FormBuilderSwitch(
                       key: _creationNoteIsEditableFieldKey,
-                      name: 'isEditable',
-                      initialValue: 'Yes',
                       decoration: inputDecoration(
                         borderColor: primaryClr,
                         isfocusBorder: true,
                       ),
-                      validator: FormBuilderValidators.compose([
-                        FormBuilderValidators.required(),
-                      ]),
-                      items: isEditableOptions
-                          .map(
-                            (child) => DropdownMenuItem(
-                              alignment: AlignmentDirectional.center,
-                              value: child,
-                              child: Text(child),
-                            ),
-                          )
-                          .toList(),
+                      name: 'isEditable',
+                      title: const Text('Allow others to edit'),
                     ),
                   ),
                 ],
@@ -253,7 +246,7 @@ class _CreationFormsState extends State<CreationForms> {
                           var data = _creationNoteFormKey.currentState!.value;
 
                           // call create note
-                          print(data);
+                          //print(data);
                           var result = createNote(
                             context: context,
                             groupid: groupid,
@@ -265,7 +258,7 @@ class _CreationFormsState extends State<CreationForms> {
                         }
                       },
                       child: const Text(
-                        'Create Note',
+                        'CREATE NOTE',
                         style: TextStyle(color: Colors.white),
                       ),
                     ),

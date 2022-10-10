@@ -22,7 +22,9 @@ class Themes {
 inputDecoration({hintText, color, suffixIcon, borderColor, isfocusBorder}) {
   return InputDecoration(
     enabledBorder: OutlineInputBorder(
-      borderSide: BorderSide(color: borderColor ?? Colors.white),
+      borderSide: borderColor != null
+          ? BorderSide(color: borderColor)
+          : const BorderSide(width: 0, style: BorderStyle.none),
       borderRadius: const BorderRadius.all(
         Radius.circular(10.0),
       ),

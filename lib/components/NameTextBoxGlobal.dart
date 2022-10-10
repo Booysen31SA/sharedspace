@@ -3,19 +3,29 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:sharedspace/configs/themes.dart';
 
-nameTextBoxGlobal({text, key, data, readOnly, name}) {
+nameTextBoxGlobal(
+    {context,
+    text,
+    key,
+    data,
+    readOnly,
+    name,
+    description = false,
+    validate = true}) {
   return Container(
     margin: const EdgeInsets.only(top: 15, right: 15),
     child: Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          text,
-          style: settingSizes,
-        ),
+        // Text(
+        //   text,
+        //   style: settingSizes,
+        // ),
+
         SizedBox(
           width: MediaQuery.of(context).size.width / 0.5,
           child: FormBuilderTextField(
+            maxLines: description ? 5 : 1,
             readOnly: readOnly ?? false,
             key: key,
             name: text,
@@ -23,10 +33,13 @@ nameTextBoxGlobal({text, key, data, readOnly, name}) {
             decoration: inputDecoration(
               borderColor: primaryClr,
               isfocusBorder: true,
+              hintText: text,
             ),
-            validator: FormBuilderValidators.compose([
-              FormBuilderValidators.required(),
-            ]),
+            validator: validate
+                ? FormBuilderValidators.compose([
+                    FormBuilderValidators.required(),
+                  ])
+                : FormBuilderValidators.compose([]),
           ),
         ),
       ],

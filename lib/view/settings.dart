@@ -145,24 +145,27 @@ class _SettingViewState extends State<SettingView> {
     return Container(
       margin: const EdgeInsets.only(top: 15, left: 15),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Dark Mode',
+          SizedBox(
+            width: MediaQuery.of(context).size.width / 1.08,
+            child: FormBuilderSwitch(
+              //key: _creationNoteIsEditableFieldKey,
+              onChanged: (value) {
+                setState(() {
+                  isDarkMode = value!;
+                  ThemeService().switchTheme();
+                });
+              },
+              decoration: inputDecoration(
+                isfocusBorder: true,
+              ),
+              name: 'isEditable',
+              title: Text(
+                'Allow others to edit',
                 style: settingSizes,
               ),
-              Switch(
-                value: isDarkMode,
-                onChanged: (value) {
-                  setState(() {
-                    isDarkMode = value;
-                    ThemeService().switchTheme();
-                  });
-                },
-              ),
-            ],
+            ),
           ),
           const SizedBox(
             height: 20,
@@ -246,6 +249,7 @@ class _SettingViewState extends State<SettingView> {
                     // Group id
 
                     nameTextBoxGlobal(
+                      context: context,
                       text: 'Group ID',
                       key: _groupSettingGroupIDFieldKey,
                       data: data.groupid.toString(),
@@ -254,6 +258,7 @@ class _SettingViewState extends State<SettingView> {
                     // Group Name
 
                     nameTextBoxGlobal(
+                      context: context,
                       text: 'Group Name',
                       key: _groupSettingGroupNameFieldKey,
                       data: data.groupname.toString(),
@@ -271,6 +276,7 @@ class _SettingViewState extends State<SettingView> {
                     // Created User
 
                     nameTextBoxGlobal(
+                      context: context,
                       text: 'Created by',
                       key: _groupSettingUserUidFieldKey,
                       data: data.useruid,
@@ -280,6 +286,7 @@ class _SettingViewState extends State<SettingView> {
                     // Date Created
 
                     nameTextBoxGlobal(
+                      context: context,
                       text: 'Date Created',
                       key: _groupSettingDateCreatedFieldKey,
                       data: data.datecreated.toString(),
