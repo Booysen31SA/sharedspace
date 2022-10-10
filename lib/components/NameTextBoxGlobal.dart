@@ -6,7 +6,7 @@ import 'package:sharedspace/configs/themes.dart';
 nameTextBoxGlobal({text, key, data, readOnly, name}) {
   return Container(
     margin: const EdgeInsets.only(top: 15, right: 15),
-    child: Row(
+    child: Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
@@ -14,7 +14,7 @@ nameTextBoxGlobal({text, key, data, readOnly, name}) {
           style: settingSizes,
         ),
         SizedBox(
-          width: 260,
+          width: MediaQuery.of(context).size.width / 0.5,
           child: FormBuilderTextField(
             readOnly: readOnly ?? false,
             key: key,

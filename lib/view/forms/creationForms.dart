@@ -183,6 +183,8 @@ class _CreationFormsState extends State<CreationForms> {
             ),
 
             // Description
+            //make height bigger so more space
+            // make textbox go to next line
             nameTextBoxGlobal(
               text: 'Description',
               key: _creationNoteDescriptionFieldKey,
@@ -191,13 +193,14 @@ class _CreationFormsState extends State<CreationForms> {
             ),
 
             // isEditable
+            // make switch instead
             Container(
               margin: const EdgeInsets.only(top: 15, right: 15),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Can other edit',
+                    'Allow others to edit',
                     style: settingSizes,
                   ),
                   SizedBox(
@@ -262,7 +265,7 @@ class _CreationFormsState extends State<CreationForms> {
                         }
                       },
                       child: const Text(
-                        'Create Group',
+                        'Create Note',
                         style: TextStyle(color: Colors.white),
                       ),
                     ),

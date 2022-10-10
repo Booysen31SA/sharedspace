@@ -85,7 +85,7 @@ class _SharedSpaceState extends State<SharedSpaceView> {
             else if (_selectedIndex == 1)
               {
                 Navigator.pushNamed(context, '/creation', arguments: {
-                  'creationtitle': 'Create Note',
+                  'creationtitle': 'Create a note',
                   'screen': 'note',
                   'groupid': arguments['groupid']
                 }),
