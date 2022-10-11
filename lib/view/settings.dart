@@ -160,9 +160,9 @@ class _SettingViewState extends State<SettingView> {
               decoration: inputDecoration(
                 isfocusBorder: true,
               ),
-              name: 'isEditable',
+              name: 'Dark Mode',
               title: Text(
-                'Allow others to edit',
+                'Dark mode',
                 style: settingSizes,
               ),
             ),
@@ -198,7 +198,7 @@ class _SettingViewState extends State<SettingView> {
                         Navigator.popAndPushNamed(context, '/');
                       },
                       child: const Text(
-                        'LogOut',
+                        'LOG OUT',
                         style: TextStyle(
                           color: Colors.red,
                         ),
