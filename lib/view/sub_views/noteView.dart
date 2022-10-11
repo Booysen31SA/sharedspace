@@ -16,6 +16,9 @@ class NoteView extends StatefulWidget {
 class _NoteViewState extends State<NoteView> {
   @override
   Widget build(BuildContext context) {
+
+    // change to use slideup panel to see if it could work
+    // https://pub.dev/packages/sliding_up_panel
     return Padding(
       padding: const EdgeInsets.all(15),
       child: Column(

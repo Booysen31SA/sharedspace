@@ -12,6 +12,9 @@ class NoteCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: const EdgeInsets.only(
+                        bottom: 20,
+                      ),
       padding: const EdgeInsets.all(18),
       width: MediaQuery.of(context).size.width / 0.5,
       decoration: BoxDecoration(
@@ -45,24 +48,35 @@ class NoteCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            createdBy!,
-            style: notesListHeadingStyle,
-          ),
+          // arrow that show up or down 
+
           Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(
-                'Title: ',
-                style: notesListHeadingStyle,
-              ),
+              // Text(
+              //   'Title: ',
+              //   style: notesListHeadingStyle,
+              // ),
               Text(
                 title!,
-                style: const TextStyle(
-                  color: Colors.white,
-                ),
+                style: notesListHeadingStyle,
               ),
             ],
           ),
+
+          Row(
+            children: [
+              Text(
+                'Created by: ',
+                style: notesListHeadingStyle,
+              ),
+            Text(
+            createdBy!,
+            style: notesListHeadingStyle,
+          ),
+            ]
+          ),
+          
           Row(
             children: [
               Text(
@@ -77,6 +91,7 @@ class NoteCard extends StatelessWidget {
               ),
             ],
           ),
+
         ],
       ),
     );
