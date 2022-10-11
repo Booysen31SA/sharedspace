@@ -28,11 +28,14 @@ Container colorPickerContainer({context, onTap, onChange, key}) {
   return Container(
     margin: const EdgeInsets.only(top: 15, right: 15),
     child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Text(
           'Change Colour',
           style: settingSizes,
+        ),
+        const SizedBox(
+          width: 20,
         ),
         GestureDetector(
           onTap: () {
@@ -44,7 +47,7 @@ Container colorPickerContainer({context, onTap, onChange, key}) {
             );
           },
           child: SizedBox(
-            width: MediaQuery.of(context).size.height / 5 ,
+            width: MediaQuery.of(context).size.height / 20,
             height: 40,
             child: Container(
               decoration: BoxDecoration(

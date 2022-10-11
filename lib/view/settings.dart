@@ -151,6 +151,7 @@ class _SettingViewState extends State<SettingView> {
             width: MediaQuery.of(context).size.width / 1.08,
             child: FormBuilderSwitch(
               //key: _creationNoteIsEditableFieldKey,
+              initialValue: isDarkMode,
               onChanged: (value) {
                 setState(() {
                   isDarkMode = value!;
@@ -263,14 +264,7 @@ class _SettingViewState extends State<SettingView> {
                       key: _groupSettingGroupNameFieldKey,
                       data: data.groupname.toString(),
                       readOnly: false,
-                    ),
-
-                    // Colour Picker
-                    colorPickerContainer(
-                      context: context,
-                      key: __groupSettingGroupColorFieldKey,
-                      onTap: changeColorOnTap,
-                      onChange: changeColor,
+                      isHidden: false,
                     ),
 
                     // Created User
@@ -280,6 +274,7 @@ class _SettingViewState extends State<SettingView> {
                       key: _groupSettingUserUidFieldKey,
                       data: data.useruid,
                       readOnly: true,
+                      isHidden: false,
                     ),
 
                     // Date Created
@@ -290,6 +285,14 @@ class _SettingViewState extends State<SettingView> {
                       data: data.datecreated.toString(),
                       readOnly: true,
                       isHidden: true,
+                    ),
+
+                    // Colour Picker
+                    colorPickerContainer(
+                      context: context,
+                      key: __groupSettingGroupColorFieldKey,
+                      onTap: changeColorOnTap,
+                      onChange: changeColor,
                     ),
 
                     Container(
@@ -404,6 +407,7 @@ class _SettingViewState extends State<SettingView> {
                       children: <Widget>[
                         // Group id
                         nameTextBox(
+                          context: context,
                           text: 'Group ID',
                           key: _profileGroupSettingGroupIDFieldKey,
                           data: document.groupid.toString(),
@@ -413,6 +417,7 @@ class _SettingViewState extends State<SettingView> {
 
                         // uid
                         nameTextBox(
+                          context: context,
                           text: 'Unique ID',
                           key: _profileGroupSettingUidFieldKey,
                           data: document.uid.toString(),
@@ -422,25 +427,40 @@ class _SettingViewState extends State<SettingView> {
 
                         // email
                         nameTextBox(
+                          context: context,
                           text: 'Email',
                           key: _profileGroupSettingEmailFieldKey,
                           data: document.email.toString(),
                           readOnly: true,
-                          isHidden: true,
+                          isHidden: false,
                         ),
 
                         // Firstname
                         nameTextBox(
+                          context: context,
                           text: 'First Name',
                           key: _profileGroupSettingFirstNameFieldKey,
                           data: document.firstname.toString(),
+                          isHidden: false,
                         ),
 
                         // Surname
                         nameTextBox(
+                          context: context,
                           text: 'Surname',
                           key: _profileGroupSettingSurnameFieldKey,
                           data: document.surname.toString(),
+                          isHidden: false,
+                        ),
+
+                        // Date Created
+                        nameTextBox(
+                          context: context,
+                          text: 'Date Created',
+                          key: _profileGroupSettingDateCreatedFieldKey,
+                          data: document.dateCreated.toString(),
+                          readOnly: true,
+                          isHidden: false,
                         ),
 
                         // Colour Picker
@@ -449,15 +469,6 @@ class _SettingViewState extends State<SettingView> {
                           key: __groupSettingGroupColorFieldKey,
                           onTap: changeColorOnTap,
                           onChange: changeColor,
-                        ),
-
-                        // Date Created
-                        nameTextBox(
-                          text: 'Date Created',
-                          key: _profileGroupSettingDateCreatedFieldKey,
-                          data: document.dateCreated.toString(),
-                          readOnly: true,
-                          isHidden: true,
                         ),
 
                         Container(
@@ -536,40 +547,36 @@ class _SettingViewState extends State<SettingView> {
     );
   }
 
-  nameTextBox({text, key, data, readOnly, isHidden = false}) {
-    return Container(
-      margin: const EdgeInsets.only(top: 15, right: 15),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            text,
-            style: settingSizes,
-          ),
-          SizedBox(
-            width: 260,
-            child: FormBuilderTextField(
-              readOnly: readOnly ?? false,
-              key: key,
-              name: text,
-              initialValue: data,
-              decoration: inputDecoration(
-                borderColor: primaryClr,
-                isfocusBorder: true,
-              ),
-              validator: FormBuilderValidators.compose([
-                FormBuilderValidators.required(),
-              ]),
-              builder: (FormFieldState<dynamic> field) {
-                //Empty widget
-                if(isHidden){
-                   return const SizedBox.shrink();
-                }
-               
-              }
+  nameTextBox({context, text, key, data, readOnly, isHidden}) {
+    return Visibility(
+      visible: !isHidden,
+      child: Container(
+        margin: const EdgeInsets.only(top: 15, right: 15),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              text,
+              style: settingSizes,
             ),
-          ),
-        ],
+            SizedBox(
+              width: MediaQuery.of(context).size.width / 0.5,
+              child: FormBuilderTextField(
+                readOnly: readOnly ?? false,
+                key: key,
+                name: text,
+                initialValue: data,
+                decoration: inputDecoration(
+                  borderColor: primaryClr,
+                  isfocusBorder: true,
+                ),
+                validator: FormBuilderValidators.compose([
+                  FormBuilderValidators.required(),
+                ]),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
