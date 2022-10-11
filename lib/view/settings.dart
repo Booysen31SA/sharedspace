@@ -323,15 +323,14 @@ class _SettingViewState extends State<SettingView> {
 
                                     SharedSpaceGroup sharedGroup =
                                         SharedSpaceGroup(
-                                            groupid: fielddata['Group ID'],
-                                            groupname: fielddata['Group Name'],
-                                            groupcolor:
-                                                __groupSettingGroupColorFieldKey
-                                                    .toString(),
-                                            useruid: fielddata['Created by'],
-                                            datecreated:
-                                                fielddata['Date Created']
-                                                    .toString());
+                                      groupid: data.groupid.toString(),
+                                      groupname: fielddata['Group Name'],
+                                      groupcolor:
+                                          __groupSettingGroupColorFieldKey
+                                              .toString(),
+                                      useruid: data.useruid,
+                                      datecreated: data.datecreated.toString(),
+                                    );
 
                                     var result = await updateGroupSetting(
                                         id: data.updateid, data: sharedGroup);
@@ -496,15 +495,14 @@ class _SettingViewState extends State<SettingView> {
                                     .currentState!.value;
 
                                 UserModel userModel = UserModel(
-                                  uid: fielddata['Unique ID'],
+                                  uid: document.uid.toString(),
                                   firstname: fielddata['First Name'],
                                   surname: fielddata['Surname'],
-                                  dateCreated:
-                                      fielddata['Date Created'].toString(),
+                                  dateCreated: document.dateCreated.toString(),
                                   color: __groupSettingGroupColorFieldKey
                                       .toString(),
-                                  groupid: fielddata['Group ID'],
-                                  email: fielddata['Email'],
+                                  groupid: document.groupid.toString(),
+                                  email: document.email.toString(),
                                 );
 
                                 var result = await updateProfileSetting(
