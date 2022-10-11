@@ -44,7 +44,7 @@ Container colorPickerContainer({context, onTap, onChange, key}) {
             );
           },
           child: SizedBox(
-            width: 260,
+            width: MediaQuery.of(context).size.height / 5 ,
             height: 40,
             child: Container(
               decoration: BoxDecoration(

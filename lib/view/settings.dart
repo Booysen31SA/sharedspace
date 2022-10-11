@@ -247,17 +247,17 @@ class _SettingViewState extends State<SettingView> {
                 child: Column(
                   children: <Widget>[
                     // Group id
-
-                    nameTextBoxGlobal(
+                    nameTextBox(
                       context: context,
                       text: 'Group ID',
                       key: _groupSettingGroupIDFieldKey,
                       data: data.groupid.toString(),
                       readOnly: true,
+                      isHidden: true,
                     ),
-                    // Group Name
 
-                    nameTextBoxGlobal(
+                    // Group Name
+                    nameTextBox(
                       context: context,
                       text: 'Group Name',
                       key: _groupSettingGroupNameFieldKey,
@@ -274,8 +274,7 @@ class _SettingViewState extends State<SettingView> {
                     ),
 
                     // Created User
-
-                    nameTextBoxGlobal(
+                    nameTextBox(
                       context: context,
                       text: 'Created by',
                       key: _groupSettingUserUidFieldKey,
@@ -284,13 +283,13 @@ class _SettingViewState extends State<SettingView> {
                     ),
 
                     // Date Created
-
-                    nameTextBoxGlobal(
+                    nameTextBox(
                       context: context,
                       text: 'Date Created',
                       key: _groupSettingDateCreatedFieldKey,
                       data: data.datecreated.toString(),
                       readOnly: true,
+                      isHidden: true,
                     ),
 
                     Container(
@@ -409,6 +408,7 @@ class _SettingViewState extends State<SettingView> {
                           key: _profileGroupSettingGroupIDFieldKey,
                           data: document.groupid.toString(),
                           readOnly: true,
+                          isHidden: true,
                         ),
 
                         // uid
@@ -417,6 +417,7 @@ class _SettingViewState extends State<SettingView> {
                           key: _profileGroupSettingUidFieldKey,
                           data: document.uid.toString(),
                           readOnly: true,
+                          isHidden: true,
                         ),
 
                         // email
@@ -425,6 +426,7 @@ class _SettingViewState extends State<SettingView> {
                           key: _profileGroupSettingEmailFieldKey,
                           data: document.email.toString(),
                           readOnly: true,
+                          isHidden: true,
                         ),
 
                         // Firstname
@@ -455,6 +457,7 @@ class _SettingViewState extends State<SettingView> {
                           key: _profileGroupSettingDateCreatedFieldKey,
                           data: document.dateCreated.toString(),
                           readOnly: true,
+                          isHidden: true,
                         ),
 
                         Container(
@@ -533,7 +536,7 @@ class _SettingViewState extends State<SettingView> {
     );
   }
 
-  nameTextBox({text, key, data, readOnly}) {
+  nameTextBox({text, key, data, readOnly, isHidden = false}) {
     return Container(
       margin: const EdgeInsets.only(top: 15, right: 15),
       child: Row(
@@ -557,6 +560,13 @@ class _SettingViewState extends State<SettingView> {
               validator: FormBuilderValidators.compose([
                 FormBuilderValidators.required(),
               ]),
+              builder: (FormFieldState<dynamic> field) {
+                //Empty widget
+                if(isHidden){
+                   return const SizedBox.shrink();
+                }
+               
+              }
             ),
           ),
         ],
