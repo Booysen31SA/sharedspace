@@ -13,8 +13,8 @@ class NoteCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(
-                        bottom: 20,
-                      ),
+        bottom: 20,
+      ),
       padding: const EdgeInsets.all(18),
       width: MediaQuery.of(context).size.width / 0.5,
       decoration: BoxDecoration(
@@ -48,10 +48,11 @@ class NoteCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // arrow that show up or down 
+          // arrow that show up or down
 
           Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            //crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               // Text(
               //   'Title: ',
@@ -59,24 +60,26 @@ class NoteCard extends StatelessWidget {
               // ),
               Text(
                 title!,
-                style: notesListHeadingStyle,
+                style: notesStyle,
               ),
             ],
           ),
 
-          Row(
-            children: [
-              Text(
-                'Created by: ',
-                style: notesListHeadingStyle,
-              ),
+          const SizedBox(
+            height: 10,
+          ),
+
+          Row(children: [
             Text(
-            createdBy!,
-            style: notesListHeadingStyle,
-          ),
-            ]
-          ),
-          
+              'Created by: ',
+              style: notesListHeadingStyle,
+            ),
+            Text(
+              createdBy!,
+              style: notesListHeadingStyle,
+            ),
+          ]),
+
           Row(
             children: [
               Text(
@@ -91,7 +94,6 @@ class NoteCard extends StatelessWidget {
               ),
             ],
           ),
-
         ],
       ),
     );

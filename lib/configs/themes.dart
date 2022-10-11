@@ -72,6 +72,14 @@ TextStyle get notesListHeadingStyle {
   );
 }
 
+TextStyle get notesStyle {
+  return const TextStyle(
+    fontSize: 25,
+    fontWeight: FontWeight.bold,
+    color: Colors.white,
+  );
+}
+
 TextStyle get settingSizes {
   return const TextStyle(
     fontSize: 20,
