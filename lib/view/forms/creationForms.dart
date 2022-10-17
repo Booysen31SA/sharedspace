@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,7 @@ import 'package:sharedspace/components/loading.dart';
 import 'package:sharedspace/configs/themes.dart';
 import 'package:sharedspace/services/functions.dart';
 import 'package:sharedspace/util/convertStringToColor.dart';
+import 'package:flutter_quill/flutter_quill.dart' as quill;
 
 class CreationForms extends StatefulWidget {
   const CreationForms({Key? key}) : super(key: key);
@@ -31,6 +33,7 @@ class _CreationFormsState extends State<CreationForms> {
   final _creationNoteIsEditableFieldKey = GlobalKey<FormBuilderState>();
 
   //general
+  final quill.QuillController _controller = quill.QuillController.basic();
   var _groupSettingGroupColorFieldKey;
   bool isReloading = false;
   bool isLoading = false;
@@ -64,7 +67,7 @@ class _CreationFormsState extends State<CreationForms> {
       ),
       body: SafeArea(
         child: FormBuilder(
-            child: Column(
+            child: Stack(
           children: <Widget>[
             returnScreen(
                 arguments['screen'], firebaseUser, arguments['groupid'])
@@ -168,102 +171,132 @@ class _CreationFormsState extends State<CreationForms> {
   createNoteForm(firebaseUser, groupid) {
     return Container(
       padding: const EdgeInsets.only(
-        top: 15,
+        bottom: 15,
         left: 15,
       ),
       child: FormBuilder(
         key: _creationNoteFormKey,
-        child: Column(
-          children: <Widget>[
-            //Title
-            nameTextBoxGlobal(
-              context: context,
-              text: 'Title',
-              key: _creationNoteTitleFieldKey,
-              data: null,
-              readOnly: false,
-            ),
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height -
+              (Header(appBar: AppBar()).preferredSize.height) -
+              MediaQuery.of(context).padding.top,
+          child: Column(
+            //mainAxisSize: MainAxisSize.max,
+            // crossAxisAlignment: CrossAxisAlignment.center,
+            // mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              //Title
+              nameTextBoxGlobal(
+                context: context,
+                text: 'Title',
+                key: _creationNoteTitleFieldKey,
+                data: null,
+                readOnly: false,
+              ),
 
-            // Description
-            //make height bigger so more space
-            // make textbox go to next line
-            nameTextBoxGlobal(
-              context: context,
-              text: 'Description',
-              key: _creationNoteDescriptionFieldKey,
-              data: null,
-              readOnly: false,
-              description: true,
-              validate: false,
-            ),
-
-            // isEditable
-            // make switch instead
-            Container(
-              margin: const EdgeInsets.only(top: 15, right: 15),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // Text(
-                  //   'Allow others to edit',
-                  //   style: settingSizes,
-                  // ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width / 1.08,
-                    child: FormBuilderSwitch(
-                      key: _creationNoteIsEditableFieldKey,
-                      decoration: inputDecoration(
-                        borderColor: primaryClr,
-                        isfocusBorder: true,
-                      ),
-                      name: 'isEditable',
-                      title: const Text('Allow others to edit'),
+              // Description
+              //make height bigger so more space
+              // make textbox go to next line
+              // nameTextBoxGlobal(
+              //   context: context,
+              //   text: 'Description',
+              //   key: _creationNoteDescriptionFieldKey,
+              //   data: null,
+              //   readOnly: false,
+              //   description: true,
+              //   validate: false,
+              // ),
+              quill.QuillToolbar.basic(controller: _controller),
+              Expanded(
+                child: Container(
+                  margin: const EdgeInsets.only(
+                    right: 15,
+                  ),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: primaryClr),
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(10.0),
                     ),
                   ),
-                ],
+                  child: quill.QuillEditor.basic(
+                    controller: _controller,
+                    readOnly: false, // true for view only mode
+                  ),
+                ),
               ),
-            ),
 
-            //button
-            Container(
-              margin: const EdgeInsets.only(
-                top: 20,
-                right: 15,
-              ),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10.0),
-                color: primaryClr,
-              ),
-              width: MediaQuery.of(context).size.width * 1,
-              child: isLoading
-                  ? const CircularProgressIndicator()
-                  : MaterialButton(
-                      onPressed: () async {
-                        final validateSuccess = _creationNoteFormKey
-                            .currentState!
-                            .saveAndValidate();
-                        if (validateSuccess) {
-                          var data = _creationNoteFormKey.currentState!.value;
-
-                          // call create note
-                          //print(data);
-                          var result = createNote(
-                            context: context,
-                            groupid: groupid,
-                            usercreated: firebaseUser,
-                            title: data['Title'],
-                            description: data['Description'],
-                            isEditable: data['isEditable'],
-                          );
-                        }
-                      },
-                      child: const Text(
-                        'CREATE NOTE',
-                        style: TextStyle(color: Colors.white),
+              // isEditable
+              // make switch instead
+              Container(
+                margin: const EdgeInsets.only(
+                  top: 15,
+                  right: 15,
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    // Text(
+                    //   'Allow others to edit',
+                    //   style: settingSizes,
+                    // ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width / 1.08,
+                      child: FormBuilderSwitch(
+                        key: _creationNoteIsEditableFieldKey,
+                        decoration: inputDecoration(
+                          borderColor: primaryClr,
+                          isfocusBorder: true,
+                        ),
+                        name: 'isEditable',
+                        title: const Text('Allow others to edit'),
                       ),
                     ),
-            )
-          ],
+                  ],
+                ),
+              ),
+
+              //button
+              Container(
+                margin: const EdgeInsets.only(
+                  top: 20,
+                  right: 15,
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.0),
+                  color: primaryClr,
+                ),
+                width: MediaQuery.of(context).size.width * 1,
+                child: isLoading
+                    ? const CircularProgressIndicator()
+                    : MaterialButton(
+                        onPressed: () async {
+                          final validateSuccess = _creationNoteFormKey
+                              .currentState!
+                              .saveAndValidate();
+                          if (validateSuccess) {
+                            var data = _creationNoteFormKey.currentState!.value;
+
+                            // call create note
+                            //print(data);
+                            var result = createNote(
+                              context: context,
+                              groupid: groupid,
+                              usercreated: firebaseUser,
+                              title: data['Title'],
+                              description: jsonEncode(
+                                  _controller.document.toDelta().toJson()),
+                              isEditable: data['isEditable'],
+                            );
+                          }
+                        },
+                        child: const Text(
+                          'CREATE NOTE',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+              )
+            ],
+          ),
         ),
       ),
     );

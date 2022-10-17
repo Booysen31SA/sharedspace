@@ -44,7 +44,8 @@ dependencies:
   intl: ^0.17.0
   uuid: ^3.0.6
   modal_bottom_sheet: ^2.1.2
-  
+  flutter_quill: 6.0.8+1
+
   # plugins to manage state of app and database
   provider: ^6.0.3
   get:

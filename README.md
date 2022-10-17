@@ -23,4 +23,9 @@ arch -x86_64 pod install
 
 # Todo
 
-changing routes to pushNamed and not replaced
+To read json for description
+
+var myJSON = jsonDecode(incomingJSONText);
+_controller = QuillController(
+          document: Document.fromJson(myJSON),
+          selection: TextSelection.collapsed(offset: 0));

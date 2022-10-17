@@ -86,7 +86,7 @@ createNote(
       groupid: groupid,
       usercreated: '${userDetails[0].firstname} ${userDetails[0].surname}',
       title: title,
-      description: description,
+      description: description.toString(),
       timecreated: DateFormat('yyy-MM-dd hh:mm:ss')
           .parse(DateTime.now().toString())
           .toString(),
