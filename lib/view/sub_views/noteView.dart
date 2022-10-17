@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sharedspace/components/header.dart';
 import 'package:sharedspace/components/loading.dart';
 import 'package:sharedspace/components/noteCard.dart';
 import 'package:sharedspace/configs/themes.dart';
@@ -8,7 +9,9 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class NoteView extends StatefulWidget {
   final String groupid;
-  const NoteView({Key? key, required this.groupid}) : super(key: key);
+  final double height;
+  const NoteView({Key? key, required this.groupid, required this.height})
+      : super(key: key);
 
   @override
   State<NoteView> createState() => _NoteViewState();
@@ -17,8 +20,6 @@ class NoteView extends StatefulWidget {
 class _NoteViewState extends State<NoteView> {
   @override
   Widget build(BuildContext context) {
-    // change to use slideup panel to see if it could work
-    // https://pub.dev/packages/sliding_up_panel
     return Padding(
       padding: const EdgeInsets.all(15),
       child: Column(
@@ -53,22 +54,26 @@ class _NoteViewState extends State<NoteView> {
                       child: Text('No notes available'),
                     );
                   }
-                  return ListView(
-                    shrinkWrap: true,
-                    children: snapshot.data.docs.map<Widget>(
-                      (details) {
-                        return GestureDetector(
-                          onTap: () {
-                            // popupModal();
-                          },
-                          child: NoteCard(
-                            title: details['title'],
-                            createdBy: details['usercreated'],
-                            created: details['timecreated'],
-                          ),
-                        );
-                      },
-                    ).toList(),
+                  return SizedBox(
+                    height: widget.height,
+                    child: ListView(
+                      shrinkWrap: true,
+                      physics: const ScrollPhysics(),
+                      children: snapshot.data.docs.map<Widget>(
+                        (details) {
+                          return GestureDetector(
+                            onTap: () {
+                              // popupModal();
+                            },
+                            child: NoteCard(
+                              title: details['title'],
+                              createdBy: details['usercreated'],
+                              created: details['timecreated'],
+                            ),
+                          );
+                        },
+                      ).toList(),
+                    ),
                   );
                 }
 

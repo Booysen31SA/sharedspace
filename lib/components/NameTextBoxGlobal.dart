@@ -25,6 +25,7 @@ nameTextBoxGlobal(
         SizedBox(
           width: MediaQuery.of(context).size.width / 0.5,
           child: FormBuilderTextField(
+            textInputAction: TextInputAction.next,
             maxLines: description ? 5 : 1,
             readOnly: readOnly ?? false,
             key: key,

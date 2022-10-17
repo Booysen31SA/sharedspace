@@ -212,6 +212,7 @@ class _CreationFormsState extends State<CreationForms> {
                   margin: const EdgeInsets.only(
                     right: 15,
                   ),
+                  padding: const EdgeInsets.all(15),
                   decoration: BoxDecoration(
                     border: Border.all(color: primaryClr),
                     borderRadius: const BorderRadius.all(
