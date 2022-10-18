@@ -10,6 +10,7 @@ import 'package:sharedspace/services/services.dart';
 import 'package:sharedspace/view/auth/registerView.dart';
 import 'package:sharedspace/view/auth/signInView.dart';
 import 'package:sharedspace/view/forms/creationForms.dart';
+import 'package:sharedspace/view/forms/viewNotes.dart';
 import 'package:sharedspace/view/homeView.dart';
 import 'package:sharedspace/view/loadingView.dart';
 import 'package:sharedspace/view/settings.dart';
@@ -63,7 +64,8 @@ class MyApp extends StatelessWidget {
           '/home': (context) => const HomeView(),
           '/settings': (context) => const SettingView(),
           '/sharedspace': (context) => const SharedSpaceView(),
-          '/creation': (context) => const CreationForms()
+          '/creation': (context) => const CreationForms(),
+          '/viewnote': (context) => const ViewNotes()
         },
       ),
     );

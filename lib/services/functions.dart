@@ -43,6 +43,14 @@ Stream<QuerySnapshot> getGroupNotes(groupid) {
   return FirebaseFirestore.instance
       .collection('Notes')
       .where('groupid', isEqualTo: groupid)
+      .orderBy('timecreated', descending: true)
+      .snapshots();
+}
+
+Stream<QuerySnapshot> getNote(key) {
+  return FirebaseFirestore.instance
+      .collection('Notes')
+      .where('key', isEqualTo: key)
       .snapshots();
 }
 

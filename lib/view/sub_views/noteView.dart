@@ -6,6 +6,7 @@ import 'package:sharedspace/components/noteCard.dart';
 import 'package:sharedspace/configs/themes.dart';
 import 'package:sharedspace/services/functions.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:sharedspace/view/forms/viewNotes.dart';
 
 class NoteView extends StatefulWidget {
   final String groupid;
@@ -63,7 +64,12 @@ class _NoteViewState extends State<NoteView> {
                         (details) {
                           return GestureDetector(
                             onTap: () {
-                              // popupModal();
+                              Navigator.pushNamed(context, '/viewnote',
+                                  arguments: {
+                                    'notekey': details['key'],
+                                    'noteTitle': details['title'],
+                                    'height': widget.height,
+                                  });
                             },
                             child: NoteCard(
                               title: details['title'],

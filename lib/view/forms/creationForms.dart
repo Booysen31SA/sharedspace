@@ -206,7 +206,16 @@ class _CreationFormsState extends State<CreationForms> {
               //   description: true,
               //   validate: false,
               // ),
-              quill.QuillToolbar.basic(controller: _controller),
+              Padding(
+                padding: const EdgeInsets.only(
+                  top: 15,
+                  right: 15,
+                ),
+                child: quill.QuillToolbar.basic(
+                  controller: _controller,
+                  multiRowsDisplay: false,
+                ),
+              ),
               Expanded(
                 child: Container(
                   margin: const EdgeInsets.only(
