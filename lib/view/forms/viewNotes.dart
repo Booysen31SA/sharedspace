@@ -143,6 +143,7 @@ class _ViewNotesState extends State<ViewNotes> {
                                       width: MediaQuery.of(context).size.width /
                                           1.17,
                                       child: FormBuilderSwitch(
+                                        initialValue: note['isEditable'],
                                         key: _viewNoteIsEditableFieldKey,
                                         decoration: inputDecoration(
                                           borderColor: primaryClr,
