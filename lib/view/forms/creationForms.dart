@@ -63,7 +63,32 @@ class _CreationFormsState extends State<CreationForms> {
             color: primaryClr,
           ),
         ),
-        suffixIcon: null,
+        suffixIcon: GestureDetector(
+          onTap: () {
+            final validateSuccess =
+                _creationNoteFormKey.currentState!.saveAndValidate();
+
+            if (validateSuccess) {
+              var data = _creationNoteFormKey.currentState!.value;
+
+              // call create note
+              //print(data);
+              var result = createNote(
+                context: context,
+                groupid: arguments['groupid'],
+                usercreated: firebaseUser,
+                title: data['Title'],
+                description:
+                    jsonEncode(_controller.document.toDelta().toJson()),
+                isEditable: data['isEditable'],
+              );
+            }
+          },
+          child: const Icon(
+            Icons.check,
+            color: primaryClr,
+          ),
+        ),
       ),
       body: SafeArea(
         child: FormBuilder(
@@ -174,141 +199,93 @@ class _CreationFormsState extends State<CreationForms> {
         bottom: 15,
         left: 15,
       ),
-      child: FormBuilder(
-        key: _creationNoteFormKey,
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height -
-              (Header(appBar: AppBar()).preferredSize.height) -
-              MediaQuery.of(context).padding.top,
-          child: Column(
-            //mainAxisSize: MainAxisSize.max,
-            // crossAxisAlignment: CrossAxisAlignment.center,
-            // mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              //Title
-              nameTextBoxGlobal(
-                context: context,
-                text: 'Title',
-                key: _creationNoteTitleFieldKey,
-                data: null,
-                readOnly: false,
-              ),
-
-              // Description
-              //make height bigger so more space
-              // make textbox go to next line
-              // nameTextBoxGlobal(
-              //   context: context,
-              //   text: 'Description',
-              //   key: _creationNoteDescriptionFieldKey,
-              //   data: null,
-              //   readOnly: false,
-              //   description: true,
-              //   validate: false,
-              // ),
-              Padding(
-                padding: const EdgeInsets.only(
-                  top: 15,
-                  right: 15,
-                ),
-                child: quill.QuillToolbar.basic(
-                  controller: _controller,
-                  multiRowsDisplay: false,
-                ),
-              ),
-              Expanded(
-                child: Container(
-                  margin: const EdgeInsets.only(
-                    right: 15,
-                  ),
-                  padding: const EdgeInsets.all(15),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: primaryClr),
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(10.0),
+      height: MediaQuery.of(context).size.height -
+          (Header(appBar: AppBar()).preferredSize.height) -
+          MediaQuery.of(context).padding.top,
+      child: ListView.builder(
+          itemCount: 1,
+          shrinkWrap: true,
+          physics: const ScrollPhysics(),
+          itemBuilder: (context, index) {
+            return FormBuilder(
+              key: _creationNoteFormKey,
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height -
+                    (Header(appBar: AppBar()).preferredSize.height) -
+                    MediaQuery.of(context).padding.top,
+                child: Column(
+                  children: <Widget>[
+                    nameTextBoxGlobal(
+                      context: context,
+                      text: 'Title',
+                      key: _creationNoteTitleFieldKey,
+                      data: null,
+                      readOnly: false,
                     ),
-                  ),
-                  child: quill.QuillEditor.basic(
-                    controller: _controller,
-                    readOnly: false, // true for view only mode
-                  ),
-                ),
-              ),
 
-              // isEditable
-              // make switch instead
-              Container(
-                margin: const EdgeInsets.only(
-                  top: 15,
-                  right: 15,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    // Text(
-                    //   'Allow others to edit',
-                    //   style: settingSizes,
-                    // ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width / 1.08,
-                      child: FormBuilderSwitch(
-                        key: _creationNoteIsEditableFieldKey,
-                        decoration: inputDecoration(
-                          borderColor: primaryClr,
-                          isfocusBorder: true,
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        top: 15,
+                        right: 15,
+                      ),
+                      child: quill.QuillToolbar.basic(
+                        controller: _controller,
+                        multiRowsDisplay: false,
+                      ),
+                    ),
+                    Expanded(
+                      child: Container(
+                        margin: const EdgeInsets.only(
+                          right: 15,
                         ),
-                        name: 'isEditable',
-                        title: const Text('Allow others to edit'),
+                        padding: const EdgeInsets.all(15),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: primaryClr),
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(10.0),
+                          ),
+                        ),
+                        child: quill.QuillEditor.basic(
+                          controller: _controller,
+                          readOnly: false, // true for view only mode
+                        ),
+                      ),
+                    ),
+
+                    //             // isEditable
+                    //             // make switch instead
+                    Container(
+                      margin: const EdgeInsets.only(
+                        top: 15,
+                        right: 15,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          // Text(
+                          //   'Allow others to edit',
+                          //   style: settingSizes,
+                          // ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width / 1.08,
+                            child: FormBuilderSwitch(
+                              key: _creationNoteIsEditableFieldKey,
+                              decoration: inputDecoration(
+                                borderColor: primaryClr,
+                                isfocusBorder: true,
+                              ),
+                              name: 'isEditable',
+                              title: const Text('Allow others to edit'),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
                 ),
               ),
-
-              //button
-              Container(
-                margin: const EdgeInsets.only(
-                  top: 20,
-                  right: 15,
-                ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10.0),
-                  color: primaryClr,
-                ),
-                width: MediaQuery.of(context).size.width * 1,
-                child: isLoading
-                    ? const CircularProgressIndicator()
-                    : MaterialButton(
-                        onPressed: () async {
-                          final validateSuccess = _creationNoteFormKey
-                              .currentState!
-                              .saveAndValidate();
-                          if (validateSuccess) {
-                            var data = _creationNoteFormKey.currentState!.value;
-
-                            // call create note
-                            //print(data);
-                            var result = createNote(
-                              context: context,
-                              groupid: groupid,
-                              usercreated: firebaseUser,
-                              title: data['Title'],
-                              description: jsonEncode(
-                                  _controller.document.toDelta().toJson()),
-                              isEditable: data['isEditable'],
-                            );
-                          }
-                        },
-                        child: const Text(
-                          'CREATE NOTE',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-              )
-            ],
-          ),
-        ),
-      ),
+            );
+          }),
     );
   }
 
