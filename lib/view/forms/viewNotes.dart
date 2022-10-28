@@ -1,9 +1,11 @@
 import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:provider/provider.dart';
 import 'package:sharedspace/components/NameTextBoxGlobal.dart';
 import 'package:sharedspace/components/header.dart';
 import 'package:sharedspace/components/loading.dart';
@@ -21,6 +23,8 @@ class ViewNotes extends StatefulWidget {
 }
 
 // Reading of Note
+var noteData = null;
+var noteID = null;
 final _viewNoteFormKey = GlobalKey<FormBuilderState>();
 final _viewNoteTitleFieldKey = GlobalKey<FormBuilderState>();
 final _viewNoteIsEditableFieldKey = GlobalKey<FormBuilderState>();
@@ -31,6 +35,7 @@ quill.QuillController _controller = quill.QuillController.basic();
 class _ViewNotesState extends State<ViewNotes> {
   @override
   Widget build(BuildContext context) {
+    final firebaseUser = context.watch<User?>();
     final arguments = (ModalRoute.of(context)?.settings.arguments ??
         <String, dynamic>{}) as Map;
 
@@ -39,6 +44,7 @@ class _ViewNotesState extends State<ViewNotes> {
         appBar: AppBar(),
         prefixIcon: GestureDetector(
           onTap: () => {
+            FocusScope.of(context).unfocus(),
             Navigator.pop(context),
           },
           child: Icon(backArrow, color: primaryClr),
@@ -50,7 +56,41 @@ class _ViewNotesState extends State<ViewNotes> {
             color: primaryClr,
           ),
         ),
-        suffixIcon: const Icon(Icons.check, color: primaryClr),
+        suffixIcon: GestureDetector(
+          onTap: () async {
+            final validateSuccess =
+                _viewNoteFormKey.currentState!.saveAndValidate();
+            if (validateSuccess) {
+              var data = _viewNoteFormKey.currentState!.value;
+
+              var result = await updateNote(
+                context: context,
+                id: noteData.id,
+                key: noteData['key'],
+                groupid: noteData['groupid'],
+                usercreated: noteData['usercreated'],
+                title: data['Title'],
+                description:
+                    jsonEncode(_controller.document.toDelta().toJson()),
+                timecreated: noteData['timecreated'],
+                isEditable: data['isEditable'],
+              );
+
+              if (!result) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Failed, Please try again'),
+                  ),
+                );
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Sucess!')),
+                );
+              }
+            }
+          },
+          child: const Icon(Icons.check, color: primaryClr),
+        ),
       ),
       body: SafeArea(
         child: Padding(
@@ -78,6 +118,8 @@ class _ViewNotesState extends State<ViewNotes> {
                     shrinkWrap: true,
                     physics: const ScrollPhysics(),
                     children: snapshot.data.docs.map<Widget>((note) {
+                      noteData = note;
+                      noteID = note.id;
                       var json = jsonDecode(note['description']);
                       _controller = quill.QuillController(
                         document: quill.Document.fromJson(json),

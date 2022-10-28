@@ -82,7 +82,13 @@ getSharedSpaceDetailsByGroupId(String? groupid) async {
 }
 
 createNote(
-    {context, groupid, usercreated, title, description, isEditable}) async {
+    {context,
+    key,
+    groupid,
+    usercreated,
+    title,
+    description,
+    isEditable}) async {
   var keyUuid = uuid.v1();
   var isImportant = false;
 
@@ -113,6 +119,37 @@ createNote(
     return false;
   }
   //timecreated
+}
+
+updateNote(
+    {context,
+    id,
+    key,
+    groupid,
+    usercreated,
+    title,
+    description,
+    timecreated,
+    isEditable}) async {
+  try {
+    //var userDetails = await getUserDetailsFuture(usercreated);
+
+    NoteModel note = NoteModel(
+      key: key,
+      groupid: groupid,
+      usercreated: usercreated,
+      title: title,
+      description: description.toString(),
+      timecreated: timecreated,
+      isEditable: isEditable,
+    );
+
+    var result = await noteDBS.updateData(id, note.toMap());
+    return true;
+  } catch (error) {
+    print(error);
+    return false;
+  }
 }
 
 createSharedSpaceGroup({context, groupname, groupcolor, useruid}) async {
