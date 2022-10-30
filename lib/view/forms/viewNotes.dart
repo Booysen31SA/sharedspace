@@ -24,7 +24,6 @@ class ViewNotes extends StatefulWidget {
 
 // Reading of Note
 var noteData = null;
-var noteID = null;
 final _viewNoteFormKey = GlobalKey<FormBuilderState>();
 final _viewNoteTitleFieldKey = GlobalKey<FormBuilderState>();
 final _viewNoteIsEditableFieldKey = GlobalKey<FormBuilderState>();
@@ -119,7 +118,6 @@ class _ViewNotesState extends State<ViewNotes> {
                     physics: const ScrollPhysics(),
                     children: snapshot.data.docs.map<Widget>((note) {
                       noteData = note;
-                      noteID = note.id;
                       var json = jsonDecode(note['description']);
                       _controller = quill.QuillController(
                         document: quill.Document.fromJson(json),

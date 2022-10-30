@@ -14,3 +14,16 @@ class ThemeService {
     _saveThemeToBox(!_loadThemeFromBox());
   }
 }
+
+class DateTimeService {
+  final _box = GetStorage();
+  final _key = 'selectedDate';
+  _saveDateTimeToBox(DateTime selectedDate) => _box.write(_key, selectedDate);
+
+  DateTime _loadDateTimeToBox() => _box.read(_key) ?? DateTime.now();
+  DateTime get date => _loadDateTimeToBox();
+
+  void changeSelectedDate(DateTime selectedDate) {
+    _saveDateTimeToBox(selectedDate);
+  }
+}
