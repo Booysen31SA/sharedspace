@@ -35,6 +35,7 @@ class _CalendarViewState extends State<CalendarView> {
             return SizedBox(
               height: height,
               child: TableCalendar(
+                availableGestures: AvailableGestures.horizontalSwipe,
                 shouldFillViewport: true,
                 focusedDay: _focusedDay,
                 firstDay: DateTime(2022),
