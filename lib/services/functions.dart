@@ -54,6 +54,13 @@ Stream<QuerySnapshot> getNote(key) {
       .snapshots();
 }
 
+Stream<QuerySnapshot> getTableCalenderEvents(groupid) {
+  return FirebaseFirestore.instance
+      .collection('TableCalenderEvents')
+      .where('groupid', isEqualTo: groupid)
+      .snapshots();
+}
+
 getUserDetailsFuture(firebaseUser) async {
   List<UserModel> groupList = [];
   var data = await userDBS

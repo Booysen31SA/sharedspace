@@ -32,7 +32,16 @@ class _SharedSpaceState extends State<SharedSpaceView> {
     //print(arguments['groupid']);
 
     List<Widget> _pages = <Widget>[
-      const CalendarView(),
+      SafeArea(
+        child: CalendarView(
+            groupid: arguments['groupid'],
+            height: (MediaQuery.of(context).size.height) -
+                (Header(appBar: AppBar()).preferredSize.height) -
+                (MediaQuery.of(context).padding.top) -
+                (kBottomNavigationBarHeight) -
+                (MediaQuery.of(context).padding.bottom) -
+                100),
+      ),
       SafeArea(
         child: NoteView(
           groupid: arguments['groupid'],
