@@ -1,9 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:provider/provider.dart';
 import 'package:sharedspace/configs/themes.dart';
+import 'package:sharedspace/models/tableCalenderEvents.dart';
 import 'package:sharedspace/services/functions.dart';
 import 'package:sharedspace/services/services.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -24,17 +26,50 @@ class _CalendarViewState extends State<CalendarView> {
   DateTime _selectedDate = DateTimeService().date;
   double listSize = 320;
   double height = 150;
+  Map<DateTime, List<dynamic>> _events = {};
+
+  Map<DateTime, List<dynamic>> _groupEvents(dynamic events) {
+    Map<DateTime, List<TableCalenderEvents>> data = {};
+    for (var event in events) {
+      DateTime eventDate = DateFormat('yyyy-MM-dd').parse(event['timecreated']);
+      // DateTime mapDate = DateFormat('yyyy-MM-dd').parse(
+      //     DateTime(eventDate.year, eventDate.month, eventDate.year).toString());
+
+      if (data[eventDate] == null) data[eventDate] = [];
+      data[eventDate]!.add(TableCalenderEvents(
+        key: event['key'],
+        groupid: event['groupid'],
+        usercreated: event['usercreated'],
+        title: event['title'],
+        description: event['description'],
+        timecreated: event['timecreated'],
+        important: event['important'],
+        isEditable: event['isEditable'],
+      ));
+    }
+    return data;
+  }
+
+  List<dynamic> getEventsFromDay(DateTime date) {
+    //2022-07-30 00:00:00.000Z
+    return _events[DateTime(date.year, date.month, date.day)] ?? [];
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         StreamBuilder(
-          stream: getTableCalenderEvents(widget.groupid),
-          builder: (context, snapshot) {
+          //stream: getTableCalenderEvents(widget.groupid),
+          stream: getGroupNotes(widget.groupid),
+          builder: (context, AsyncSnapshot<dynamic> snapshot) {
+            if (snapshot.hasData) {
+              _events = _groupEvents(snapshot.data.docs);
+            }
             return SizedBox(
               height: height,
               child: TableCalendar(
+                eventLoader: getEventsFromDay,
                 availableGestures: AvailableGestures.horizontalSwipe,
                 shouldFillViewport: true,
                 focusedDay: _focusedDay,
@@ -103,8 +138,27 @@ class _CalendarViewState extends State<CalendarView> {
                 onDrag(details.delta.dx, details.delta.dy);
               },
               child: Text('test Drag')),
-        )
+        ),
+        _ListBuilder()
       ],
+    );
+  }
+
+  _ListBuilder() {
+    return ListView(
+      shrinkWrap: true,
+      children: _events[DateTime(_selectedDate.year, _selectedDate.month,
+                  _selectedDate.day)] ==
+              null
+          ? []
+          : _events[DateTime(
+                  _selectedDate.year, _selectedDate.month, _selectedDate.day)]!
+              .map(
+                (event) => ListTile(
+                  title: Text(event.title),
+                ),
+              )
+              .toList(),
     );
   }
 
