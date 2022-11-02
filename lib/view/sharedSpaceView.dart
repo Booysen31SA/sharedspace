@@ -40,7 +40,7 @@ class _SharedSpaceState extends State<SharedSpaceView> {
                 (MediaQuery.of(context).padding.top) -
                 (kBottomNavigationBarHeight) -
                 (MediaQuery.of(context).padding.bottom) -
-                100),
+                50),
       ),
       SafeArea(
         child: NoteView(

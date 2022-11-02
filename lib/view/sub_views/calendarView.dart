@@ -57,108 +57,113 @@ class _CalendarViewState extends State<CalendarView> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        StreamBuilder(
-          //stream: getTableCalenderEvents(widget.groupid),
-          stream: getGroupNotes(widget.groupid),
-          builder: (context, AsyncSnapshot<dynamic> snapshot) {
-            if (snapshot.hasData) {
-              _events = _groupEvents(snapshot.data.docs);
-            }
-            return SizedBox(
-              height: height,
-              child: TableCalendar(
-                eventLoader: getEventsFromDay,
-                availableGestures: AvailableGestures.horizontalSwipe,
-                shouldFillViewport: true,
-                focusedDay: _focusedDay,
-                firstDay: DateTime(2022),
-                lastDay: DateTime(2090),
-                formatAnimationDuration: const Duration(milliseconds: 500),
-                availableCalendarFormats: const {
-                  CalendarFormat.month: 'Month',
-                  CalendarFormat.week: 'Week',
-                },
-                weekendDays: const [DateTime.saturday, DateTime.sunday],
-                calendarFormat: format,
-                headerStyle: HeaderStyle(
-                  formatButtonVisible: true,
-                  titleCentered: false,
-                  formatButtonShowsNext: false,
-                  formatButtonDecoration: BoxDecoration(
-                    color: primaryClr,
-                    borderRadius: BorderRadius.circular(5.0),
+    return SizedBox(
+      height: widget.height,
+      child: Column(
+        children: [
+          StreamBuilder(
+            //stream: getTableCalenderEvents(widget.groupid),
+            stream: getGroupNotes(widget.groupid),
+            builder: (context, AsyncSnapshot<dynamic> snapshot) {
+              if (snapshot.hasData) {
+                _events = _groupEvents(snapshot.data.docs);
+              }
+              return SizedBox(
+                height: height,
+                child: TableCalendar(
+                  eventLoader: getEventsFromDay,
+                  availableGestures: AvailableGestures.horizontalSwipe,
+                  shouldFillViewport: true,
+                  focusedDay: _focusedDay,
+                  firstDay: DateTime(2022),
+                  lastDay: DateTime(2090),
+                  formatAnimationDuration: const Duration(milliseconds: 500),
+                  availableCalendarFormats: const {
+                    CalendarFormat.month: 'Month',
+                    CalendarFormat.week: 'Week',
+                  },
+                  weekendDays: const [DateTime.saturday, DateTime.sunday],
+                  calendarFormat: format,
+                  headerStyle: HeaderStyle(
+                    formatButtonVisible: true,
+                    titleCentered: false,
+                    formatButtonShowsNext: false,
+                    formatButtonDecoration: BoxDecoration(
+                      color: primaryClr,
+                      borderRadius: BorderRadius.circular(5.0),
+                    ),
+                    formatButtonTextStyle: const TextStyle(
+                      color: Colors.white,
+                    ),
+                    leftChevronVisible: false,
+                    rightChevronVisible: false,
+                    headerPadding: const EdgeInsets.only(
+                        top: 20.0, bottom: 20.0, left: 15),
                   ),
-                  formatButtonTextStyle: const TextStyle(
-                    color: Colors.white,
+                  calendarStyle: const CalendarStyle(
+                    isTodayHighlighted: true,
+                    selectedDecoration: BoxDecoration(
+                      color: primaryClr,
+                      shape: BoxShape.circle,
+                    ),
+                    selectedTextStyle: TextStyle(
+                      color: Colors.white,
+                    ),
                   ),
-                  leftChevronVisible: false,
-                  rightChevronVisible: false,
-                  headerPadding:
-                      const EdgeInsets.only(top: 20.0, bottom: 20.0, left: 15),
+                  selectedDayPredicate: (DateTime date) {
+                    return isSameDay(_selectedDate, date);
+                  },
+                  onDaySelected: (selectedDay, focusedDay) {
+                    setState(() {
+                      _selectedDate = selectedDay;
+                      _focusedDay = focusedDay;
+                      DateTimeService().changeSelectedDate(selectedDay);
+                    });
+                  },
+                  onFormatChanged: (CalendarFormat _format) {
+                    setState(() {
+                      if (_format == CalendarFormat.week) {
+                        height = 150;
+                      } else {
+                        height = 400;
+                      }
+                      format = _format;
+                    });
+                  },
                 ),
-                calendarStyle: const CalendarStyle(
-                  isTodayHighlighted: true,
-                  selectedDecoration: BoxDecoration(
-                    color: primaryClr,
-                    shape: BoxShape.circle,
-                  ),
-                  selectedTextStyle: TextStyle(
-                    color: Colors.white,
-                  ),
-                ),
-                selectedDayPredicate: (DateTime date) {
-                  return isSameDay(_selectedDate, date);
+              );
+            },
+          ),
+          Center(
+            child: GestureDetector(
+                onPanUpdate: (details) {
+                  onDrag(details.delta.dx, details.delta.dy);
                 },
-                onDaySelected: (selectedDay, focusedDay) {
-                  setState(() {
-                    _selectedDate = selectedDay;
-                    _focusedDay = focusedDay;
-                    DateTimeService().changeSelectedDate(selectedDay);
-                  });
-                },
-                onFormatChanged: (CalendarFormat _format) {
-                  setState(() {
-                    if (_format == CalendarFormat.week) {
-                      height = 150;
-                    } else {
-                      height = 400;
-                    }
-                    format = _format;
-                  });
-                },
-              ),
-            );
-          },
-        ),
-        Center(
-          child: GestureDetector(
-              onPanUpdate: (details) {
-                onDrag(details.delta.dx, details.delta.dy);
-              },
-              child: Text('test Drag')),
-        ),
-        _ListBuilder()
-      ],
+                child: Text('test Drag')),
+          ),
+          _ListBuilder()
+        ],
+      ),
     );
   }
 
   _ListBuilder() {
-    return ListView(
-      shrinkWrap: true,
-      children: _events[DateTime(_selectedDate.year, _selectedDate.month,
-                  _selectedDate.day)] ==
-              null
-          ? []
-          : _events[DateTime(
-                  _selectedDate.year, _selectedDate.month, _selectedDate.day)]!
-              .map(
-                (event) => ListTile(
-                  title: Text(event.title),
-                ),
-              )
-              .toList(),
+    return Expanded(
+      child: ListView(
+        shrinkWrap: true,
+        children: _events[DateTime(_selectedDate.year, _selectedDate.month,
+                    _selectedDate.day)] ==
+                null
+            ? []
+            : _events[DateTime(_selectedDate.year, _selectedDate.month,
+                    _selectedDate.day)]!
+                .map(
+                  (event) => ListTile(
+                    title: Text(event.title),
+                  ),
+                )
+                .toList(),
+      ),
     );
   }
 
